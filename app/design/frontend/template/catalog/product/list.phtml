@@ -1,0 +1,732 @@
+<?php
+$products = $this->getAllProducts();
+// echo '<pre>';
+// print_r($products);
+// echo '</pre>';
+$attributes_name = $this->getAttributesName();
+$categories = $this->getAllCategories();
+// echo '<pre>';
+// print_r($categories);
+// echo '</pre>';
+// die;
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Store - Product List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <style>
+        :root {
+            --primary-color: #ff3f6c;
+            --secondary-color: #535766;
+            --border-color: #eaeaec;
+            --light-bg: #f5f5f6;
+            --white: #ffffff;
+            --discount-green: #03a685;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Assistant', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--white);
+            color: #282c3f;
+        }
+        .main-container{
+            display: flex;
+            flex-direction: row;
+        }
+        .filter-div{
+            width: 19%;
+            background-color: #ff3f6c;
+            display: flex;
+            flex-direction: row;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .categories-filter{
+            display: flex;
+            flex-direction: row;
+        }
+
+        
+        
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        .filters {
+            display: flex;
+            align-items: center;
+        }
+        
+        .filter-title {
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .clear-all {
+            color: var(--primary-color);
+            font-size: 14px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .filter-chip {
+            padding: 6px 12px;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 40px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .filter-chip:after {
+            content: "▼";
+            font-size: 10px;
+            margin-left: 5px;
+        }
+        
+        .sort-by {
+            display: flex;
+            align-items: center;
+        }
+        
+        .sort-label {
+            margin-right: 5px;
+            font-size: 14px;
+            color: var(--secondary-color);
+        }
+        
+        .sort-value {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Price filter styles */
+.price-filter {
+    cursor: pointer;
+}
+
+.price-range-display {
+    font-weight: 600;
+}
+
+.price-range-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.price-inputs input {
+    width: 80px;
+    padding: 8px;
+    border: 1px solid #eaeaec;
+    border-radius: 4px;
+}
+
+.price-slider {
+    position: relative;
+    height: 5px;
+    background: #eaeaec;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.price-slider input {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    background: none;
+    pointer-events: none;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+.price-slider input::-webkit-slider-thumb {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    pointer-events: auto;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.price-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.price-actions button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#apply-price-filter {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+#reset-price-filter {
+    background-color: #f5f5f6;
+    color: #282c3f;
+}
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+        
+        .product-card {
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .product-image-container {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .wishlist-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1;
+            border: none;
+        }
+        
+        .product-details {
+            padding: 12px 8px;
+        }
+        
+        .product-brand {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+        
+        .product-name {
+            color: var(--secondary-color);
+            font-size: 14px;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        
+        .current-price {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .original-price {
+            color: var(--secondary-color);
+            text-decoration: line-through;
+            font-size: 12px;
+        }
+        
+        .discount {
+            color: var(--discount-green);
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .rating-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .rating {
+            background-color: #f5f5f6;
+            color: #282c3f;
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .rating i {
+            color: #282c3f;
+            font-size: 10px;
+        }
+        
+        .reviews {
+            color: var(--secondary-color);
+            font-size: 12px;
+        }
+        
+        .new-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 2px;
+            z-index: 1;
+            text-transform: uppercase;
+        }
+        
+        .wishlist-icon {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid #eaeaec;
+            z-index: 2;
+            transition: all 0.2s ease;
+        }
+        
+        .wishlist-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .wishlist-icon i {
+            color: #535766;
+            font-size: 16px;
+        }
+        
+        .wishlist-text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            color: #535766;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .similar-products {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary-color);
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover .similar-products {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Media Queries */
+        @media (max-width: 1024px) {
+            .product-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+            
+            .filter-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .sort-by {
+                margin-top: 10px;
+                align-self: flex-end;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style> 
+    <script>
+         function showdata() {
+            var selectedCategories = [];
+            document.querySelectorAll('input[name="category[]"]:checked').forEach(function(checkbox) {
+                selectedCategories.push(checkbox.value);
+            });
+
+            var formattedCategories = selectedCategories.join(',');
+            var xhr = new XMLHttpRequest();
+            console.log(123);
+            xhr.open("GET", "http://localhost/mvc_copy/catalog/product/list/?categoryid=" + formattedCategories , true);
+            xhr.onreadystatechange = function() {
+                // console.log(xhr.readyState + "  "+ xhr.status);
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // console.log(xhr.responseText);
+                    document.getElementById("main-body").innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
+
+        </script>
+</head>
+<body id="main-body">
+    <div class="main-container">
+        <div class="filter-div">
+            <div class="test">
+
+                <div>filters</div>
+                <h6>Categories</h6>
+                <div class="categories-filter2">
+                    <?php foreach($categories as $key => $category) : ?>
+                        <label>
+                        <input type="checkbox" name="category[]" value="<?= $category->getCategoryId(); ?>" onclick="showdata()">
+                        <?= $category->getName() ?>
+                        </label>
+                        <br>
+                        
+                    <?php endforeach; ?>
+                    <label for="">
+                            <input type="checkbox" name="category[]"  onchange="showdata()" value="21">
+                            <?= 'Dresses' ?>
+                        </label>
+                    <h6>hfyf2</h6>
+                    <h6>hfyf2</h6>
+                    <h6>hfyf2</h6>
+                    <h6>hfyf2</h6>
+                </div>
+            </div>
+        </div>
+    <div class="container">
+
+        <div class="filter-section">
+            <div class="filters">
+                <div class="filter-title">FILTERS</div>
+                <div class="clear-all">CLEAR ALL</div>
+                <div class="filter-chips">
+                    <!-- //<?php //foreach($attributes_name as $name) : ?>
+                        <a href="// echo $this->getUrl('catalog/product/list') . '/?' . $name->getName() . '='; ?>" 
+                                class="filter-chip" style="text-decoration: none; color: #282c3f;"><?php //echo $name->getName(); ?></a> -->
+                    <?php //endforeach ; ?>
+                    <div class="filter-chip price-filter">
+                    Price <span class="price-range-display"></span>
+                    
+                </div>
+                </div>
+            </div>
+
+
+            <div class="sort-by">
+                <select class="sort-label">Sort by:
+                    <option value="">Sort By:</option>
+                    <option value="price">Price: Low to High</option>
+                    <option value="price">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="price-filter-popup" style="display: none; position: absolute; background: white; border: 1px solid #eaeaec; padding: 15px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100; min-width: 250px;">
+                <h4>Price Range</h4>
+                <div class="price-range-container">
+                    <div class="price-inputs">
+                        <input type="number" id="min-price" placeholder="Min" min="0">
+                        <span>to</span>
+                        <input type="number" id="max-price" placeholder="Max" min="0">
+                    </div>
+                    <div class="price-slider">
+                        <input type="range" id="price-slider-min" min="0" max="10000" value="0">
+                        <input type="range" id="price-slider-max" min="0" max="10000" value="10000">
+                    </div>
+                    <div class="price-actions">
+                        <button id="apply-price-filter">Apply</button>
+                        <button id="reset-price-filter">Reset</button>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="product-grid" id="product-grid">
+
+<?php foreach ($products as $index => $product): ?>
+
+    <?php $productUrl = $this->getUrl('*/*/view') . '/?id=' . $product->getProductId(); ?>
+    <div class="product-card product-card-<?php echo $index; ?>" onclick="location.href='<?php echo $productUrl; ?>'">
+        <?php if ($index % 5 == 0): ?>
+            <div class="new-tag">NEW</div>
+        <?php endif; ?>
+        
+        <div class="product-image-container">
+            <?php 
+                // Get product images - if not available, use placeholder
+                $currentImages = [];
+                foreach ($this->getAllProductsImgs($product->getProductId()) as $image){
+    
+                    $currentImages[] = $image->getFilePath();
+                    
+                }
+                
+                // If no images, use placeholder
+                if (empty($currentImages)) {
+                    $currentImages = ['assets/images/placeholder.jpg'];
+                }
+                
+                // Display the first image
+                $mainImage = $currentImages[0];
+            ?>
+            <img src="/mvc_copy/<?php echo $mainImage; ?>" alt="<?php echo $product->getName(); ?>" class="product-image">
+            
+            <div class="similar-products">SIMILAR PRODUCTS</div>
+        </div>
+        
+        <div class="product-details">
+            <div class="product-brand"><?php echo $product->getBrand() ?: 'Brand Name'; ?></div>
+            <div class="product-name"><?php echo $product->getName(); ?></div>
+            
+            <div class="price-container">
+                <span class="current-price">Rs. <?php echo number_format((float)$product->getPrice('price'), 0); ?></span>
+                <?php 
+                    // Calculate original price (20% higher than current price for demo)
+                    $originalPrice = (float)$product->getPrice('price') * 1.2;
+                    $discount = 20; // 20% discount for demo
+                ?>
+                <span class="original-price">Rs. <?php echo number_format($originalPrice, 0); ?></span>
+                <span class="discount">(<?php echo $discount; ?>% OFF)</span>
+            </div>
+            
+            <?php if ($index % 2 == 0): // Only show ratings for some products ?>
+            <div class="rating-container">
+                <div class="rating">
+                    <?php 
+                        // Generate random rating between 3.5 and 4.9
+                        $rating = number_format(rand(35, 49) / 10, 1);
+                        // Generate random number of reviews
+                        $reviews = rand(10, 1500);
+                    ?>
+                    <?php echo $rating; ?> <i class="fas fa-star"></i> | <?php echo $reviews; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+        
+        <button class="wishlist-button" title="Add to Wishlist">
+            <i class="far fa-heart"></i>
+        </button>
+    </div>
+<?php endforeach; ?>
+</div>
+
+
+    </div>
+    </div>
+
+    <script>
+
+        
+        // Wishlist functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up wishlist functionality
+            document.querySelectorAll('.wishlist-button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent triggering the product card click
+                    const heart = this.querySelector('i');
+                    if (heart.classList.contains('far')) {
+                        heart.classList.remove('far');
+                        heart.classList.add('fas');
+                        heart.style.color = '#ff3f6c';
+                    } else {
+                        heart.classList.remove('fas');
+                        heart.classList.add('far');
+                        heart.style.color = '';
+                    }
+                });
+            });
+            
+            // Simulating additional product images for hover effect (in a real application, this would come from the database)
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const img = this.querySelector('.product-image');
+                    // Create a slight zoom effect on hover
+                    img.style.transform = 'scale(1.05)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    const img = this.querySelector('.product-image');
+                    img.style.transform = 'scale(1)';
+                });
+            });
+        });
+
+        // Add this to your existing script section at the bottom
+document.addEventListener('DOMContentLoaded', function() {
+    // Price filter functionality
+    const priceFilter = document.querySelector('.price-filter');
+    const priceFilterPopup = document.getElementById('price-filter-popup');
+    
+    // Show popup when clicking on the price filter chip
+    priceFilter.addEventListener('click', function(e) {
+        e.stopPropagation();
+        // Position the popup below the filter chip
+        const rect = priceFilter.getBoundingClientRect();
+        priceFilterPopup.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+        priceFilterPopup.style.left = (rect.left + window.scrollX) + 'px';
+        
+        // Toggle visibility
+        if (priceFilterPopup.style.display === 'none') {
+            priceFilterPopup.style.display = 'block';
+        } else {
+            priceFilterPopup.style.display = 'none';
+        }
+    });
+    
+    // Hide popup when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!priceFilterPopup.contains(e.target) && !priceFilter.contains(e.target)) {
+            priceFilterPopup.style.display = 'none';
+        }
+    });
+    
+    // Implement price range slider functionality
+    const minPriceInput = document.getElementById('min-price');
+    const maxPriceInput = document.getElementById('max-price');
+    const minSlider = document.getElementById('price-slider-min');
+    const maxSlider = document.getElementById('price-slider-max');
+    const priceRangeDisplay = document.querySelector('.price-range-display');
+    const applyButton = document.getElementById('apply-price-filter');
+    const resetButton = document.getElementById('reset-price-filter');
+    
+    // Sync input fields with sliders
+    minSlider.addEventListener('input', function() {
+        minPriceInput.value = this.value;
+        if (parseInt(minSlider.value) > parseInt(maxSlider.value)) {
+            minSlider.value = maxSlider.value;
+            minPriceInput.value = maxSlider.value;
+        }
+    });
+    
+    maxSlider.addEventListener('input', function() {
+        maxPriceInput.value = this.value;
+        if (parseInt(maxSlider.value) < parseInt(minSlider.value)) {
+            maxSlider.value = minSlider.value;
+            maxPriceInput.value = minSlider.value;
+        }
+    });
+    
+    // Sync sliders with input fields
+    minPriceInput.addEventListener('input', function() {
+        minSlider.value = this.value;
+    });
+    
+    maxPriceInput.addEventListener('input', function() {
+        maxSlider.value = this.value;
+    });
+    
+    // Apply button functionality
+    applyButton.addEventListener('click', function() {
+        const min = minPriceInput.value;
+        const max = maxPriceInput.value;
+        if (min && max) {
+            priceRangeDisplay.textContent = `Rs. ${min} - Rs. ${max}`;
+        } else if (min) {
+            priceRangeDisplay.textContent = `Rs. ${min}+`;
+        } else if (max) {
+            priceRangeDisplay.textContent = `Up to Rs. ${max}`;
+        }
+        priceFilterPopup.style.display = 'none';
+        
+        // Here you would normally filter the products based on price
+        // This would require an AJAX call or page reload with query parameters
+    });
+    
+    // Reset button functionality
+    resetButton.addEventListener('click', function() {
+        minPriceInput.value = '';
+        maxPriceInput.value = '';
+        minSlider.value = minSlider.min;
+        maxSlider.value = maxSlider.max;
+        priceRangeDisplay.textContent = 'All';
+        priceFilterPopup.style.display = 'none';
+        
+        // Reset the product display to show all products
+    });
+});
+    </script>
+</body>
+</html>

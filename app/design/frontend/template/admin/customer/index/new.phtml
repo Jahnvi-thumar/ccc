@@ -1,0 +1,45 @@
+<h1>admin customer index new</h1>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        .container{
+            width: 50%;
+            margin: 0 auto;
+            border: 1px solid black;
+            
+        }
+        .wrapper{
+
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+    
+</head>
+<body>
+    
+    <div class="container">
+
+        <form action="">
+            <div class="wrapper">
+                <?php echo $this->getHtmlField('text' , ['id' => 'hello' , 'class' => 'abc']) ?>
+                <?php echo $this->getHtmlField('text' , ['id' => 'hello2' , 'class' => 'abc']) ?>
+                <?php echo $this->getHtmlField('checkbox' , ['id' => 'hello2' , 'class' => 'abc' , 'name' => 'subscribe' , 'value' => 'checkbox1']) ?>
+                <?php echo $this->getHtmlField('checkbox' , ['id' => 'hello2' , 'class' => 'abc' , 'name' => 'subscribe' , 'value' => 'checkbox2']) ?>
+                <?php echo $this->getHtmlField('radio' , ['id' => 'hello2' , 'class' => 'abc' , 'name' => 'subscribe' , 'value' => 'radioa']) ?>
+                <?php echo $this->getHtmlField('radio' , ['id' => 'hello2' , 'class' => 'abc' , 'name' => 'subscribe' , 'value' => 'radiob']) ?>
+                <?php echo $this->getHtmlField('range' , ['id' => 'hello2' , 'class' => 'abc' , 'name' => 'subscribe' , 'min' => 0 , 'max' => 100 , 'step' => 5 , 'value' => 'range']) ?>
+                <?php echo $this->getHtmlField('dropdown' , ['id' => 'hello2' , 'class' => 'abc' , 'value' => ['abc' , 'bvc' , 'dgt']]) ?>
+                
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,220 @@
+<?php 
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/catalog.css"> <!-- External CSS file -->
+
+    <style>
+        .catalog-container {
+            font-family: 'Georgia', serif;
+            background: #f4f4f4;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .catalog-heading {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 32px;
+            margin: 20px 0;
+            font-weight: normal;
+            position: relative;
+        }
+
+        .catalog-heading:after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #2c3e50;
+            margin: 15px auto;
+        }
+
+        .catalog-actions {
+            display: flex;
+            justify-content: flex-end;
+            width: 90%;
+            margin: 0 auto 20px;
+        }
+
+        .catalog-add-btn {
+            background: #2c3e50;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .catalog-add-btn:hover {
+            background: #34495e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .catalog-table {
+            width: 95%;
+            margin: 0 auto;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .catalog-table th {
+            background: #2c3e50;
+            color: #fff;
+            padding: 12px;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        .catalog-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            color: #555;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .catalog-table tr:hover td {
+            background-color: #f8f9fa;
+        }
+
+        .catalog-table tr:nth-child(even) td {
+            background-color: #f9f9f9;
+        }
+
+        .catalog-table img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .catalog-table img:hover {
+            transform: scale(1.1);
+        }
+
+        .catalog-action-icons .fa {
+            font-size: 16px;
+            padding: 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .catalog-edit-icon {
+            color: #4a90e2;
+        }
+
+        .catalog-delete-icon {
+            color: #e74c3c;
+        }
+
+        .catalog-action-icons .fa:hover {
+            transform: scale(1.15);
+        }
+
+        @media (max-width: 768px) {
+            .catalog-container {
+                padding: 15px;
+            }
+
+            .catalog-table {
+                width: 100%;
+                overflow-x: auto;
+                display: block;
+            }
+
+            .catalog-heading {
+                font-size: 24px;
+            }
+
+            .catalog-actions {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="catalog-container">
+    <h2 class="catalog-heading">Product Catalog</h2>
+
+    <div class="catalog-actions">
+        <a class="catalog-add-btn" href="<?php echo $this->getUrl('*/*/new'); ?>">Add Product</a>
+    </div>
+
+    <?php if (count($this->getProduct()) > 0): ?>
+        <table class="catalog-table">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>SKU</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Category</th>
+                <th>Brand</th>
+                <th>Model Number</th>
+                <th>Color</th>
+                <th>Material</th>
+                <th>Country Of Origin</th>
+                <th>Media</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+
+            <?php foreach ($this->getProduct() as $product): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($product->getProduct_id()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getName()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getSku()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getDescription()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getPrice()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getStock_quantity()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getCategory_id()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getBrand()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getModelNumber()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getColor()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getMaterial()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getCountryOfOrigin()); ?></td>
+                    <td>
+                        <img src="<?php echo htmlspecialchars($product->getMedia()); ?>" alt="Product Image">
+                    </td>
+                    <td><?php echo htmlspecialchars($product->getCreated_at()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getUpdated_at()); ?></td>
+                    <td class="catalog-action-icons">
+                        <a href="<?php echo $this->getUrl('*/*/new') . '/?id=' . $product->getProductId(); ?>">
+                            <i class="fa fa-edit catalog-edit-icon"></i>
+                        </a>
+                    </td>
+                    <td class="catalog-action-icons">
+                        <a href="<?php echo $this->getUrl('*/*/delete') . '/?id=' . $product->getProductId(); ?>" onclick="return confirm('Are you sure you want to delete this product?');">
+                            <i class="fa fa-trash catalog-delete-icon"></i>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p class="catalog-empty">No products available.</p>
+    <?php endif; ?>
+</body>
+
+</html>

@@ -1,0 +1,868 @@
+<?php
+// Sample data - in real application, this would come from your database
+$cartItems = [
+    [
+        'id' => 1,
+        'brand' => 'Zastraa',
+        'name' => 'Black High Waist Scuba Mini Skirts',
+        'seller' => 'MONARK CREATION INDIA',
+        'size' => '28',
+        'qty' => 1,
+        'current_price' => 674,
+        'mrp' => 2499,
+        'discount_percent' => 73,
+        'return_days' => 14,
+        'image' => 'product-image.jpg'
+    ]
+    // More items can be dynamically added here
+];
+
+// Calculate totals
+$totalMRP = 0;
+$totalDiscount = 0;
+$platformFee = 20;
+$shippingFee = 0; // Free shipping
+
+foreach($cartItems as $item) {
+    $totalMRP += $item['mrp'] * $item['qty'];
+    $totalDiscount += ($item['mrp'] - $item['current_price']) * $item['qty'];
+}
+
+$totalAmount = $totalMRP - $totalDiscount + $platformFee + $shippingFee;
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOPPING BAG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        .cart-body {
+            background-color: #f5f5f6;
+            color: #282c3f;
+        }
+        
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            background-color: white;
+            border-bottom: 1px solid #eaeaec;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .cart-logo {
+            width: 50px;
+            height: 36px;
+        }
+        
+        .cart-nav {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .cart-nav-item {
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 14px;
+            color: #282c3f;
+            text-decoration: none;
+            position: relative;
+        }
+        
+        .cart-new-tag {
+            position: absolute;
+            top: -8px;
+            right: -24px;
+            background-color: #ff3f6c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 10px;
+        }
+        
+        .cart-search-container {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f6;
+            border-radius: 4px;
+            padding: 8px 10px;
+            width: 400px;
+        }
+        
+        .cart-search-icon {
+            color: #696e79;
+            margin-right: 8px;
+        }
+        
+        .cart-search-input {
+            border: none;
+            background-color: transparent;
+            width: 100%;
+            outline: none;
+            font-size: 14px;
+            color: #282c3f;
+        }
+        
+        .cart-user-actions {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+        
+        .cart-user-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #282c3f;
+            font-size: 12px;
+        }
+        
+        .cart-user-action i {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+        
+        .cart-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
+        .cart-steps {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .cart-step {
+            padding: 0 40px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+            color: #94969f;
+        }
+        
+        .cart-step.cart-active {
+            color: #ff3f6c;
+            font-weight: 600;
+        }
+        
+        .cart-left-section {
+            width: 65%;
+        }
+        
+        .cart-right-section {
+            width: 32%;
+        }
+        
+        .cart-delivery-check {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff8f8;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+        
+        .cart-delivery-text {
+            font-size: 14px;
+            color: #282c3f;
+        }
+        
+        .cart-pin-btn {
+            background-color: white;
+            color: #ff3f6c;
+            border: 1px solid #eaeaec;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        
+        .cart-offers-section {
+            margin-bottom: 16px;
+        }
+        
+        .cart-offers-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .cart-tag-icon {
+            color: #94969f;
+            margin-right: 8px;
+        }
+        
+        .cart-offers-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #282c3f;
+        }
+        
+        .cart-offer-text {
+            font-size: 14px;
+            color: #282c3f;
+            margin-bottom: 8px;
+        }
+        
+        .cart-show-more {
+            color: #ff3f6c;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cart-show-more i {
+            margin-left: 4px;
+            font-size: 12px;
+        }
+        
+        .cart-items-container {
+            background-color: white;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+        
+        .cart-items-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid #eaeaec;
+        }
+        
+        .cart-select-all {
+            display: flex;
+            align-items: center;
+        }
+        
+        .cart-checkbox {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        
+        .cart-items-count {
+            font-size: 14px;
+            font-weight: 600;
+            color: #282c3f;
+        }
+        
+        .cart-actions {
+            display: flex;
+            font-size: 14px;
+            color: #282c3f;
+        }
+        
+        .cart-remove-action, .cart-wishlist-action {
+            cursor: pointer;
+        }
+        
+        .cart-divider {
+            margin: 0 8px;
+            color: #94969f;
+        }
+        
+        .cart-item {
+            display: flex;
+            padding: 16px;
+            border-bottom: 1px solid #eaeaec;
+            position: relative;
+        }
+        
+        .cart-item-image {
+            width: 120px;
+            height: 150px;
+            object-fit: cover;
+            margin-right: 16px;
+            border: 1px solid #f5f5f6;
+        }
+        
+        .cart-item-details {
+            flex: 1;
+        }
+        
+        .cart-brand {
+            font-size: 16px;
+            font-weight: 600;
+            color: #282c3f;
+            margin-bottom: 4px;
+        }
+        
+        .cart-product-name {
+            font-size: 14px;
+            color: #535766;
+            margin-bottom: 4px;
+        }
+        
+        .cart-seller {
+            font-size: 14px;
+            color: #94969f;
+            margin-bottom: 12px;
+        }
+        
+        .cart-item-options {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .cart-size-selector, .cart-qty-selector {
+            border: 1px solid #eaeaec;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: #282c3f;
+        }
+        
+        .cart-dropdown-icon {
+            margin-left: 8px;
+            color: #94969f;
+            font-size: 12px;
+        }
+        
+        .cart-item-price {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .cart-current-price {
+            font-size: 16px;
+            font-weight: 600;
+            color: #282c3f;
+            margin-right: 8px;
+        }
+        
+        .cart-original-price {
+            font-size: 14px;
+            color: #94969f;
+            text-decoration: line-through;
+            margin-right: 8px;
+        }
+        
+        .cart-discount {
+            font-size: 14px;
+            color: #f16565;
+        }
+        
+        .cart-return {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #94969f;
+        }
+        
+        .cart-return-icon {
+            margin-right: 4px;
+            font-size: 14px;
+        }
+        
+        .cart-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: #94969f;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .cart-login-box {
+            background-color: white;
+            border-radius: 4px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cart-login-image {
+            width: 36px;
+            height: 36px;
+            margin-right: 16px;
+        }
+        
+        .cart-login-text {
+            flex: 1;
+            font-size: 14px;
+            color: #282c3f;
+        }
+        
+        .cart-login-btn {
+            background-color: #ff3f6c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        
+        .cart-coupons {
+            background-color: white;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .cart-coupons-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #282c3f;
+            margin-bottom: 16px;
+        }
+        
+        .cart-apply-coupon {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .cart-apply-text {
+            font-size: 14px;
+            color: #282c3f;
+        }
+        
+        .cart-apply-btn {
+            border: 1px solid #ff3f6c;
+            background-color: white;
+            color: #ff3f6c;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        
+        .cart-login-offer {
+            font-size: 14px;
+            color: #282c3f;
+        }
+        
+        .cart-login-link {
+            color: #ff3f6c;
+            text-decoration: none;
+        }
+        
+        .cart-donation {
+            background-color: white;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .cart-donation-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #282c3f;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        
+        .cart-donation-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .cart-donation-label {
+            font-size: 14px;
+            color: #282c3f;
+            margin-left: 8px;
+        }
+        
+        .cart-donation-amounts {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .cart-donation-btn {
+            border: 1px solid #eaeaec;
+            background-color: white;
+            color: #282c3f;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .cart-know-more {
+            color: #ff3f6c;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .cart-price-details {
+            background-color: white;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .cart-price-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #282c3f;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        
+        .cart-price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #282c3f;
+        }
+        
+        .cart-price-row-green {
+            color: #03a685;
+        }
+        
+        .cart-price-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .cart-price-divider {
+            border-top: 1px solid #eaeaec;
+            margin: 12px 0;
+        }
+        
+        .cart-total-row {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .cart-order-btn {
+            background-color: #ff3f6c;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+        .cart-secure-badge {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            color: #03a685;
+            font-size: 14px;
+        }
+        
+        .cart-secure-icon {
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body class="cart-body">
+    <header class="cart-header">
+        <a href="/">
+            <img src="myntra-logo.png" alt="BidApp" class="cart-logo">
+        </a>
+        
+        <nav class="cart-nav">
+            <a href="#" class="cart-nav-item">Men</a>
+            <a href="#" class="cart-nav-item">Women</a>
+            <a href="#" class="cart-nav-item">Kids</a>
+            <a href="#" class="cart-nav-item">Home & Living</a>
+            <a href="#" class="cart-nav-item">Beauty</a>
+            <a href="#" class="cart-nav-item">
+                Studio
+                <span class="cart-new-tag">NEW</span>
+            </a>
+        </nav>
+        
+        <div class="cart-search-container">
+            <i class="fas fa-search cart-search-icon"></i>
+            <input type="text" class="cart-search-input" placeholder="Search for products, brands and more">
+        </div>
+        
+        <div class="cart-user-actions">
+            <a href="#" class="cart-user-action">
+                <i class="far fa-user"></i>
+                <span>Profile</span>
+            </a>
+            <a href="#" class="cart-user-action">
+                <i class="far fa-heart"></i>
+                <span>Wishlist</span>
+            </a>
+            <a href="#" class="cart-user-action">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Bag</span>
+            </a>
+        </div>
+    </header>
+    
+    <div class="cart-container">
+        <div class="cart-secure-badge">
+            <i class="fas fa-shield-alt cart-secure-icon"></i>
+            <span>100% SECURE</span>
+        </div>
+        
+        <div class="cart-steps">
+            <div class="cart-step cart-active">BAG</div>
+            <div class="cart-step">ADDRESS</div>
+            <div class="cart-step">PAYMENT</div>
+        </div>
+        
+        <div class="cart-left-section">
+            <div class="cart-delivery-check">
+                <div class="cart-delivery-text">Check delivery time & services</div>
+                <button class="cart-pin-btn">ENTER PIN CODE</button>
+            </div>
+            
+            <div class="cart-offers-section">
+                <div class="cart-offers-header">
+                    <i class="fas fa-tag cart-tag-icon"></i>
+                    <div class="cart-offers-title">Available Offers</div>
+                </div>
+                <div class="cart-offer-text">
+                    10% Instant Discount on Axis Bank Credit Card and Credit Card EMI on a min spend of ₹3,500. TCA
+                </div>
+                <div class="cart-show-more">
+                    Show More
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            
+            <div class="cart-items-container">
+                <div class="cart-items-header">
+                    <div class="cart-select-all">
+                        <input type="checkbox" class="cart-checkbox" checked>
+                        <div class="cart-items-count">1/1 ITEMS SELECTED</div>
+                    </div>
+                    <div class="cart-actions">
+                        <div class="cart-remove-action">REMOVE</div>
+                        <div class="cart-divider">|</div>
+                        <div class="cart-wishlist-action">MOVE TO WISHLIST</div>
+                    </div>
+                </div>
+                
+                <?php foreach($cartItems as $item): ?>
+                <div class="cart-item">
+                    <input type="checkbox" class="cart-checkbox" checked>
+                    <img src="<?php echo $item['image']; ?>" alt="<?php echo $item['name']; ?>" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <div class="cart-brand"><?php echo $item['brand']; ?></div>
+                        <div class="cart-product-name"><?php echo $item['name']; ?></div>
+                        <div class="cart-seller">Sold by: <?php echo $item['seller']; ?></div>
+                        <div class="cart-item-options">
+                            <div class="cart-size-selector">
+                                Size: <?php echo $item['size']; ?>
+                                <i class="fas fa-chevron-down cart-dropdown-icon"></i>
+                            </div>
+                            <div class="cart-qty-selector">
+                                Qty: <?php echo $item['qty']; ?>
+                                <i class="fas fa-chevron-down cart-dropdown-icon"></i>
+                            </div>
+                        </div>
+                        <div class="cart-item-price">
+                            <div class="cart-current-price">₹<?php echo $item['current_price']; ?></div>
+                            <div class="cart-original-price">₹<?php echo $item['mrp']; ?></div>
+                            <div class="cart-discount"><?php echo $item['discount_percent']; ?>% OFF</div>
+                        </div>
+                        <div class="cart-return">
+                            <i class="fas fa-undo cart-return-icon"></i>
+                            <?php echo $item['return_days']; ?> days return available
+                        </div>
+                    </div>
+                    <button class="cart-close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            
+            <div class="cart-login-box">
+                <img src="login-icon.png" alt="Login" class="cart-login-image">
+                <div class="cart-login-text">Login to see items from your existing bag and wishlist.</div>
+                <button class="cart-login-btn">LOGIN NOW</button>
+            </div>
+        </div>
+        
+        <div class="cart-right-section">
+            <div class="cart-coupons">
+                <div class="cart-coupons-title">COUPONS</div>
+                <div class="cart-apply-coupon">
+                    <div class="cart-apply-text">Apply Coupons</div>
+                    <button class="cart-apply-btn">APPLY</button>
+                </div>
+                <div class="cart-login-offer">
+                    <a href="#" class="cart-login-link">Login</a> to get upto ₹500 OFF on first order
+                </div>
+            </div>
+            
+            <div class="cart-donation">
+                <div class="cart-donation-title">SUPPORT TRANSFORMATIVE SOCIAL WORK IN INDIA</div>
+                <div class="cart-donation-check">
+                    <input type="checkbox" class="cart-checkbox">
+                    <div class="cart-donation-label">Donate and make a difference</div>
+                </div>
+                <div class="cart-donation-amounts">
+                    <button class="cart-donation-btn">₹10</button>
+                    <button class="cart-donation-btn">₹20</button>
+                    <button class="cart-donation-btn">₹50</button>
+                    <button class="cart-donation-btn">₹100</button>
+                </div>
+                <div class="cart-know-more">Know More</div>
+            </div>
+            
+            <div class="cart-price-details">
+                <div class="cart-price-title">PRICE DETAILS (1 Item)</div>
+                <div class="cart-price-row">
+                    <div>Total MRP</div>
+                    <div>₹<?php echo number_format($totalMRP); ?></div>
+                </div>
+                <div class="cart-price-row">
+                    <div>Discount on MRP</div>
+                    <div class="cart-price-row-green">-₹<?php echo number_format($totalDiscount); ?></div>
+                </div>
+                <div class="cart-price-row">
+                    <div>Platform Fee <span class="cart-know-more">Know More</span></div>
+                    <div>₹<?php echo number_format($platformFee); ?></div>
+                </div>
+                <div class="cart-price-row">
+                    <div>Shipping Fee <span class="cart-know-more">Know More</span></div>
+                    <div><?php echo $shippingFee > 0 ? '₹'.number_format($shippingFee) : 'FREE'; ?></div>
+                </div>
+                <div class="cart-price-divider"></div>
+                <div class="cart-price-row cart-total-row">
+                    <div>Total Amount</div>
+                    <div>₹<?php echo number_format($totalAmount); ?></div>
+                </div>
+            </div>
+            
+            <button class="cart-order-btn">PLACE ORDER</button>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Dynamic functionality can be added here
+        
+        // Example: Size selector
+        const sizeSelectors = document.querySelectorAll('.cart-size-selector');
+        sizeSelectors.forEach(selector => {
+            selector.addEventListener('click', function() {
+                // Show dropdown with sizes
+                // In real implementation, fetch available sizes from API
+                console.log('Size selector clicked');
+            });
+        });
+        
+        // Example: Quantity selector
+        const qtySelectors = document.querySelectorAll('.cart-qty-selector');
+        qtySelectors.forEach(selector => {
+            selector.addEventListener('click', function() {
+                // Show dropdown with quantity options
+                console.log('Quantity selector clicked');
+            });
+        });
+        
+        // Example: Remove item
+        const closeButtons = document.querySelectorAll('.cart-close-btn');
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const item = this.closest('.cart-item');
+                // Send AJAX request to remove from cart
+                // Example:
+                /*
+                const itemId = item.dataset.id; // Add data-id to each item
+                fetch('remove_from_cart.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id: itemId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        item.remove();
+                        updateCartCount();
+                        updatePriceDetails(data.totals);
+                    }
+                });
+                */
+                
+                // For demo, just remove the item
+                item.remove();
+                console.log('Item removed');
+            });
+        });
+        
+        // Example: Apply coupon
+        const applyButton = document.querySelector('.cart-apply-btn');
+        if(applyButton) {
+            applyButton.addEventListener('click', function() {
+                // Show coupon input modal or form
+                console.log('Apply button clicked');
+            });
+        }
+        
+        // Example: Enter pin code
+        const pinButton = document.querySelector('.cart-pin-btn');
+        if(pinButton) {
+            pinButton.addEventListener('click', function() {
+                // Show pin code input
+                console.log('Pin button clicked');
+            });
+        }
+        
+        // Function to update cart count
+        function updateCartCount() {
+            const itemsCount = document.querySelectorAll('.cart-item').length;
+            const countElement = document.querySelector('.cart-items-count');
+            if(countElement) {
+                countElement.textContent = `${itemsCount}/${itemsCount} ITEMS SELECTED`;
+            }
+        }
+        
+        // Function to update price details
+        function updatePriceDetails(totals) {
+            // Update all price values based on cart changes
+            // This would be called after adding/removing items or applying coupons
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,687 @@
+<?php
+$id = Mage::getModel('core/request')->getQuery('id');
+$product = $this->getProductDetails($id);
+
+?>
+
+<!-- Product Page Main Content - No Header -->
+<main class="spd__container">
+    <!-- Breadcrumb Navigation -->
+    <div class="spd__breadcrumb">
+        <a href="/" class="spd__breadcrumb-link">Home</a> / 
+        <a href="/category" class="spd__breadcrumb-link">Category</a> /
+        <a href="/subcategory" class="spd__breadcrumb-link">Subcategory</a> /
+        <span class="spd__breadcrumb-current" id="productBrand"><?php echo $product->getBrand(); ?></span>
+    </div>
+
+    <!-- Product Section -->
+    <div class="spd__product-section">
+        <!-- Product Images Grid -->
+        <div class="spd__product-images">
+            <?php
+            $images = $product->getFilepath();
+            // echo '<pre>';
+            // print_r($images);
+            // echo '</pre>';
+            // die;
+            $imageCount = count($images);
+            
+            // Display up to 6 images
+            for ($i = 0; $i < $imageCount; $i++) {
+                $imageUrl = $images[$i];
+                $index = $i + 1;
+                echo '<div class="spd__image-container">
+                    <img src="/mvc_copy/' . $imageUrl . '" alt="Product View" class="spd__product-image" id="productImage' . $index . '">
+                </div>';
+            }
+            
+            // Fill remaining image slots with placeholders if needed
+            // for ($i = $imageCount; $i < 6; $i++) {
+            //     $index = $i + 1;
+            //     echo '<div class="spd__image-container">
+            //         <img src="" alt="Product View" class="spd__product-image" id="productImage' . $index . '">
+            //     </div>';
+            // }
+            ?>
+        </div>
+
+        <!-- Product Info Section -->
+        <div class="spd__product-info">
+            <!-- Brand and Title -->
+            <h1 class="spd__product-brand" id="brandName"><?php echo $product->getBrand(); ?></h1>
+            <p class="spd__product-title" id="productTitle"><?php echo $product->getName(); ?></p>
+            
+            <!-- Ratings -->
+            <div class="spd__ratings">
+                <span class="spd__rating-value" id="ratingValue">4.2</span>
+                <span class="spd__rating-stars">★★★★☆</span>
+                <span class="spd__rating-count" id="ratingCount">13 Ratings</span>
+            </div>
+            
+            <!-- Price -->
+            <div class="spd__price-container">
+                <?php
+                $price = $product->getPrice();
+                $originalPrice = $price * 1.25; // Example for original price, replace with actual logic
+                $discount = round((($originalPrice - $price) / $originalPrice) * 100);
+                ?>
+                <span class="spd__current-price" id="currentPrice">₹<?php echo number_format($price, 2); ?></span>
+                <span class="spd__original-price" id="originalPrice">₹<?php echo number_format($originalPrice, 2); ?></span>
+                <span class="spd__discount" id="discountPercentage">(<?php echo $discount; ?>% OFF)</span>
+                <p class="spd__inclusive-text">Inclusive of all taxes</p>
+            </div>
+            
+            <!-- Color Options -->
+            <div class="spd__color-options">
+                <div class="spd__color-title">MORE COLORS</div>
+                <div class="spd__color-swatches" id="colorSwatches">
+                    <?php
+                    $productColor = $product->getColor();
+                    // This is a placeholder. In a real implementation, you would have a collection of available colors
+                    $availableColors = [
+                        ['id' => 1, 'name' => 'black', 'code' => '#000000'],
+                        ['id' => 2, 'name' => 'white', 'code' => '#FFFFFF'],
+                        ['id' => 3, 'name' => 'red', 'code' => '#FF0000'],
+                        ['id' => 4, 'name' => 'blue', 'code' => '#0000FF']
+                    ];
+                    
+                    foreach ($availableColors as $color) {
+                        $isActive = ($color['name'] === strtolower($productColor)) ? 'active' : '';
+                        echo '<div class="spd__color-swatch ' . $isActive . '" style="background-color: ' . $color['code'] . ';" data-color-id="' . $color['id'] . '"></div>';
+                    }
+                    ?>
+                </div>
+            </div>
+            
+            <!-- Size Options -->
+            <div class="spd__size-section">
+                <div class="spd__size-title">
+                    <span>SELECT SIZE</span>
+                    <span class="spd__size-chart">SIZE CHART &gt;</span>
+                </div>
+                <div class="spd__size-options" id="sizeOptions">
+                    <?php
+                    // This is a placeholder. In a real implementation, you would have a collection of available sizes
+                    $availableSizes = [
+                        ['id' => 1, 'label' => 'XS', 'outOfStock' => false],
+                        ['id' => 2, 'label' => 'S', 'outOfStock' => false],
+                        ['id' => 3, 'label' => 'M', 'outOfStock' => false],
+                        ['id' => 4, 'label' => 'L', 'outOfStock' => false],
+                        ['id' => 5, 'label' => 'XL', 'outOfStock' => true]
+                    ];
+                    
+                    foreach ($availableSizes as $index => $size) {
+                        $selected = ($index === 1) ? 'selected' : ''; // Default select the second size
+                        $outOfStock = $size['outOfStock'] ? 'out-of-stock' : '';
+                        $title = $size['outOfStock'] ? 'title="Out of Stock"' : '';
+                        
+                        echo '<div class="spd__size-option ' . $selected . ' ' . $outOfStock . '" ' . $title . ' data-size-id="' . $size['id'] . '">' . $size['label'] . '</div>';
+                    }
+                    ?>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="spd__action-buttons">
+                <a class="spd__add-to-bag" href='<?php echo $this->getUrl("checkout/cart/index") ?>/?id=<?php echo $product->getProductId(); ?>'>
+                        <i class="spd__bag-icon"></i> ADD TO BAG
+                </a>
+                <button class="spd__wishlist">
+                    <i class="spd__heart-icon"></i> WISHLIST
+                </button>
+            </div>
+            
+            <!-- Delivery Options -->
+            <div class="spd__delivery-options">
+                <div class="spd__delivery-title">DELIVERY OPTIONS <i class="spd__truck-icon"></i></div>
+                <div class="spd__delivery-input">
+                    <input type="text" placeholder="Enter pincode" class="spd__pincode-input" id="pincodeInput">
+                    <button class="spd__check-button">Check</button>
+                </div>
+                <p class="spd__delivery-message">Please enter PIN code to check delivery time & Pay on Delivery Availability</p>
+                <ul class="spd__offer-list">
+                    <li class="spd__offer-item">100% Original Products</li>
+                    <li class="spd__offer-item">Pay on delivery might be available</li>
+                    <li class="spd__offer-item">Easy 14 days returns and exchanges</li>
+                </ul>
+            </div>
+            
+            <!-- Best Offers -->
+            <div class="spd__best-offers">
+                <div class="spd__offers-title">BEST OFFERS <i class="spd__tag-icon"></i></div>
+                <div class="spd__offer-details" id="offerDetails">
+                    <!-- Offers -->
+                    <?php
+                    // This is a placeholder. In a real implementation, you would fetch offers from a database
+                    $offers = [
+                        [
+                            'name' => 'Best Price: Rs. ' . round($price * 0.9),
+                            'description' => 'Applicable on: Orders above Rs. 799 (only on first purchase)'
+                        ],
+                        [
+                            'name' => '10% Discount on HDFC Bank Credit Card',
+                            'description' => 'Min Spend Rs.3,000; Max Discount Rs.500. Valid till 31st Dec'
+                        ],
+                        [
+                            'name' => '5% Unlimited Cashback on Flipkart Axis Bank Credit Card',
+                            'description' => 'Min Spend Rs.1,500; Max Discount Rs.500'
+                        ]
+                    ];
+                    
+                    foreach ($offers as $offer) {
+                        echo '<div class="spd__offer-item">
+                            <div class="spd__offer-name">' . $offer['name'] . '</div>
+                            <div class="spd__offer-description">' . $offer['description'] . '</div>
+                        </div>';
+                    }
+                    ?>
+                </div>
+            </div>
+            
+            <!-- Product Details -->
+            <div class="spd__product-details">
+                <h3 class="spd__details-title">PRODUCT DETAILS <i class="spd__info-icon"></i></h3>
+                <p class="spd__details-text" id="productDescription"><?php echo $product->getDescription(); ?></p>
+                
+                <div class="spd__size-fit">
+                    <h4 class="spd__section-title">Size & Fit</h4>
+                    <p class="spd__section-text" id="sizeFitInfo">The model (height 5'8) is wearing a size S</p>
+                </div>
+                
+                <div class="spd__material-care">
+                    <h4 class="spd__section-title">Material & Care</h4>
+                    <p class="spd__section-text" id="materialCareInfo">Material: <?php echo $product->getMaterial(); ?>
+                    <br>Machine Wash</p>
+                </div>
+                
+                <div class="spd__specifications">
+                    <h4 class="spd__section-title">Specifications</h4>
+                    <table class="spd__specs-table">
+                        <tr class="spd__spec-row">
+                            <td class="spd__spec-label">Model Number</td>
+                            <td class="spd__spec-value" id="specModelNumber"><?php echo $product->getModelNumber(); ?></td>
+                        </tr>
+                        <tr class="spd__spec-row">
+                            <td class="spd__spec-label">SKU</td>
+                            <td class="spd__spec-value" id="specSKU"><?php echo $product->getSku(); ?></td>
+                        </tr>
+                        <tr class="spd__spec-row">
+                            <td class="spd__spec-label">Stock</td>
+                            <td class="spd__spec-value" id="specStock"><?php echo $product->getStockQuantity(); ?> Units</td>
+                        </tr>
+                        <tr class="spd__spec-row">
+                            <td class="spd__spec-label">Country of Origin</td>
+                            <td class="spd__spec-value" id="specCountryOrigin"><?php echo $product->getCountryOfOrigin(); ?></td>
+                        </tr>
+                        <tr class="spd__spec-row">
+                            <td class="spd__spec-label">Color</td>
+                            <td class="spd__spec-value" id="specColor"><?php echo $product->getColor(); ?></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+/* Single Product Display (SPD) Styles - Unique class prefixes to avoid conflicts */
+.spd__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.spd__breadcrumb {
+    display: flex;
+    margin: 15px 0;
+    font-size: 12px;
+    color: #666;
+}
+
+.spd__breadcrumb-link {
+    text-decoration: none;
+    color: #666;
+    margin: 0 5px;
+}
+
+.spd__breadcrumb-current {
+    margin: 0 5px;
+    color: #333;
+}
+
+.spd__product-section {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.spd__product-images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 5px; /* Reduced from 10px to 5px */
+    row-gap: 5px; /* Use this instead of grid-row-gap with a positive value */
+    width: 60%;
+}
+
+.spd__image-container {
+    width: 100%;
+    /* height: 80%; */
+    overflow: hidden;
+}
+
+.spd__product-image {
+    width: 100%;
+    height: 70%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.spd__product-image:hover {
+    transform: scale(1.05);
+}
+
+.spd__product-info {
+    width: 40%;
+    padding: 0 20px;
+}
+
+.spd__product-brand {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.spd__product-title {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.spd__ratings {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.spd__rating-value {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.spd__rating-stars {
+    color: #ff3f6c;
+    margin-right: 5px;
+}
+
+.spd__rating-count {
+    color: #777;
+    font-size: 13px;
+}
+
+.spd__price-container {
+    margin-bottom: 20px;
+}
+
+.spd__current-price {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.spd__original-price {
+    text-decoration: line-through;
+    color: #777;
+    margin-left: 5px;
+}
+
+.spd__discount {
+    color: #ff3f6c;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.spd__inclusive-text {
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.spd__color-options {
+    margin-bottom: 20px;
+}
+
+.spd__color-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.spd__color-swatches {
+    display: flex;
+}
+
+.spd__color-swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+}
+
+.spd__color-swatch.active {
+    border: 2px solid #ff3f6c;
+}
+
+.spd__size-section {
+    margin-bottom: 20px;
+}
+
+.spd__size-title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.spd__size-chart {
+    color: #ff3f6c;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.spd__size-options {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.spd__size-option {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.spd__size-option.selected {
+    border: 1px solid #ff3f6c;
+    font-weight: bold;
+}
+
+.spd__size-option.out-of-stock {
+    color: #ccc;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.spd__size-option.out-of-stock:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+    transform: rotate(45deg);
+}
+
+.spd__action-buttons {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.spd__add-to-bag {
+    background-color: #ff3f6c;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 3px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+    flex: 2;
+}
+
+.spd__wishlist {
+    border: 1px solid #ddd;
+    background-color: white;
+    padding: 12px 20px;
+    border-radius: 3px;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spd__delivery-options {
+    border: 1px solid #f0f0f0;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.spd__delivery-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.spd__delivery-input {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.spd__pincode-input {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px 0 0 3px;
+}
+
+.spd__check-button {
+    flex: 1;
+    background: none;
+    border: 1px solid #ddd;
+    border-left: none;
+    padding: 8px;
+    color: #ff3f6c;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0 3px 3px 0;
+}
+
+.spd__delivery-message {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.spd__offer-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.spd__offer-item {
+    font-size: 13px;
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 15px;
+}
+
+.spd__offer-item:before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #ff3f6c;
+}
+
+.spd__best-offers {
+    border: 1px solid #f0f0f0;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.spd__offers-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.spd__offer-details {
+    font-size: 13px;
+}
+
+.spd__offer-item {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.spd__offer-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.spd__offer-description {
+    color: #666;
+}
+
+.spd__product-details {
+    margin-top: 20px;
+}
+
+.spd__details-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.spd__details-text {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.spd__section-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 15px 0 5px;
+}
+
+.spd__section-text {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.spd__specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.spd__spec-row {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.spd__spec-label {
+    padding: 8px 0;
+    width: 40%;
+    color: #666;
+    font-size: 13px;
+}
+
+.spd__spec-value {
+    padding: 8px 0;
+    font-size: 13px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .spd__product-section {
+        flex-direction: column;
+    }
+    
+    .spd__product-images,
+    .spd__product-info {
+        width: 100%;
+    }
+    
+    .spd__product-info {
+        padding: 20px 0;
+    }
+}
+</style>
+
+<!-- JavaScript for dynamic functionality -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Size selection
+    document.querySelectorAll('.spd__size-option').forEach(element => {
+        element.addEventListener('click', function() {
+            if (!this.classList.contains('out-of-stock')) {
+                document.querySelectorAll('.spd__size-option').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            }
+        });
+    });
+    
+    // Color selection
+    document.querySelectorAll('.spd__color-swatch').forEach(element => {
+        element.addEventListener('click', function() {
+            document.querySelectorAll('.spd__color-swatch').forEach(el => {
+                el.classList.remove('active');
+            });
+            this.classList.add('active');
+            
+            // In a real implementation, you would fetch the product data for the selected color
+            // and update the page using AJAX
+            const colorId = this.dataset.colorId;
+            console.log('Selected color ID:', colorId);
+            // Example AJAX call (commented out)
+            /*
+            fetch('/api/product-color?id=<?php echo $id; ?>&color=' + colorId)
+                .then(response => response.json())
+                .then(data => {
+                    // Update product images, price, etc.
+                })
+                .catch(error => console.error('Error:', error));
+            */
+        });
+    });
+    
+    // Pincode check
+    document.querySelector('.spd__check-button').addEventListener('click', function() {
+        const pincode = document.getElementById('pincodeInput').value;
+        if (pincode.length === 6 && !isNaN(pincode)) {
+            // Example AJAX call (commented out)
+            /*
+            fetch('/api/check-delivery?pincode=' + pincode)
+                .then(response => response.json())
+                .then(data => {
+                    // Update delivery message
+                })
+                .catch(error => console.error('Error:', error));
+            */
+            // Placeholder response
+            document.querySelector('.spd__delivery-message').textContent = 
+                'Delivery available in ' + pincode + '. Expected delivery in 3-5 days.';
+        } else {
+            document.querySelector('.spd__delivery-message').textContent = 
+                'Please enter a valid 6-digit PIN code.';
+        }
+    });
+});
+</script>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        .myntra_custom_container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #fdeff2;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        .myntra_custom_promo {
+            position: relative;
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        
+        .myntra_custom_promo_banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fdeff2;
+            padding: 20px 40px;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .myntra_custom_offer_text {
+            flex: 1;
+        }
+        
+        .myntra_custom_offer_heading {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3e4152;
+            margin-bottom: 5px;
+        }
+        
+        .myntra_custom_offer_subtext {
+            font-size: 14px;
+            color: #7e818c;
+            margin-bottom: 10px;
+        }
+        
+        .myntra_custom_code {
+            font-size: 14px;
+            color: #3e4152;
+            margin-top: 15px;
+        }
+        
+        .myntra_custom_code_value {
+            display: inline-block;
+            border: 1px dashed #ff3f6c;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-left: 5px;
+            font-weight: bold;
+        }
+        
+        .myntra_custom_offer_image {
+            flex: 1;
+            text-align: right;
+        }
+        
+        .myntra_custom_offer_image img {
+            max-width: 200px;
+        }
+        
+        .myntra_custom_login_form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .myntra_custom_login_header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: #3e4152;
+        }
+        
+        .myntra_custom_form_group {
+            margin-bottom: 20px;
+        }
+        
+        .myntra_custom_form_control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d4d5d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .myntra_custom_terms {
+            font-size: 12px;
+            color: #7e818c;
+            margin-bottom: 20px;
+        }
+        
+        .myntra_custom_terms a {
+            color: #ff3f6c;
+            text-decoration: none;
+        }
+        
+        .myntra_custom_btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff3f6c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+        .myntra_custom_help {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #7e818c;
+        }
+        
+        .myntra_custom_help a {
+            color: #ff3f6c;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- <form class="myntra-login-form" > -->
+    <div class="myntra_custom_container">
+        <div class="myntra_custom_promo">
+            <div class="myntra_custom_promo_banner">
+                <div class="myntra_custom_offer_text">
+                    <div class="myntra_custom_offer_heading">Flat ₹300 OFF +<br>Free Shipping</div>
+                    <div class="myntra_custom_offer_subtext">On First Order</div>
+                    <div class="myntra_custom_code">
+                        Code: <span class="myntra_custom_code_value">MYNTRA300</span>
+                    </div>
+                </div>
+                <div class="myntra_custom_offer_image">
+                    <img src="/api/placeholder/200/150" alt="Offer">
+                </div>
+            </div>
+            
+            <div class="myntra_custom_login_form">
+                <div class="myntra_custom_login_header">
+                    Login or Signup
+                </div>
+                <form method="POST" action='<?php echo $this->getUrl("*/*/loginPost")?>'>
+                    <div class="myntra_custom_form_group">
+                        <input type="text" class="myntra_custom_form_control" name="user[username]" placeholder="Username" required>
+                    </div>
+                    <div class="myntra_custom_form_group">
+                        <input type="password" class="myntra_custom_form_control" name="user[password]" placeholder="Password" required>
+                    </div>
+                    <div class="myntra_custom_terms">
+                        By continuing, I agree to the <a href="#">Terms of Use</a> & <a href="#">Privacy Policy</a>
+                    </div>
+                    <button type="submit" class="myntra_custom_btn">CONTINUE</button>
+                </form>
+                <div class="myntra_custom_help">
+                    Have trouble logging in? <a href=>Get help</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- </form> -->
+</body>
+</html>
+
+
+
