@@ -1,34 +1,16 @@
 <?php
 // Sample data - in real application, this would come from your database
-$cartItems = [
-    [
-        'id' => 1,
-        'brand' => 'Zastraa',
-        'name' => 'Black High Waist Scuba Mini Skirts',
-        'seller' => 'MONARK CREATION INDIA',
-        'size' => '28',
-        'qty' => 1,
-        'current_price' => 674,
-        'mrp' => 2499,
-        'discount_percent' => 73,
-        'return_days' => 14,
-        'image' => 'product-image.jpg'
-    ]
-    // More items can be dynamically added here
-];
 
-// Calculate totals
-$totalMRP = 0;
-$totalDiscount = 0;
-$platformFee = 20;
-$shippingFee = 0; // Free shipping
 
-foreach($cartItems as $item) {
-    $totalMRP += $item['mrp'] * $item['qty'];
-    $totalDiscount += ($item['mrp'] - $item['current_price']) * $item['qty'];
-}
+// --------------------------
+$cart_items = $this->getCartItems();
+$summary = $this->getSummary();
+$total = $this->getTotalOfSubTotal();
 
-$totalAmount = $totalMRP - $totalDiscount + $platformFee + $shippingFee;
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -592,7 +574,7 @@ $totalAmount = $totalMRP - $totalDiscount + $platformFee + $shippingFee;
     </style>
 </head>
 <body class="cart-body">
-    <header class="cart-header">
+    <!-- <header class="cart-header">
         <a href="/">
             <img src="myntra-logo.png" alt="BidApp" class="cart-logo">
         </a>
@@ -628,7 +610,7 @@ $totalAmount = $totalMRP - $totalDiscount + $platformFee + $shippingFee;
                 <span>Bag</span>
             </a>
         </div>
-    </header>
+    </header> -->
     
     <div class="cart-container">
         <div class="cart-secure-badge">
@@ -674,61 +656,81 @@ $totalAmount = $totalMRP - $totalDiscount + $platformFee + $shippingFee;
                         <div class="cart-wishlist-action">MOVE TO WISHLIST</div>
                     </div>
                 </div>
-                
-                <?php foreach($cartItems as $item): ?>
+
+
+                <?php $url = Mage::getBaseUri(); ?>
+                <?php foreach($cart_items as $item): ?>
+                    
                 <div class="cart-item">
                     <input type="checkbox" class="cart-checkbox" checked>
-                    <img src="<?php echo $item['image']; ?>" alt="<?php echo $item['name']; ?>" class="cart-item-image">
+                    
+                    <img src="<?php  echo $url,isset($item->getProduct()->getFilepath()[0]) ? $item->getProduct()->getFilepath()[0] : ''; ?>" 
+                        alt="<?php echo isset($item->getProduct()->getFilepath()[0]) ? $item->getProduct()->getFilepath()[0] : ''; ?>" class="cart-item-image">
                     <div class="cart-item-details">
-                        <div class="cart-brand"><?php echo $item['brand']; ?></div>
-                        <div class="cart-product-name"><?php echo $item['name']; ?></div>
-                        <div class="cart-seller">Sold by: <?php echo $item['seller']; ?></div>
+                        <div class="cart-brand"><?php echo $item->getProduct()->getBrand(); ?></div>
+                        <div class="cart-product-name"><?php echo $item->getProduct()->getName(); ?></div>
+                        <!-- <div class="cart-seller">Sold by: <?php //echo $item['seller']; ?></div> -->
                         <div class="cart-item-options">
                             <div class="cart-size-selector">
-                                Size: <?php echo $item['size']; ?>
+                                Size: <?php //echo $item['size']; ?>
+                                
                                 <i class="fas fa-chevron-down cart-dropdown-icon"></i>
                             </div>
-                            <div class="cart-qty-selector">
-                                Qty: <?php echo $item['qty']; ?>
+                            <form action="<?php echo $this->getUrl('checkout/cart/update') ?>" 
+                                class="cart-qty-selector" method="POST">
+                                <button type="submit">Quantity</button>
                                 <i class="fas fa-chevron-down cart-dropdown-icon"></i>
-                            </div>
+                                <input type="hidden" name="cart_item_id" value="<?php echo $item->getCartItemId() ?>">
+                                <input type="number" name="quantity" value="<?php echo $item->getQuantity(); ?>">
+                                
+                            </form>
                         </div>
                         <div class="cart-item-price">
-                            <div class="cart-current-price">₹<?php echo $item['current_price']; ?></div>
-                            <div class="cart-original-price">₹<?php echo $item['mrp']; ?></div>
-                            <div class="cart-discount"><?php echo $item['discount_percent']; ?>% OFF</div>
+                            <div class="cart-current-price">₹<?php echo $item->getProduct()->getPrice(); ?></div>
+                            <div class="cart-current-price">₹<?php echo $item->getSubtotal(); ?></div>
+                            <!-- <div class="cart-original-price">₹<?php //echo $item['mrp']; ?></div>
+                            <div class="cart-discount"><?php //echo $item['discount_percent']; ?>% OFF</div> -->
                         </div>
                         <div class="cart-return">
                             <i class="fas fa-undo cart-return-icon"></i>
-                            <?php echo $item['return_days']; ?> days return available
+                            <?php //echo $item['return_days']; ?> days return available
                         </div>
                     </div>
                     <button class="cart-close-btn">
-                        <i class="fas fa-times"></i>
+                        <a href="<?php echo $this->getUrl('checkout/cart/remove') . '/?cart_item_id=' . $item->getCartItemId() ?>" class="fas fa-times"></a>
                     </button>
                 </div>
                 <?php endforeach; ?>
             </div>
             
-            <div class="cart-login-box">
+            <!-- <div class="cart-login-box">
                 <img src="login-icon.png" alt="Login" class="cart-login-image">
                 <div class="cart-login-text">Login to see items from your existing bag and wishlist.</div>
                 <button class="cart-login-btn">LOGIN NOW</button>
-            </div>
+            </div> -->
         </div>
         
         <div class="cart-right-section">
-            <div class="cart-coupons">
-                <div class="cart-coupons-title">COUPONS</div>
-                <div class="cart-apply-coupon">
-                    <div class="cart-apply-text">Apply Coupons</div>
-                    <button class="cart-apply-btn">APPLY</button>
+            <form method="GET" action="<?php echo $this->getUrl('checkout/cart/applyCoupon') . '/' ?>">
+                <div class="cart-coupons">
+                    <div class="cart-coupons-title">COUPONS</div>
+                    <div class="cart-apply-coupon">
+                        <input name="coupon" value="<?php echo $summary->getCouponCode() ?>" class="cart-apply-text" placeholder="Apply Coupons">
+                        <!-- <div class="cart-apply-text">Apply Coupon</div> -->
+                         <!-- Show message based on coupon validity -->
+                        <button type="submit" class="cart-apply-btn">APPLY</button>
+                    </div>
+                    <!-- <div class="cart-login-offer">
+                        <a href="#" class="cart-login-link">Login</a> to get upto ₹500 OFF on first order
+                    </div> -->
+                    <?php if ($summary->getCouponCode()): ?>             
+                            <div style="color:green;">Coupon Applied</div>
+                        <?php else: ?>
+                            <div style="color:red;">Invalid Coupon</div>                           
+                        <?php endif; ?>
                 </div>
-                <div class="cart-login-offer">
-                    <a href="#" class="cart-login-link">Login</a> to get upto ₹500 OFF on first order
-                </div>
-            </div>
-            
+            </form>
+        
             <div class="cart-donation">
                 <div class="cart-donation-title">SUPPORT TRANSFORMATIVE SOCIAL WORK IN INDIA</div>
                 <div class="cart-donation-check">
@@ -748,32 +750,35 @@ $totalAmount = $totalMRP - $totalDiscount + $platformFee + $shippingFee;
                 <div class="cart-price-title">PRICE DETAILS (1 Item)</div>
                 <div class="cart-price-row">
                     <div>Total MRP</div>
-                    <div>₹<?php echo number_format($totalMRP); ?></div>
+                    <div>₹<?php echo number_format($total); ?></div>
                 </div>
                 <div class="cart-price-row">
                     <div>Discount on MRP</div>
-                    <div class="cart-price-row-green">-₹<?php echo number_format($totalDiscount); ?></div>
+                    <div class="cart-price-row-green">-₹<?php echo number_format($summary->getCouponDiscount()); ?></div>
                 </div>
                 <div class="cart-price-row">
                     <div>Platform Fee <span class="cart-know-more">Know More</span></div>
-                    <div>₹<?php echo number_format($platformFee); ?></div>
+                    <div>₹20</div>
                 </div>
                 <div class="cart-price-row">
                     <div>Shipping Fee <span class="cart-know-more">Know More</span></div>
-                    <div><?php echo $shippingFee > 0 ? '₹'.number_format($shippingFee) : 'FREE'; ?></div>
+                    <div>0</div>
                 </div>
                 <div class="cart-price-divider"></div>
                 <div class="cart-price-row cart-total-row">
                     <div>Total Amount</div>
-                    <div>₹<?php echo number_format($totalAmount); ?></div>
+                    <div>₹<?php echo number_format($summary->getTotalAmount()); ?></div>
                 </div>
             </div>
             
-            <button class="cart-order-btn">PLACE ORDER</button>
+            <!-- <div class="cart-order-btn"> -->
+
+                <button class="cart-order-btn"><a href="<?php echo $this->getUrl('checkout/Address/display')  ?>" class="cart-order-btn">Proceed To Checkout</a></button>
+            <!-- </div> -->
         </div>
     </div>
 
-    <script>
+    <!-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Dynamic functionality can be added here
         
@@ -863,6 +868,6 @@ $totalAmount = $totalMRP - $totalDiscount + $platformFee + $shippingFee;
             // This would be called after adding/removing items or applying coupons
         }
     });
-    </script>
+    </script> -->
 </body>
 </html>

@@ -3,6 +3,7 @@
 class Core_Block_Template{
 
     protected $_child = [];
+    protected $_parent = null;
     protected $_template;
 
     public function toHtml(){
@@ -19,16 +20,29 @@ class Core_Block_Template{
     public function addChild($key, $block){
 
         $this->_child[$key] = $block;
+        $block->setParent($this);
         return $this;
 
+    }
+
+    public function getParent(){
+        return $this->_parent;
+    }
+
+    public function setParent($block){
+
+        $this->_parent = $block;
+        return $this;
     }
 
     public function removeChild($key){
 
-        $this->_child[$key];
+        unset($this->_child[$key]);
         return $this;
 
     }
+
+    
 
     public function getChildHtml($key){
 
@@ -62,6 +76,11 @@ class Core_Block_Template{
         $_url[] = $url[2] == '*' ? $request->getActionName() : $url[2];
 
         return Mage::getBaseUri().implode("/" , $_url);
+    }
+
+    public function getLayout(){
+
+        return Mage::getBlockSingleton('core/layout');
     }
 
 }

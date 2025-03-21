@@ -66,6 +66,23 @@ class Core_Model_Request{
 
         return $_POST;
     }
+
+    public function isPost(){
+
+        return $_SERVER['REQUEST_METHOD'] === 'POST';
+    }
+
+    public function isget(){
+        
+        return $_SERVER['REQUEST_METHOD'] === 'GET';
+    }
+
+    public function isAjax(){
+        
+        return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) 
+            && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+    }
 }
 
 ?>

@@ -4,7 +4,7 @@ class Core_model_Session{
 
     public function __construct(){
 
-        session_start();
+        @session_start();
     }
 
     public function getId(){
@@ -15,6 +15,7 @@ class Core_model_Session{
     public function set($key, $value){
 
         $_SESSION[$key] = $value;
+        
     }
 
     public function get($key){

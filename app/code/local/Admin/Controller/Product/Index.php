@@ -17,7 +17,7 @@ class Admin_Controller_Product_Index extends Core_Controller_Admin_Action{
 
     public function listAction(){
        
-        $layout = Mage::getBlock('Core/Layout');
+        $layout = $this->getLayout();
         
         $list = $layout->createBlock('Admin/Product_Index_list')
                 ->setTemplate('admin/product/index/list.phtml');
@@ -35,7 +35,7 @@ class Admin_Controller_Product_Index extends Core_Controller_Admin_Action{
         $product->setData($request->getParam('catalog_product'));
         $product->save();
 
-        die;
+        // die;
         header('Location: http://localhost/mvc_copy/admin/product_index/list');
         exit;
         
@@ -95,7 +95,7 @@ class Admin_Controller_Product_Index extends Core_Controller_Admin_Action{
                 }
             }
         }
-        die();
+        
         header('Location: http://localhost/mvc_copy/admin/product_index/list');
         exit;
     }

@@ -1,0 +1,41 @@
+
+<!-- address.phtml - Child template for address information section -->
+<div class="address-wrap p-5">
+    <div class="address-head flex justify-between mb-4">
+        <h2 class="title text-lg font-medium text-gray-700">Saved Addresses</h2>
+        <a href="<?php echo $this->getUrl('customer/account_address/new') ?>"><button class="add-btn text-sm font-medium text-pink-600 px-3 py-1 rounded border border-pink-600">ADD NEW ADDRESS</button></a>
+    </div>
+    
+    <div class="address-list grid grid-cols-1 md:grid-cols-2 gap-4">
+        <?php if (count($this->getAddressData()) > 0): ?>
+            <?php foreach ($this->getAddressData() as $address): ?>
+            <div class="address-card p-4 border border-gray-200 rounded relative">
+                <div class="badge absolute top-2 right-2 px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded"><?php echo $address->getType(); ?></div>
+                
+                <div class="content">
+                    <div class="street text-sm font-medium text-gray-800 mb-1"><?php echo $address->getStreetAddress(); ?></div>
+                    <div class="details text-sm text-gray-600">
+                        <?php echo $address->getCity(); ?>, <?php echo $address->getCountry(); ?> - <?php echo $address->getZipcode(); ?>
+                    </div>
+                </div>
+                
+                <div class="actions flex mt-3 pt-3 border-t border-gray-100">
+                    <a href="<?php echo $this->getUrl('customer/account_address/new') . '/?address_id=' . $address->getAddressId(); ?>"><button class="edit-link text-xs font-medium text-gray-700 hover:text-pink-600 mr-3">EDIT</button></a>
+                    <a href="<?php echo $this->getUrl('customer/account_address/delete') . '/?address_id=' . $address->getAddressId(); ?>"><button class="delete-link text-xs font-medium text-gray-700 hover:text-pink-600">REMOVE</button></a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="empty-card p-6 border border-dashed border-gray-300 rounded flex flex-col items-center justify-center text-center">
+                <div class="icon text-gray-400 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                </div>
+                <div class="text text-sm text-gray-600">You haven't added any addresses yet</div>
+                <a href="<?php echo $this->getUrl('customer/account_address/new') ?>"><button class="add-link mt-3 text-sm font-medium text-pink-600 px-3 py-1 rounded border border-pink-600">ADD NEW ADDRESS</button></a>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

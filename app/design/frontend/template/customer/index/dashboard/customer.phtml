@@ -1,0 +1,52 @@
+<!-- <h1>customer</h1> -->
+<?php
+
+$profile = $this->getCustomerData();
+
+?>
+
+<!-- customer.phtml - Child template for customer information section -->
+<div class="profile-wrap border-b border-gray-200 p-5">
+    <div class="profile-head flex justify-between mb-4">
+        <h2 class="title text-lg font-medium text-gray-700">Personal Information</h2>
+       <a href="<?php echo $this->getUrl('customer/index/profileNew') . '/?customer_id=' . $profile->getCustomerId() ?>"><button class="edit-btn text-sm font-medium text-pink-600 px-3 py-1 rounded border border-pink-600">EDIT</button></a> 
+    </div>
+    
+    <div class="info-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="info-item">
+            <div class="label text-xs text-gray-500 mb-1">Full Name</div>
+            <div class="value text-sm text-gray-800"><?php echo $profile->getFirstName() . ' ' . $profile->getLastName(); ?></div>
+        </div>
+        
+        <div class="info-item">
+            <div class="label text-xs text-gray-500 mb-1">Email Address</div>
+            <div class="value text-sm text-gray-800"><?php echo $profile->getEmail(); ?></div>
+        </div>
+        
+        <div class="info-item">
+            <div class="label text-xs text-gray-500 mb-1">Mobile Number</div>
+            <div class="value text-sm text-gray-800"><?php echo $profile->getPhone(); ?></div>
+        </div>
+        
+        <div class="info-item">
+            <div class="label text-xs text-gray-500 mb-1">Gender</div>
+            <div class="value text-sm text-gray-800"><?php echo ucfirst($profile->getGender()); ?></div>
+        </div>
+        
+        <div class="info-item">
+            <div class="label text-xs text-gray-500 mb-1">Date of Birth</div>
+            <div class="value text-sm text-gray-800"><?php 
+                $dob = new DateTime($profile->getDob());
+                echo $dob->format('d M Y'); 
+            ?></div>
+        </div>
+        
+        <div class="info-item">
+            <div class="label text-xs text-gray-500 mb-1">Customer Since</div>
+            <div class="value text-sm text-gray-800"><?php 
+                $createdAt = new DateTime($profile->getCreatedAt());
+                echo $createdAt->format('d M Y'); 
+            ?></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,241 @@
+<div class="filter">
+    <div class="filter-section">
+        <h3>Categories</h3>
+        <?php foreach ($this->getCategories() as $category): ?>
+        <div class="filter-option">
+            <label>
+                <input type="checkbox" name="category"
+                    value="<?php echo htmlspecialchars($category->getCategoryId()); ?>" class="filter-checkbox">
+                <?php echo htmlspecialchars($category->getName()); ?>
+            </label>
+        </div>
+        <?php endforeach; ?>
+        <h3>Price Range</h3>
+        <div class="price-range">
+            <input type="range" id="price-slider" min="0" max="10000" value="10000" class="filter-range">
+            <div class="price-inputs">
+                <input type="number" id="min-price" placeholder="Min" min="0" value="0" class="filter-price">
+                <input type="number" id="max-price" placeholder="Max" max="10000" value="10000" class="filter-price">
+            </div>
+        </div>
+        <h3>Attributes</h3>
+        <?php foreach ($this->getAttributes() as $attribute): ?>
+        <div class="attribute-dropdown">
+            <div class="attribute-header" onclick="toggleAttribute(this)">
+                <h4><?php echo htmlspecialchars($attribute->getName()); ?></h4>
+                <div class="attribute-toggle"></div>
+            </div>
+            <div class="attribute-options">
+                <?php $productAttributes = $this->getProductAttribute($attribute->getAttributeId()); ?>
+                <?php foreach ($productAttributes as $productAttribute): ?>
+                <div class="attribute-option">
+                    <label>
+                        <input type="checkbox" name="<?php echo htmlspecialchars($attribute->getName()); ?>"
+                            value="<?php echo htmlspecialchars($productAttribute->getValue()); ?>"
+                            class="filter-checkbox">
+                        <?php echo htmlspecialchars($productAttribute->getValue()); ?>
+                    </label>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<script>
+const FilterApp = {
+    init: function() {
+        this.bindEvents();
+    },
+
+    bindEvents: function() {
+        $('.filter-checkbox, .filter-price').on('input', this.fetchFilteredProducts);
+    },
+
+    fetchFilteredProducts: function() {
+        let formData = FilterApp.collectFilterData();
+        FilterApp.updateEncodedURL(formData);
+        $('#products-container').html('<p>Loading products...</p>');
+        $.ajax({
+            url: 'http://localhost/mvc_main/catalog/product/list/',
+            type: 'GET',
+            data: formData,
+            success: function(response) {
+                let $response = $(response);
+                console.log($response);
+                let $products = $response.find('.products-grid');
+                console.log($products.length);
+                let $productsGrid = $response.find('.products-grid');
+                $('#products-container').html($productsGrid);
+            },
+            error: function(error) {
+                console.log('Error fetching products:', error);
+                $('#products-container').html('<p>Failed to load products. Please try again.</p>');
+            }
+        });
+    },
+    syncPriceInputs: function() {
+        $('#max-price').val($('#price-slider').val());
+        FilterApp.fetchFilteredProducts();
+    },
+    debounce: function(func, delay) {
+        let timer;
+        return function() {
+            clearTimeout(timer);
+            timer = setTimeout(() => func.apply(this, arguments), delay);
+        };
+    },
+
+    updateEncodedURL: function(filters) {
+        try {
+            let jsonString = JSON.stringify(filters);
+            let encodedData = btoa(jsonString);
+
+            window.history.pushState({}, '', `?data=${encodedData}`);
+        } catch (error) {
+            console.error('Encoding failed:', error);
+        }
+    },
+
+    fetchProductsFromEncodedURL: function() {
+        let urlParams = new URLSearchParams(window.location.search);
+        let encodedData = urlParams.get('data');
+
+        console.log(encodedData);
+
+        if (encodedData) {
+            try {
+                let decodedData = atob(encodedData);
+                console.log(encodedData);
+
+                console.log(encodedData);
+                let filters = JSON.parse(decodedData);
+
+                if (filters) {
+                    FilterApp.restoreFilters(filters);
+                    this.fetchFilteredProducts();
+                }
+            } catch (error) {
+                console.error('Decoding failed:', error);
+            }
+        }
+    },
+
+    restoreFilters: function(filters) {
+        $.each(filters, function(key, value) {
+            if (Array.isArray(value)) {
+                $('.filter-checkbox[name="' + key + '"]').each(function() {
+                    $(this).prop('checked', value.includes($(this).val()));
+                });
+            } else {
+                $('#' + key).val(value);
+            }
+        });
+    },
+
+    collectFilterData: function() {
+        let filters = {};
+        $('.filter-checkbox:checked').each(function() {
+            let name = $(this).attr('name');
+            if (!filters[name]) {
+                filters[name] = [];
+            }
+            filters[name].push($(this).val());
+        });
+        console.log(filters);
+        return filters;
+    },
+    searchInput: function() {
+        $('#search-input').on('input', function() {
+            let input = $('#search-input').val().toLowerCase();
+            $('.product').each(function() {
+                let productName = $(this).find('.product-name').text().toLowerCase();
+                console.log(productName);
+
+                if (productName.includes(input)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+
+            })
+            console.log(input);
+        });
+    },
+    sortProducts: function() {
+        $('#sort-select').on('change', function() {
+            let option = $('#sort-select').val();
+
+            // Get all product cards
+            let products = $('.product-card').toArray();
+
+            // Sort the products based on the selected option
+            products.sort((a, b) => {
+                let priceA = parseFloat($(a).find('.product-price').text().substring(1));
+                let priceB = parseFloat($(b).find('.product-price').text().substring(1));
+
+                if (option === 'price-asc') {
+                    return priceA - priceB;
+                } else if (option === 'price-desc') {
+                    return priceB - priceA;
+                }
+            });
+
+            // Clear the container and append the sorted products
+            $('.product').empty();
+            products.forEach(product => {
+                $('.product').append(product);
+            });
+        });
+    }
+}
+
+$(document).ready(function() {
+    FilterApp.init();
+    FilterApp.fetchProductsFromEncodedURL();
+    FilterApp.searchInput();
+    FilterApp.sortProducts();
+});
+
+function toggleAttribute(header) {
+    console.log(header);
+    var options = header.nextElementSibling;
+    if (options.classList.contains('active')) {
+        options.classList.remove('active');
+    } else {
+        options.classList.add('active');
+    }
+}
+
+document.querySelectorAll('.attribute-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+        toggleAttribute(this);
+    });
+});
+</script>
+
+
+
+
+//productes.phtml
+<div class="products">
+    <div class="products-grid" id="products-container">
+        <?php foreach ($this->getProduct() as $product): ?>
+            <div class="product">
+
+                <?php
+                $i = $this->image($product->getProductId());
+                ?>
+                <a href="<?php echo $this->getUrl('*/*/view') ?>/?id=<?php echo $product->getProductId(); ?>"
+                    class=" product-link">
+                    <div class="product-card">
+                        <img src="/mvc_main/<?php echo $i ?>" alt="Product Image" class="product-image">
+                        <h3 class="product-name"><?php echo $product->getName() ?></h3>
+                        <p class="product-price">$<?php echo $product->getPrice() ?></p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>

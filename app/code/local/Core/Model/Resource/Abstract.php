@@ -32,7 +32,7 @@ class Core_Model_Resource_Abstract {
 
 
         $field = (is_null($field)) ? $this->_primaryKey : $field;
-        $sql = "SELECT * FROM {$this->_tableName} WHERE $field = '$value' LIMIT 1";
+        $sql = "SELECT * FROM `{$this->_tableName}` WHERE $field = '$value' LIMIT 1";
         // echo $sql;
         return $this->getAdapter()->fetchRow($sql);
        
@@ -52,7 +52,7 @@ class Core_Model_Resource_Abstract {
         }
         
         if ($primaryId) {
-            print("in update");
+            // print("in update");
             
             $columns = [];
             unset($data[$this->_primaryKey]);
@@ -82,7 +82,7 @@ class Core_Model_Resource_Abstract {
            
         } else {
 
-            echo "in insert";
+            // echo "in insert";
             $columns = [];
             $values = [];
            
@@ -99,7 +99,7 @@ class Core_Model_Resource_Abstract {
 
 
             $sql = sprintf(
-                "INSERT INTO %s (`%s`) VALUES ('%s')",
+                "INSERT INTO `%s` (`%s`) VALUES ('%s')",
                 $this->_tableName,
                 $columns,
                 $values

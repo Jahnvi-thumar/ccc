@@ -1,0 +1,100 @@
+<style>
+    /* Main Container */
+.container-payment {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Heading */
+.pay-heading{
+    text-align: center;
+    color: #333;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Payment Options */
+.payment-option {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.3s ease-in-out;
+    margin-bottom: 10px;
+}
+
+.payment-option:hover {
+    background-color: #f9f9f9;
+}
+
+.payment-option input {
+    transform: scale(1.2);
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.details {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Submit Button */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.3s ease-in-out;
+}
+
+.submit-btn:hover {
+    background: #0056b3;
+}
+
+</style>
+<body>
+    <div class="container-payment">
+        <form action="<?php echo $this->getUrl("checkout/payment/save") ?>" method="POST">
+            <h2 class="pay-heading">Select Payment Method</h2>
+
+            <label class="payment-option" onclick="selectPayment('card')">
+                <input type="radio" name="payment_method" value="card">
+                <div class="details">Credit / Debit Card</div>
+            </label>
+
+            <label class="payment-option" onclick="selectPayment('upi')">
+                <input type="radio" name="payment_method" value="upi" >
+                <div class="details">UPI</div>
+            </label>
+
+            <label class="payment-option">
+                <input type="radio" name="payment_method" value="cash on delivery" checked>
+                <div class="details">Cash on Delivery (COD)</div>
+            </label>
+
+            <button type="submit" class="submit-btn">Place Order</button>
+        </form>
+    </div>
+</body>
+
+<script>
+        function selectPayment(paymentType) {
+            // document.getElementById("card-details").style.display = paymentType === "card" ? "block" : "none";
+            document.getElementById("upi-details").style.display = paymentType === "upi" ? "block" : "none";
+        }
+</script>

@@ -32,9 +32,8 @@ class Core_Block_Layout extends Core_Block_Template{
        $head = $this->getChild('head');
     
         $head->addJs('page/common.js')
-        ->addCss('page/common.css');
+            ->addCss('page/common.css');
     
-       
     }
      
     public function createBlock($block){

@@ -8,26 +8,49 @@ class Catalog_Block_Product_List extends Core_Block_Template{
 
     //filtered products
     protected $categoryTree = [];
+
+    public function __construct(){
+
+        // $layout = Mage::getBlock('Core/Layout');
+        $filter = $this->getLayout()->createBlock('catalog/product_list_filter');
+        $products = $this->getLayout()->createBlock('catalog/product_list_products');
+        $this->addChild('filter' , $filter);
+        $this->addChild('products' , $products);
+    }
     public function getAllProducts(){
 
         $products = Mage::getModel('catalog/filter')
                             ->getProductCollection()
-                            ->addAttributToSelect(['brand'])
+                            // ->prepareQuery();
+                            ->addAttributToSelect(['Brand'])
                             ->getData();
-                            
+                            // echo $products;
+                            // print($products->prepareQuery());
+                            // echo '<pre>';
+                            // print_r($products);
+                            // echo '</pre>';
+                            // die;
         return $products;
-        // $product=Mage::getSingleton("catalog/filter")->getProductCollection()->prepareQuery();
-        // print_r($product);
-        // die;
+        
     }
 
-    public function getAttributesName(){
+    public function getAttributes(){
 
         $attributes = Mage::getModel('catalog/attribute')
                             ->getCollection()
                             ->getData();
 
         return $attributes;
+    }
+
+    public function getProductAttributes($attributeId = null){
+
+        $product_attributes = Mage::getModel('catalog/product_attribute')
+                                    ->getCollection()
+                                    ->addFieldToFilter('attribute_id', $attributeId)
+                                    ->getData();
+
+        return $product_attributes;
     }
     public function getAllProductsImgs($productId){
 
@@ -39,31 +62,8 @@ class Catalog_Block_Product_List extends Core_Block_Template{
         return $images;
     }
 
-    public function getCategories(){
-
-        $categoryid = Mage::getModel('core/request')->getQuery('categoryid');
-        
-        if($categoryid != null){
-
-            $categories = Mage::getModel('catalog/category')
-                                ->getCollection() 
-                                ->addFieldToFilter('parent_id' , ['=' => $categoryid])
-                                ->getData();
-
-        } else {
-
-            $categories = Mage::getModel('catalog/category')
-                                ->getCollection() 
-                                ->addFieldToFilter('parent_id' , ['=' => 0])
-                                ->getData();
-
-        }
-
-        return $categories;
-    }
-
     public function getAllCategories($categoryid=0){
-        echo $categoryid;
+
         $categories = Mage::getModel('catalog/category')
                             ->getCollection()   
                             ->addFieldToFilter('parent_id' , $categoryid)
@@ -81,6 +81,7 @@ class Catalog_Block_Product_List extends Core_Block_Template{
             
             return $this->categoryTree;
         }
+
     }
 }
 

@@ -45,7 +45,25 @@ class Mage{
                 return self::$registry[$class] = new $class;
             }
         
+    }
+
+    public static function getBlockSingleton($blockName){
+
+        $class = str_replace("/" , "_Block_" , $blockName);
+        $class = ucwords($class , "_");
         
+            if(isset(self::$registry[$class])){
+                return self::$registry[$class];
+            } else {
+                return self::$registry[$class] = new $class;
+            }
+    }
+
+    public static function log($data){
+
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";
     }
 }
 ?>

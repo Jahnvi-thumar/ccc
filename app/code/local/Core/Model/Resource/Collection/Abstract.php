@@ -19,11 +19,19 @@ class Core_Model_Resource_Collection_Abstract {
     public function select($columns = ['*']){
 
         $this->_select["FROM"] = ["main_table" => $this->_resource->getTableName()];
-        // $this->_select["COLUMNS"] = $columns;
+        $this->_select["COLUMNS"] = [];
         // $this->_select["COLUMNS"] = $columns;
         $columns = is_array($columns) ? $columns : [$columns];
-        foreach($columns as $column){
-            $this->_select['COLUMNS'][] = "main_table.{$column}";
+        foreach($columns as $alias=>$column){
+            // Mage::log($alias);
+            // Mage::log($column);
+
+            if(is_integer($alias)){
+
+                $this->_select['COLUMNS'][] = "main_table.{$column}";
+            } else {
+                $this->_select['COLUMNS'][] = $alias . " AS " . $column;
+            }
         }
         return $this;
         // echo "<pre>";
@@ -42,7 +50,10 @@ class Core_Model_Resource_Collection_Abstract {
             $_data = $_model->setData($_data);
             // print_r($this->_model);
         }
-        
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
+        // die;
         return $data;
     }
 
@@ -59,7 +70,7 @@ class Core_Model_Resource_Collection_Abstract {
 
     public function prepareQuery()
     {
-        $query = sprintf("SELECT %s FROM %s AS %s", implode(',', 
+        $query = sprintf("SELECT %s FROM `%s` AS %s", implode(',', 
         $this->_select['COLUMNS']), array_values($this->_select['FROM'])[0] , 
         array_keys($this->_select['FROM'])[0]);
     
@@ -148,13 +159,17 @@ class Core_Model_Resource_Collection_Abstract {
 
     public function where($field, $value)
     {
-       
+    //    echo'<br><pre>where:';print_r($this);echo'</pre>';
+    
         if (is_array($value)) {
 
             foreach ($value as $operator => $_value) {
+                // print("<br>val:");
+                // print_r($value);
                 switch (strtoupper($operator)) {
                     case 'IN':
-                        case 'NOT IN':
+                    case 'NOT IN':
+                        // echo "in";
                             $_value = is_array($_value) ? $_value : explode(',', $_value); // Convert to array if needed
                             $inarryvalues = [];
                     
@@ -180,16 +195,18 @@ class Core_Model_Resource_Collection_Abstract {
                         $betweenvaluestring = implode(' AND ', $betweenvalues);
                         $where  =   " {$field} {$operator} {$betweenvaluestring}";
                         break;
+
                     case 'EQ':
                         $where = "{$field} = '{$_value}'";
                         break;
 
                     default:
+                    // echo "default";print_r($value);
                         $where = " {$field} {$operator} '{$_value}' ";
                         break;
                 }
             }
-        }
+        } 
         return $where;
     }
     
@@ -282,6 +299,17 @@ class Core_Model_Resource_Collection_Abstract {
 
     private function getTableName($tableName){
         return array_values($tableName)[0];
+    }
+
+    public function getFirstItem(){
+
+        $data = $this->getData();
+
+        if(isset($data[0])){
+            return $data[0];
+        } else {
+            return $this->_model;
+        }
     }
     
 }

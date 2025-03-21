@@ -13,9 +13,10 @@ class Catalog_Model_Filter extends Core_Model_Abstract{
 
         $request = Mage::getModel('core/request');
         $parameters = $request->getQuery();
-        
+        // print_r($parameters['categoryid']);
         if(isset($parameters['categoryid'])){
-
+            // echo'cat filter apply<br>';
+            // print_r($parameters['categoryid']);
             $collection->addCategoryFilter($parameters['categoryid']);
             unset($parameters['categoryid']);  
 
@@ -29,7 +30,7 @@ class Catalog_Model_Filter extends Core_Model_Abstract{
     
             foreach($attribute_collection->getData() as $attributeCollection){
     
-                $collection->addAttributeToFilter($attributeCollection->getName() , $parameters[$attributeCollection->getName()]);
+                $collection->addAttributeToFilter($attributeCollection->getName() , ['IN' => $parameters[$attributeCollection->getName()]]);
             
             }
 

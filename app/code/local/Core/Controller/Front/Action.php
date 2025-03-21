@@ -18,5 +18,10 @@ class Core_Controller_Front_Action{
         header('location: ' . Mage::getBaseUri() . $url);
         return $this;
     }
+
+    public function getLayout(){
+        
+        return Mage::getBlock('core/layout');
+    }
 }
 ?>

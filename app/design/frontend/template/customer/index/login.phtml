@@ -1,0 +1,277 @@
+
+<style>
+.login-page-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff0f4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 2rem;
+}
+
+.login-content-wrapper {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+/* Promo Banner styles */
+.promo-banner-container {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.promo-banner-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.promo-banner-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.promo-text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.promo-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #8b2222;
+  margin: 0;
+}
+
+.rupee-symbol {
+  font-weight: 500;
+}
+
+.promo-subtitle {
+  font-size: 0.875rem;
+  color: #8b2222;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.promo-code-container {
+  margin-top: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+.promo-code-label {
+  font-size: 0.75rem;
+  color: #555;
+}
+
+.promo-code-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid #ff3e6c;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  background-color: #ffffff;
+}
+
+.promo-image-container {
+  position: relative;
+}
+
+.promo-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #8b2222;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0 0 0 6px;
+}
+
+.promo-badge-text {
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.promo-character-image {
+  width: 6rem;
+  height: auto;
+}
+
+/* Login Form styles */
+.login-form-container {
+  width: 100%;
+}
+
+.login-heading {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-alternate-text {
+  font-weight: 400;
+  color: #666;
+}
+
+.login-input-container {
+  margin-bottom: 1rem;
+}
+
+.phone-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d4d5d9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.country-code {
+  padding: 0.75rem 0.5rem;
+  font-size: 0.875rem;
+  color: #333;
+  border-right: 1px solid #d4d5d9;
+}
+
+.mobile-number-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+}
+
+.terms-container {
+  margin-bottom: 1rem;
+}
+
+.terms-text {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.terms-link, .privacy-link {
+  color: #ff3e6c;
+  text-decoration: none;
+}
+
+.continue-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #ff3e6c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.continue-button:hover {
+  background-color: #e83a66;
+}
+
+.help-container {
+  text-align: center;
+}
+
+.help-text {
+  font-size: 0.75rem;
+  color: #333;
+}
+
+.help-link {
+  color: #ff3e6c;
+  text-decoration: none;
+  font-weight: 500;
+}
+</style>
+
+<!-- Main content section (without header) -->
+<div class="login-page-container">
+  <div class="login-content-wrapper">
+    <!-- Promo Banner -->
+    <div class="promo-banner-container">
+        <!-- <img src="C:\xampp\htdocs\mvc_copy\media\customer\login\main.png" alt="main image"> -->
+        <img src="<?php echo Mage::getBaseUri() . '\media\customer\login\main.png' ?>" alt="">
+      <!-- <img 
+        src="C:\xampp\htdocs\mvc_copy\media\customer\login\main.png" 
+        alt="Flat ₹200 off promotion" 
+        class="promo-banner-image"
+      />
+      <div class="promo-banner-overlay">
+        <div class="promo-text-container">
+          <h2 class="promo-title">FLAT <span class="rupee-symbol">₹</span>200 OFF</h2>
+          <p class="promo-subtitle">+ Free Shipping On 1<sup>st</sup> Order</p>
+          <div class="promo-code-container">
+            <span class="promo-code-label">Code: </span>
+            <span class="promo-code-value">MYNTRA200</span>
+          </div>
+        </div>
+        <div class="promo-image-container">
+          <div class="promo-badge">
+            <span class="promo-badge-text"><span class="rupee-symbol">₹</span>200 OFF</span>
+          </div>
+          <img 
+            src="promo-character.png" 
+            alt="Promo character" 
+            class="promo-character-image"
+          />
+        </div>
+      </div> -->
+    </div>
+
+    <!-- Login Form Section -->
+    <form method="POST" action="<?php echo $this->geturl('customer/index/loginPost'); ?>" class="login-form-container">
+      <h1 class="login-heading">Login</h1>
+      
+      <div class="login-input-container">
+          <label for="email" class="form-label required">Email</label>          
+            <div class="phone-input-wrapper">
+                <input type="email" placeholder="Email*" name="customer[email]" class="mobile-number-input" />
+            </div>
+      </div>
+
+      <div class="login-input-container">
+          <label for="password" class="form-label required">Password</label>          
+            <div class="phone-input-wrapper">
+                <input type="password" placeholder="Password*" name="customer[password]" class="mobile-number-input" />
+            </div>
+      </div>
+      
+      <div class="terms-container">
+        <p class="terms-text">By continuing, I agree to the 
+          <a href="#" class="terms-link">Terms of Use</a> & 
+          <a href="#" class="privacy-link">Privacy Policy</a>
+        </p>
+      </div>
+      
+      <button type="submit" class="continue-button">CONTINUE</button>
+      
+      <div class="help-container">
+        <p class="help-text">Have trouble logging in? 
+          <a href="#" class="help-link">Get help</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

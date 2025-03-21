@@ -158,6 +158,10 @@
         <a class="catalog-add-btn" href="<?php echo $this->getUrl('*/*/new'); ?>">Add Product</a>
     </div>
 
+    <div class="catalog-actions">
+        <a class="catalog-add-btn" href="<?php echo $this->getUrl('admin/order_index/list'); ?>">View Orders</a>
+    </div>
+
     <?php if (count($this->getProduct()) > 0): ?>
         <table class="catalog-table">
             <tr>

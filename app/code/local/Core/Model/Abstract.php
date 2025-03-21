@@ -108,7 +108,7 @@ class Core_Model_Abstract{
    
     protected function _afterSave()
     {
-        echo "helooooooooollll";
+        // echo "helooooooooollll";
         // die;
         return $this;
     }

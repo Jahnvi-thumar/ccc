@@ -31,7 +31,7 @@ $product = $this->getProductDetails($id);
                 $imageUrl = $images[$i];
                 $index = $i + 1;
                 echo '<div class="spd__image-container">
-                    <img src="/mvc_copy/' . $imageUrl . '" alt="Product View" class="spd__product-image" id="productImage' . $index . '">
+                    // <img src="/mvc_copy/' . $imageUrl . '" alt="Product View" class="spd__product-image" id="productImage' . $index . '">
                 </div>';
             }
             
@@ -123,9 +123,15 @@ $product = $this->getProductDetails($id);
             
             <!-- Action Buttons -->
             <div class="spd__action-buttons">
-                <a class="spd__add-to-bag" href='<?php echo $this->getUrl("checkout/cart/index") ?>/?id=<?php echo $product->getProductId(); ?>'>
-                        <i class="spd__bag-icon"></i> ADD TO BAG
-                </a>
+                <form  method="POST" id="cartform">
+                    <input type="hidden" name="product_id"  value="<?php echo $product->getProductId() ?>">
+                    <div class="spd__add-to-bag" >
+                        <button type="submit" class="spd__add-to-bag addtocart">ADD TO Cart</button> 
+                    </div>
+                    <div>
+                        <input type="number" name="quantity">Quantity
+                    </div>
+                </form>
                 <button class="spd__wishlist">
                     <i class="spd__heart-icon"></i> WISHLIST
                 </button>
@@ -625,63 +631,127 @@ $product = $this->getProductDetails($id);
 
 <!-- JavaScript for dynamic functionality -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+// document.addEventListener('DOMContentLoaded', function() {
     // Size selection
-    document.querySelectorAll('.spd__size-option').forEach(element => {
-        element.addEventListener('click', function() {
-            if (!this.classList.contains('out-of-stock')) {
-                document.querySelectorAll('.spd__size-option').forEach(el => {
-                    el.classList.remove('selected');
-                });
-                this.classList.add('selected');
-            }
-        });
-    });
+    // document.querySelectorAll('.spd__size-option').forEach(element => {
+    //     element.addEventListener('click', function() {
+    //         if (!this.classList.contains('out-of-stock')) {
+    //             document.querySelectorAll('.spd__size-option').forEach(el => {
+    //                 el.classList.remove('selected');
+    //             });
+    //             this.classList.add('selected');
+    //         }
+    //     });
+    // });
     
-    // Color selection
-    document.querySelectorAll('.spd__color-swatch').forEach(element => {
-        element.addEventListener('click', function() {
-            document.querySelectorAll('.spd__color-swatch').forEach(el => {
-                el.classList.remove('active');
-            });
-            this.classList.add('active');
+    // // Color selection
+    // document.querySelectorAll('.spd__color-swatch').forEach(element => {
+    //     element.addEventListener('click', function() {
+    //         document.querySelectorAll('.spd__color-swatch').forEach(el => {
+    //             el.classList.remove('active');
+    //         });
+    //         this.classList.add('active');
             
-            // In a real implementation, you would fetch the product data for the selected color
-            // and update the page using AJAX
-            const colorId = this.dataset.colorId;
-            console.log('Selected color ID:', colorId);
-            // Example AJAX call (commented out)
-            /*
-            fetch('/api/product-color?id=<?php echo $id; ?>&color=' + colorId)
-                .then(response => response.json())
-                .then(data => {
-                    // Update product images, price, etc.
-                })
-                .catch(error => console.error('Error:', error));
-            */
-        });
-    });
+    //         // In a real implementation, you would fetch the product data for the selected color
+    //         // and update the page using AJAX
+    //         const colorId = this.dataset.colorId;
+    //         console.log('Selected color ID:', colorId);
+    //         // Example AJAX call (commented out)
+    //         /*
+    //         fetch('/api/product-color?id=<?php echo $id; ?>&color=' + colorId)
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 // Update product images, price, etc.
+    //             })
+    //             .catch(error => console.error('Error:', error));
+    //         */
+    //     });
+    // });
     
-    // Pincode check
-    document.querySelector('.spd__check-button').addEventListener('click', function() {
-        const pincode = document.getElementById('pincodeInput').value;
-        if (pincode.length === 6 && !isNaN(pincode)) {
-            // Example AJAX call (commented out)
-            /*
-            fetch('/api/check-delivery?pincode=' + pincode)
-                .then(response => response.json())
-                .then(data => {
-                    // Update delivery message
-                })
-                .catch(error => console.error('Error:', error));
-            */
-            // Placeholder response
-            document.querySelector('.spd__delivery-message').textContent = 
-                'Delivery available in ' + pincode + '. Expected delivery in 3-5 days.';
-        } else {
-            document.querySelector('.spd__delivery-message').textContent = 
-                'Please enter a valid 6-digit PIN code.';
+    // // Pincode check
+    // document.querySelector('.spd__check-button').addEventListener('click', function() {
+    //     const pincode = document.getElementById('pincodeInput').value;
+    //     if (pincode.length === 6 && !isNaN(pincode)) {
+    //         // Example AJAX call (commented out)
+    //         /*
+    //         fetch('/api/check-delivery?pincode=' + pincode)
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 // Update delivery message
+    //             })
+    //             .catch(error => console.error('Error:', error));
+    //         */
+    //         // Placeholder response
+    //         document.querySelector('.spd__delivery-message').textContent = 
+    //             'Delivery available in ' + pincode + '. Expected delivery in 3-5 days.';
+    //     } else {
+    //         document.querySelector('.spd__delivery-message').textContent = 
+    //             'Please enter a valid 6-digit PIN code.';
+    //     }
+    // });
+
+    class addToCart{
+
+        
+        constructor(){
+            console.log('constructor called');
+            this.init();
         }
-    });
-});
+
+        init(){
+            console.log('init');
+            let ele = document.querySelector(".spd__add-to-bag .addtocart");
+            console.log(ele);
+            // $(document).on('click' , '.spd__add-to-bag' , () => this.goToCart());
+
+            $(document).on('click', '.spd__add-to-bag .addtocart', (event) => {
+                event.preventDefault(); // Prevents default form submission if inside a form
+                this.goToCart();
+            });
+        }
+
+        collectFormData(){
+
+            let form = $('form#cartform')[0];
+            console.log('form: ', form);
+            let formData = new FormData(form);
+            console.log('formData');
+            console.log(formData);
+
+            for(let pair of formData.entries()){
+                console.log(pair[0], pair[1]);
+            }
+            return formData;
+        }
+
+        goToCart(){
+            console.log('goToCart called');
+
+            let formData = this.collectFormData();
+
+            if (typeof jQuery === "undefined" || typeof $.ajax === "undefined") {
+                console.error("Error: jQuery is not loaded.");
+                return;
+            }
+
+            $.ajax({
+                url: 'http://localhost/mvc_copy/checkout/cart/add/',
+                method: 'POST',
+                data: formData,
+                processData: false,  // ✅ Prevent jQuery from processing FormData
+                contentType: false, 
+                success: (response) => {
+                    console.log('Response received:', response);
+                },
+                error: (xhr, status, error) => {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        }
+    }
+
+    $(document).ready(() => {
+        new addToCart();
+    })
+// });
 </script>

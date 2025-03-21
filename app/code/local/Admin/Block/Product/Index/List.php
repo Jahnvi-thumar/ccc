@@ -22,9 +22,14 @@ class Admin_Block_Product_Index_List extends Core_Block_Template{
 
         $products = Mage::getModel('catalog/filter')
                             ->getProductCollection()
-                            ->addAttributToSelect(['brand', 'color', 'country_Of_Origin' , 'model_number' , 'material'])
+                            // ->addAttributToSelect(['brand', 'color', 'country_Of_Origin' , 'model_number' , 'material'])
+                            // ->prepareQuery();
                             ->getData();
                             
+                            // echo '<pre>';
+                            // print_r($products);
+                            // echo '</pre>';
+                            // die;
         return $products;
     }
 }

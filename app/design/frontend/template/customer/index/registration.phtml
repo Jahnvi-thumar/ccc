@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myntra - Customer Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Assistant', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #282c3f;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 460px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .form-wrapper {
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            width: 70px;
+            height: auto;
+        }
+        
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #282c3f;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #535766;
+        }
+        
+        .form-control {
+            width: 100%;
+            height: 40px;
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #d4d5d9;
+            border-radius: 4px;
+            background-color: #fff;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #ff3f6c;
+            box-shadow: 0 0 0 2px rgba(255, 63, 108, 0.1);
+        }
+        
+        .gender-options {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .gender-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .gender-option input {
+            margin-right: 8px;
+        }
+        
+        .required:after {
+            content: " *";
+            color: #ff3f6c;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            height: 48px;
+            background-color: #ff3f6c;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: #ff527b;
+        }
+        
+        .terms-text {
+            font-size: 12px;
+            color: #94969f;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .terms-text a {
+            color: #ff3f6c;
+            text-decoration: none;
+        }
+        
+        .terms-text a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: #ff3f6c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .form-footer a {
+            color: #ff3f6c;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 12px;
+            top: 37px;
+            color: #94969f;
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                margin: 20px auto;
+            }
+            
+            .form-wrapper {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-wrapper">
+            <div class="logo-container">
+                <svg class="logo" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 50C38.8071 50 50 38.8071 50 25C50 11.1929 38.8071 0 25 0C11.1929 0 0 11.1929 0 25C0 38.8071 11.1929 50 25 50Z" fill="#FF3F6C"/>
+                    <path d="M34.5859 22.0078L28.4375 37.0547H23.8516L17.6562 22.0078H22.0312L26.0547 32.7344H26.2109L30.1875 22.0078H34.5859Z" fill="white"/>
+                </svg>
+            </div>
+            
+            <h2 class="form-title">Create Your Account</h2>
+            
+            <form action="<?php echo $this->getUrl('customer/index/registrationpost'); ?>" method="post" id="registration-form" class="myntra-form">
+               
+                <div class="form-group">
+                    <label for="first_name" class="form-label required">First Name</label>
+                    <input type="text" id="first_name" name="customer[first_name]" class="form-control" >
+                    
+                </div>
+                
+                <div class="form-group">
+                    <label for="last_name" class="form-label required">Last Name</label>
+                    <input type="text" id="last_name" name="customer[last_name]" class="form-control" >
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label required">Email</label>
+                    <input type="email" id="email" name="customer[email]" class="form-control" >
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label required">Password</label>
+                    <input type="text" id="password" name="customer[password]" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone" class="form-label required">Mobile Number</label>
+                    <input type="tel" id="phone" name="customer[phone]" class="form-control" >
+                </div>
+                
+                <div class="form-group">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" id="dob" name="customer[dob]" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Gender</label>
+                    <div class="gender-options">
+                        <div class="gender-option">
+                            <input type="radio" id="male" name="customer[gender]" value="male">
+                            <label for="male">Male</label>
+                        </div>
+                        <div class="gender-option">
+                            <input type="radio" id="female" name="customer[gender]" value="female">
+                            <label for="female">Female</label>
+                        </div>
+                        <div class="gender-option">
+                            <input type="radio" id="other" name="customer[gender]" value="other">
+                            <label for="other">Other</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" id="city" name="customer[city]" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="street_address" class="form-label">Street Address</label>
+                    <input type="text" id="street_address" name="customer[street_address]" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="country" class="form-label">Country</label>
+                    <input type="text" id="country" name="customer[country]" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="zipcode" class="form-label">Zipcode</label>
+                    <input type="number" id="zipcode" name="customer[zipcode]" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Address Type</label>
+                    <div class="gender-options">
+                        <div class="gender-option">
+                            <input type="radio" id="home" name="customer[type]" value="home">
+                            <label for="home">Home</label>
+                        </div>
+                        <div class="gender-option">
+                            <input type="radio" id="work" name="customer[type]" value="work">
+                            <label for="work">Work</label>
+                        </div>
+                        <div class="gender-option">
+                            <input type="radio" id="other" name="customer[type]" value="other">
+                            <label for="other">Other</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- <div class="form-group" style="display: none;">
+                    <input type="hidden" id="created_at" name="created_at">
+                    <input type="hidden" id="updated_at" name="updated_at">
+                </div> -->
+                
+                <button type="submit" class="submit-btn">Register</button>
+                
+                <p class="terms-text">
+                    By registering, you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>
+                </p>
+            </form>
+            
+            <div class="form-footer">
+                Already have an account? <a href="<?php echo $this->getUrl('customer/index/login') ?>">Login here</a>
+            </div>
+        </div>
+    </div>
+
+   
+</body>
+</html>

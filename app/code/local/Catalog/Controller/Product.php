@@ -22,10 +22,22 @@ class Catalog_Controller_Product{
 
     public function listAction(){
         // echo get_class() . "----" . __FUNCTION__; 
+        $request = Mage::getModel('core/request');
         $layout = Mage::getBlock('Core/Layout');
         $list = $layout->createBlock('Catalog/Product_List')
                 ->setTemplate('catalog/product/list.phtml');
         $layout->getChild('content')->addChild('list' , $list);
+        
+        if($request->isAjax()){
+            
+            $layout->getChild('content')
+                ->getChild('list')
+                ->removeChild('filter');
+            $layout->removeChild('header');
+            $layout->removeChild('footer');
+            
+        }
+
         $layout->toHtml();     
         
     }

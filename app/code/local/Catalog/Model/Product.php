@@ -80,14 +80,10 @@ class Catalog_Model_Product extends Core_Model_Abstract{
 
     protected function _afterSave(){
 
-        echo "   ->>>>aftersave<br>";
+        // echo "   ->>>>aftersave<br>";
         $attributes = Mage::getModel('catalog/attribute')
                             ->getCollection()
                             ->getData();
-                            
-                            echo '<pre>';
-                            print_r($attributes);
-                            echo '</pre>';
 
         foreach($attributes as $_attribute){
 
@@ -96,9 +92,7 @@ class Catalog_Model_Product extends Core_Model_Abstract{
                                         ->addFieldToFilter('product_id', $this->getProductId())
                                         ->addFieldToFilter('attribute_id', $_attribute->getAttributeId())
                                         ->getData();
-            echo '<pre>';
-            print_r($product_attribute);
-            echo '</pre>';
+           
            $value = $this->{$_attribute->getName()};
 
            if(isset($product_attribute[0])){
@@ -122,8 +116,6 @@ class Catalog_Model_Product extends Core_Model_Abstract{
             if (!file_exists($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
-
-            // $mediaGallery = Mage::getModel('catalog/media_gallery');
 
             foreach ($_FILES['catalog_product']['name'] as $key => $imgName) {
 
@@ -151,16 +143,12 @@ class Catalog_Model_Product extends Core_Model_Abstract{
 echo "++++";
                         if(isset($catalog_media_gallery[0])){
 
-                            echo"------------";
-                            echo '<pre>-----';
-                            print_r($catalog_media_gallery[0]);
-                            echo '</pre>-----';
-                            die;
+                           
                             $catalog_media_gallery[0]->setFilePath($filePath)
                                 ->save();               
                         } else {
 
-                            echo "++++nnn";
+                            
 
                                 Mage::getModel('catalog/media_gallery')
                                     ->setProductId($this->getProductId())

@@ -1,0 +1,622 @@
+<h1>hello order list</h1>
+
+<?php
+$orders = $this->getAllOrders();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Dashboard | Admin Panel</title>
+    <style>
+        :root {
+            --primary: #FF3F6C;
+            --secondary: #696b79;
+            --light-gray: #f5f5f6;
+            --dark-gray: #282c3f;
+            --success: #03a685;
+            --warning: #ff9f00;
+            --pending: #7e57c2;
+            --font-family: 'Assistant', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background-color: #f5f5f6;
+            color: var(--dark-gray);
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 20px;
+        }
+        
+        .logo img {
+            max-width: 120px;
+        }
+        
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            color: var(--secondary);
+        }
+        
+        .nav-item.active {
+            background-color: rgba(255, 63, 108, 0.1);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(255, 63, 108, 0.05);
+        }
+        
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .search-bar {
+            position: relative;
+        }
+        
+        .search-bar input {
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #e9e9ed;
+            border-radius: 4px;
+            width: 300px;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .search-bar i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: var(--secondary);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e8364d;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(255, 63, 108, 0.1);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-card h3 {
+            font-size: 14px;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+        
+        .stat-card .change {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .stat-card .change.positive {
+            color: var(--success);
+        }
+        
+        .stat-card .change.negative {
+            color: var(--primary);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .card-header .actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .card-body {
+            padding: 0;
+        }
+        
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .orders-table th, .orders-table td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .orders-table th {
+            font-weight: 600;
+            color: var(--secondary);
+            background-color: #fafafa;
+        }
+        
+        .orders-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status.pending {
+            background-color: rgba(126, 87, 194, 0.1);
+            color: var(--pending);
+        }
+        
+        .status.processing {
+            background-color: rgba(255, 159, 0, 0.1);
+            color: var(--warning);
+        }
+        
+        .status.completed {
+            background-color: rgba(3, 166, 133, 0.1);
+            color: var(--success);
+        }
+        
+        .status.cancelled {
+            background-color: rgba(255, 63, 108, 0.1);
+            color: var(--primary);
+        }
+        
+        .actions-cell {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn.view {
+            background-color: rgba(126, 87, 194, 0.1);
+            color: var(--pending);
+        }
+        
+        .action-btn.edit {
+            background-color: rgba(255, 159, 0, 0.1);
+            color: var(--warning);
+        }
+        
+        .action-btn.delete {
+            background-color: rgba(255, 63, 108, 0.1);
+            color: var(--primary);
+        }
+        
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .pagination-item {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .pagination-item:hover:not(.active) {
+            background-color: var(--light-gray);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--secondary);
+            font-size: 14px;
+        }
+        
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .nav-item span {
+                display: none;
+            }
+            
+            .nav-item i {
+                margin-right: 0;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .logo img {
+                max-width: 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .search-bar input {
+                width: 200px;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <img src="/api/placeholder/120/40" alt="Myntra Admin">
+            </div>
+            <div class="nav-item active">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Orders</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-box"></i>
+                <span>Products</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Customers</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-tags"></i>
+                <span>Promotions</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <h1>Orders Management</h1>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search orders...">
+                    </div>
+                    <button class="btn btn-primary"><i class="fas fa-plus"></i> New Order</button>
+                </div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Orders</h3>
+                    <div class="value">2</div>
+                    <div class="change positive">
+                        <i class="fas fa-arrow-up"></i> 12.5% from last week
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <div class="value">₹22,015</div>
+                    <div class="change positive">
+                        <i class="fas fa-arrow-up"></i> 8.3% from last week
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Order Value</h3>
+                    <div class="value">₹11,007.5</div>
+                    <div class="change negative">
+                        <i class="fas fa-arrow-down"></i> 2.1% from last week
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Orders</h3>
+                    <div class="value">2</div>
+                    <div class="change negative">
+                        <i class="fas fa-arrow-up"></i> 5% from last week
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Orders</h2>
+                    <div class="actions">
+                        <button class="btn btn-outline"><i class="fas fa-filter"></i> Filter</button>
+                        <button class="btn btn-outline"><i class="fas fa-download"></i> Export</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Payment Method</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body">
+                            <!-- Orders will be dynamically inserted here -->
+                             <?php foreach($orders as $_order) : ?>
+                                <tr>
+                                    
+
+                                    <td><?php echo '#'. htmlspecialchars($_order->getorderId()); ?></td>
+                                    <td>
+                                         <div><?php echo 'Customer ID:' . htmlspecialchars($_order->getCustomerId()); ?></div>
+                                         <div style="font-size: 12px; color: var(--secondary);">
+                                                <?php echo htmlspecialchars($_order->getEmail()) ?></div>
+                                     </td>
+                                     <td><?php echo htmlspecialchars($_order->getCreatedAt()) ?></td>
+                                     <td><?php echo htmlspecialchars($_order->getPaymentMethod()) ?></td>
+                                     <td><?php echo htmlspecialchars($_order->getTotalAmount()) ?></td>
+                                     <td><span class="status ${status}"><?php echo htmlspecialchars('status') ?></span></td>
+                                     <td class="actions-cell">
+                                         <div class="action-btn view"><a href="<?php echo $this->getUrl('admin/order_index/view') . '/?order_id=' . $_order->getOrderId() ?>" class="action-btn view"><i class="fas fa-eye"></i></a></div>
+                                         <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+                                         <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+                                     </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <div class="pagination-item"><i class="fas fa-chevron-left"></i></div>
+                    <div class="pagination-item active">1</div>
+                    <div class="pagination-item">2</div>
+                    <div class="pagination-item">3</div>
+                    <div class="pagination-item"><i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                © 2025 Myntra Admin Dashboard. All rights reserved.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data from PHP converted to JavaScript
+        // const orders = [
+        //     {
+        //         order_id: 1,
+        //         customer_id: 1,
+        //         email: "thumarjahanvi@gmail.com",
+        //         coupon_code: "",
+        //         coupon_discount: 0,
+        //         shipping_method: "USPS",
+        //         shipping_charge: 10,
+        //         payment_method: "cash on delivery",
+        //         total_amount: 11007.5,
+        //         order_status: "",
+        //         ip_address: 0,
+        //         created_at: "2025-03-17 18:44:23",
+        //         updated_at: "2025-03-17 18:44:23"
+        //     },
+        //     {
+        //         order_id: 2,
+        //         customer_id: 1,
+        //         email: "thumarjahanvi@gmail.com",
+        //         coupon_code: "",
+        //         coupon_discount: 0,
+        //         shipping_method: "USPS",
+        //         shipping_charge: 10,
+        //         payment_method: "upi",
+        //         total_amount: 11007.5,
+        //         order_status: "",
+        //         ip_address: 0,
+        //         created_at: "2025-03-17 18:57:19",
+        //         updated_at: "2025-03-17 18:57:19"
+        //     }
+        // ];
+
+        // Function to format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        // Function to get status class
+        function getRandomStatus() {
+            const statuses = ['pending', 'processing', 'completed', 'cancelled'];
+            return statuses[Math.floor(Math.random() * statuses.length)];
+        }
+
+        // Function to render orders
+        // function renderOrders() {
+        //     const tableBody = document.getElementById('orders-table-body');
+        //     tableBody.innerHTML = '';
+            
+        //     orders.forEach(order => {
+        //         const status = getRandomStatus(); // In a real app, this would come from the data
+                
+        //         const row = document.createElement('tr');
+        //         row.innerHTML = `
+        //             <td>#${order.order_id}</td>
+        //             <td>
+        //                 <div>Customer ID: ${order.customer_id}</div>
+        //                 <div style="font-size: 12px; color: var(--secondary);">${order.email}</div>
+        //             </td>
+        //             <td>${formatDate(order.created_at)}</td>
+        //             <td>${order.payment_method}</td>
+        //             <td>₹${order.total_amount.toFixed(2)}</td>
+        //             <td><span class="status ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+        //             <td class="actions-cell">
+        //                 <div class="action-btn view"><i class="fas fa-eye"></i></div>
+        //                 <div class="action-btn edit"><i class="fas fa-edit"></i></div>
+        //                 <div class="action-btn delete"><i class="fas fa-trash"></i></div>
+        //             </td>
+        //         `;
+                
+        //         tableBody.appendChild(row);
+        //     });
+        // }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            renderOrders();
+            
+            // Add event listeners for demo purposes
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelector('.nav-item.active').classList.remove('active');
+                    this.classList.add('active');
+                });
+            });
+            
+            document.querySelectorAll('.pagination-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    if (!this.classList.contains('active') && !this.querySelector('i')) {
+                        document.querySelector('.pagination-item.active').classList.remove('active');
+                        this.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -4,6 +4,10 @@ class Catalog_Model_Resource_Product_Collection extends Core_Model_Resource_Coll
     
     public function addAttributToSelect($attributes){
 
+        // echo '<pre>';
+        // print_r($attributes);
+        // echo '</pre>';
+        // die;
        
         foreach($attributes as $attribute){
 
@@ -25,7 +29,8 @@ class Catalog_Model_Resource_Product_Collection extends Core_Model_Resource_Coll
 
     public function addCategoryFilter($category_id){
 
-        
+        // echo "1234 ";
+        // print_r($category_id);
         return $this->addFieldToFilter('category_id' , ['IN' => $category_id]);
         // return $this;
     }
