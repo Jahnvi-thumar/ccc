@@ -13,6 +13,7 @@ class Customer_Block_Index_Dashboard_Address extends Core_Block_Template{
             ->getCollection()
             ->addFieldToFilter('customer_id' , $customerId)
             ->getData();
+            
         return $address;
     }
 }

@@ -42,7 +42,6 @@ class Admin_Block_Product_Index_New extends Core_Block_Template{
         $calssName = sprintf("Core_Block_Html_Elements_%s" , $field);
         $element = new $calssName($data);
         return $element->render();  
-
         
     }
     

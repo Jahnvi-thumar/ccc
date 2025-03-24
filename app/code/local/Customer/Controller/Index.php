@@ -5,20 +5,16 @@ class Customer_Controller_Index extends Core_Controller_Customer_Action{
 
     public function testAction(){
 
-        // echo 'test action';
         $session = Mage::getSingleton('core/session');
             $session->set('test' , 100);
-
-        // echo '<pre> test : ';
-        // print_r($session->get('customer_id'));
-        // echo '</pre>';
     }
     public function loginAction(){
 
-        $layout = $this->getLayout();
-        $login = $layout->createBlock('customer/index_login');
-        $layout->getChild('content')->addChild('login', $login);
-        $layout->toHtml();
+        // echo '123';
+        $login = $this->getLayout()->createBlock('customer/index_login');
+        $this->getLayout()->getChild('content')->addChild('login', $login);
+        $this->getLayout()->getChild('head')->addCss('customer/index/login.css');
+        $this->getLayout()->toHtml();
     }
 
     public function loginPostAction(){
@@ -26,23 +22,13 @@ class Customer_Controller_Index extends Core_Controller_Customer_Action{
         $customer = Mage::getModel('customer/customer')
             ->setData($this->getRequest()->getParam('customer'));
 
-        // echo '<pre> login Data : ';
-        // print_r($customer);
-        // echo '</pre>';
-        // /die;
-
         if($customer->isEmailExist()){
             //check password
             // echo 'alloe for login';
             // die;
             if($customer->isPasswordValid()){
                 $customer = $customer->load($customer->getEmail() , 'email');
-                // echo "<br> hello";
-                // echo '<pre>';
-                // print_r($customer);
-                // echo '</pre>';
-                // echo $customer->getCustomerId();
-                // die;
+               
                 $session = Mage::getSingleton('core/session')
                     ->set('customer_id' ,$customer->getCustomerId());
                 $this->redirect('customer/index/dashboard');
@@ -58,7 +44,10 @@ class Customer_Controller_Index extends Core_Controller_Customer_Action{
 
     public function LogoutAction(){
 
-        
+        // echo 'logout';
+        $session = Mage::getSingleton('core/session')
+            ->remove('customer_id');
+        $this->redirect('customer/index/login');
     }
 
     public function registrationAction(){
@@ -66,38 +55,55 @@ class Customer_Controller_Index extends Core_Controller_Customer_Action{
         $layout = $this->getLayout();
         $registration = $layout->createBlock('customer/index_registration');
         $layout->getChild('content')->addChild('registration', $registration);
+        $this->getLayout()->getChild('head')->addCss('customer/index/registration.css');
+        $this->getLayout()->getChild('head')->addJs('customer/index/registration.js');
+
         $layout->toHtml();
     }
 
     public function registrationPostAction(){
 
-        $customer = Mage::getModel('customer/customer')
-            ->setData($this->getRequest()->getParam('customer'));
-        
-        if($customer->isEmailExist()){
-            $this->redirect('customer/index/registration');
+        if($this->getRequest()->isAjax()){
+            $email = $this->getRequest()->getParam('email');
+            $customer = Mage::getModel('customer/customer')
+                ->setEmail($email)
+                ->isEmailExist();
+
+            if($customer){
+                echo "0";
+            } else {
+                echo '1';
+            }
         } else {
-            $customer->save();
-            $session = Mage::getSingleton('core/session')
-                ->set('customer_id' , $customer->getCustomerId());
-            $this->redirect('customer/index/dashboard');
-        }
+
+            $customer = Mage::getModel('customer/customer')
+                ->setData($this->getRequest()->getParam('customer'));
+            
+            if($customer->isEmailExist()){
+                $this->redirect('customer/index/registration');
+            } else {
+                $customer->save();
+                $session = Mage::getSingleton('core/session')
+                    ->set('customer_id' , $customer->getCustomerId());
+                $this->redirect('customer/index/dashboard');
+            }
+        } 
        
     }
 
     public function dashBoardAction(){
 
-        $layout = $this->getLayout();
-        $dashBoard = $layout->createBlock('customer/index_dashboard');
-        $layout->getChild('content')->addChild('dashboard' , $dashBoard);
+        $dashBoard = $this->getLayout()->createBlock('customer/index_dashboard');
+        $this->getLayout()->getChild('content')->addChild('dashboard' , $dashBoard);
+        $this->getLayout()->getChild('head')->addCss('customer/index/dashboard.css');
 
-        $customer_profile = $layout->createBlock('customer/index_dashboard_customer');
+        $customer_profile = $this->getLayout()->createBlock('customer/index_dashboard_customer');
         $dashBoard->addChild('customer_profile' , $customer_profile);
 
-        $customer_address = $layout->createBlock('customer/index_dashboard_address');
+        $customer_address = $this->getLayout()->createBlock('customer/index_dashboard_address');
         $dashBoard->addChild('customer_address' , $customer_address);
 
-        $layout->toHtml();
+        $this->getLayout()->toHtml();
 
     }
 
@@ -117,7 +123,6 @@ class Customer_Controller_Index extends Core_Controller_Customer_Action{
         Mage::getModel('customer/customer')
             ->setData($data)
             ->save();
-
           
     }
 }

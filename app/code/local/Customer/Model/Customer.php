@@ -33,7 +33,7 @@ class Customer_Model_Customer extends Core_Model_Abstract{
 
     public function isEmailExist(){
 
-        echo "isemailValid()";
+        // echo "isemailValid()";
 
         $customer = Mage::getModel('customer/customer')
             ->load($this->getEmail(), 'email');
@@ -47,8 +47,8 @@ class Customer_Model_Customer extends Core_Model_Abstract{
         $customer = Mage::getModel('customer/customer')
             ->load($this->getPassword(), 'password');
         
-            echo "ispasswordValid()";
-            var_dump($customer->getPassword());
+            // echo "ispasswordValid()";
+            // var_dump($customer->getPassword());
            
         return $customer->getPassword() ? true : false;
     }

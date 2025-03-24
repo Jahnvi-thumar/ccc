@@ -285,6 +285,7 @@ class Core_Model_Resource_Collection_Abstract {
 
     public function limit($limit , $offset = 0){
 
+        $offset = ($offset-1)*$limit;
         $this->_select['LIMIT'] = ['limit' => $limit , 'offset' => $offset];
             
         // echo "<pre>";

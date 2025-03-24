@@ -4,26 +4,21 @@ class Checkout_Controller_Payment extends Core_Controller_Front_Action{
 
     public function indexAction(){
 
-        $layout = Mage::getBlock('Core/Layout');
-        $index = $layout->createBlock('Checkout/payment_index')
-                ->setTemplate('checkout/payment/index.phtml');
-        $layout->getChild('content')->addChild('index' , $index);
-        // echo "<pre>";
-        // print_r($layout->getChild('content'));
-        $layout->toHtml();  
+        $index = $this->getLayout()->createBlock('Checkout/payment_index');
+        $this->getLayout()->getChild('content')->addChild('index' , $index);
+        $this->getLayout()->getChild('head')->addCss('checkout/payment/index.css');
+        $this->getLayout()->getChild('head')->addCss('checkout/payment/index.js');
+        $this->getLayout()->toHtml();  
     }
 
     public function saveAction(){
 
-       
-        $data = Mage::getModel('core/request')->getParams();
+        $data = $this->getRequest()->getParams();
         
         $cart = Mage::getSingleton('checkout/session')
             ->getCart();
 
-        
         $cart->setPaymentMethod($data['payment_method'])
-            // ->setShippingCharge($shipping->getCharge($data['shipping_method']))
             ->save(); 
             
         $this->redirect('checkout/cart/placeorder');

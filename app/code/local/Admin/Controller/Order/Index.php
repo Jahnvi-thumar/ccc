@@ -4,17 +4,16 @@
 class Admin_Controller_Order_Index extends Core_Controller_Admin_Action{
 
     public function listAction(){
-
-        $layout = Mage::getBlock('Core/Layout');
         
-        $list = $layout->createBlock('admin/order_list');
-        $layout->getChild('content')->addChild('list' , $list);
-        $layout->toHtml(); 
+        $list = $this->getLayout()->createBlock('admin/order_list');
+        $this->getLayout()->getChild('content')->addChild('list' , $list);
+        $this->getLayout()->getChild('head')->addCss('admin/order/index/list.css');
+        $this->getLayout()->getChild('head')->addJs('admin/order/index/list.js');
+        $this->getLayout()->toHtml(); 
                 
-
     }
 
-    public function viewAction(){
+        public function viewAction(){
         
         $layout = Mage::getBlock('Core/Layout');
         
@@ -37,9 +36,9 @@ class Admin_Controller_Order_Index extends Core_Controller_Admin_Action{
             ->setParent($view);
         $view->addChild('addressinfo' , $addressInfo);
 
-        
-
         $layout->getChild('content')->addChild('view' , $view);
+        $this->getLayout()->getChild('head')->addCss('admin/order/index/view.css');
+        $this->getLayout()->getChild('head')->addJs('admin/order/index/view.js');
         $layout->toHtml();
                 
 

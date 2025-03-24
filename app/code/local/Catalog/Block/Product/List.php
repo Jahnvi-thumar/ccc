@@ -2,37 +2,26 @@
 
 class Catalog_Block_Product_List extends Core_Block_Template{
 
-    // public function __construct(){
-    //     $this->setTemplate('catalog/product/list.phtml');
-    // }
-
-    //filtered products
     protected $categoryTree = [];
+    
 
     public function __construct(){
 
-        // $layout = Mage::getBlock('Core/Layout');
-        $filter = $this->getLayout()->createBlock('catalog/product_list_filter');
-        $products = $this->getLayout()->createBlock('catalog/product_list_products');
-        $this->addChild('filter' , $filter);
-        $this->addChild('products' , $products);
-    }
-    public function getAllProducts(){
+        $this->setTemplate('catalog/product/list.phtml');
 
-        $products = Mage::getModel('catalog/filter')
-                            ->getProductCollection()
-                            // ->prepareQuery();
-                            ->addAttributToSelect(['Brand'])
-                            ->getData();
-                            // echo $products;
-                            // print($products->prepareQuery());
-                            // echo '<pre>';
-                            // print_r($products);
-                            // echo '</pre>';
-                            // die;
-        return $products;
+        $filter = $this->getLayout()->createBlock('catalog/product_list_filter');
+        $this->addChild('filter' , $filter);
+        $this->getLayout()->getChild('head')->addCss('catalog/product/list/filter.css');
+        $this->getLayout()->getChild('head')->addJs('catalog/product/list/filter.js');
+
+        $products = $this->getLayout()->createBlock('catalog/product_list_products');
+        $this->addChild('products' , $products);
+        $this->getLayout()->getChild('head')->addCss('catalog/product/list/products.css');
+        $this->getLayout()->getChild('head')->addJs('catalog/product/list/products.js');
         
     }
+
+    
 
     public function getAttributes(){
 

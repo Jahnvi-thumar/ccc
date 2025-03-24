@@ -3,22 +3,7 @@ $categories = $this->getAllCategories();
 $attributes = $this->getAttributes();
 // $product_attributes = $this->getProductAttributes();
 ?>
-<style>
-    .category-filter{
-        background-color: pink;
-    }
-    .line{
-        background-color: palevioletred;
-        height: 2px;
-        padding: 1px;
-        margin-bottom: 3px;
-    }
-    .attr_name{
-        color: black;
-        size: 7px;
-        border: 1px solid black;
-    }
-</style>
+
 <div class="category-filter">
     <h3>Shop by Category</h3>
         <?php foreach($categories as $categorygrp) : ?>
@@ -48,75 +33,4 @@ $attributes = $this->getAttributes();
         <button id="applyFilter" type="submit">Apply Filter</button>
 </div>
 
-<script>
 
-    class CategoryFilter {
-        constructor() {
-            console.log('Constructor called');
-            this.init();
-        }
-
-        init() {
-            // Use event delegation to handle dynamically added elements
-            $(document).on('change', '.filter-checkbox', () => this.applyFilter());
-            // $('.filter-checkbox, .filter-price').on('input', this.fetchFilteredProducts);
-
-        }
-
-        getSelectedCategories() {
-            let selectedCategories = [];
-            $('.filter-checkbox:checked').each(function () {
-                selectedCategories.push($(this).val());
-            });
-            return selectedCategories;
-        }
-
-        collectFilterData() {
-            let filters = {};
-            $('.filter-checkbox:checked').each(function() {
-                let name = $(this).attr('name');
-                // console.log('name : ');
-                // console.log(name);
-                if (!filters[name]) {
-                    filters[name] = [];
-                }
-                filters[name].push($(this).val());
-            });
-            console.log('filters : ');
-            console.log(filters);
-            return filters;
-        }
-
-        applyFilter() {
-            let formData = this.collectFilterData();
-            let selectedCategories = this.getSelectedCategories().join(",");
-            
-            console.log('Applying filter...');
-            console.log('Selected input fields:', formData);
-
-            // Ensure jQuery is available before making the request
-            if (typeof jQuery === "undefined" || typeof $.ajax === "undefined") {
-                console.error("Error: jQuery is not loaded.");
-                return;
-            }
-
-            $.ajax({
-                url: 'http://localhost/mvc_copy/catalog/product/list/',
-                type: 'GET',
-                data: formData,
-                success: (response) => {
-                    console.log('Response received:', response);
-                    $('.product-grid').html(response);
-                },
-                error: (xhr, status, error) => {
-                    console.error('AJAX Error:', error);
-                }
-            });
-        }
-    }
-
-    // Initialize the class when the document is ready
-    $(document).ready(() => {
-        new CategoryFilter();
-    });
-</script>

@@ -1,44 +1,39 @@
 <?php
 
-class Catalog_Controller_Product{
+class Catalog_Controller_Product extends Core_Controller_Front_Action{
 
 
     public function viewAction(){
         // echo get_class() . "----" . __FUNCTION__;
         $product = Mage::getModel('Catalog/Product');
         $product->getResourceModel();
-       
         $product->getResourceModel();
-        $layout = Mage::getBlock('Core/Layout');
-        $view = $layout->createBlock('Catalog/Product_view')
-                ->setTemplate('catalog/product/view.phtml');
-        $layout->getChild('content')->addChild('view' , $view);
-        // echo "<pre>";
-        // print_r($layout->getChild('content'));
-        $layout->toHtml();  
+       
+        $view = $this->getLayout()->createBlock('Catalog/Product_view');
+        $this->getLayout()->getChild('content')->addChild('view' , $view);
+        $this->getLayout()->getChild('head')->addCss('catalog/product/view.css');
+        $this->getLayout()->getChild('head')->addJs('catalog/product/view.js');
+        $this->getLayout()->toHtml();  
     
     
     }
 
     public function listAction(){
-        // echo get_class() . "----" . __FUNCTION__; 
-        $request = Mage::getModel('core/request');
-        $layout = Mage::getBlock('Core/Layout');
-        $list = $layout->createBlock('Catalog/Product_List')
-                ->setTemplate('catalog/product/list.phtml');
-        $layout->getChild('content')->addChild('list' , $list);
         
-        if($request->isAjax()){
+        $list = $this->getLayout()->createBlock('Catalog/Product_List');
+        $this->getLayout()->getChild('content')->addChild('list' , $list);
+        
+        if($this->getRequest()->isAjax()){
             
-            $layout->getChild('content')
+            $this->getLayout()->getChild('content')
                 ->getChild('list')
                 ->removeChild('filter');
-            $layout->removeChild('header');
-            $layout->removeChild('footer');
+            $this->getLayout()->removeChild('header');
+            $this->getLayout()->removeChild('footer');
             
         }
 
-        $layout->toHtml();     
+        $this->getLayout()->toHtml();     
         
     }
 

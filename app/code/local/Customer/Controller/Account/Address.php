@@ -4,11 +4,10 @@ class Customer_Controller_Account_Address extends Core_Controller_Front_Action{
     
     public function newAction(){
 
-        echo "123";
-        $layout = $this->getLayout();
-        $address = $layout->createBlock('customer/account_address_new');
-        $layout->getChild('content')->addChild('address' , $address);
-        $layout->toHtml();
+        $address = $this->getLayout()->createBlock('customer/account_address_new');
+        $this->getLayout()->getChild('content')->addChild('address' , $address);
+        $this->getLayout()->getChild('head')->addCss('customer/account/address/new.css');
+        $this->getLayout()->toHtml();
         
     }
 

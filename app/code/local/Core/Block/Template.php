@@ -42,6 +42,10 @@ class Core_Block_Template{
 
     }
 
+    public function getRequest(){
+        return Mage::getModel('core/request');
+    }
+
     
 
     public function getChildHtml($key){

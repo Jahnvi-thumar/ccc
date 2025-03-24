@@ -31,7 +31,7 @@ class Core_Controller_Customer_Action extends Core_Controller_Front_Action{
 
     public function getLayout(){
         
-        return Mage::getBlock('core/layout');
+        return Mage::getBlockSingleton('core/layout');
     }
 }
 ?>

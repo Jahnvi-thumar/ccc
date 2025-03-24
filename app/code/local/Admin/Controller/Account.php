@@ -5,12 +5,11 @@ class Admin_Controller_Account extends Core_Controller_Admin_Action{
     protected $_allowedActions = ['login' , 'loginPost'];
     public function loginAction(){
 
-        $layout = Mage::getBlock('core/layout');
-        $login = Mage::getBlock('admin/account')
-                      ->setTemplate('admin/login.phtml');
-
-        $layout->getChild('content')->addChild('login' , $login);
-        $layout->toHtml();
+        $login = $this->getLayout()->createBlock('admin/account');
+                
+        $this->getLayout()->getChild('content')->addChild('login' , $login);
+        $this->getLayout()->getChild('head')->addCss('admin/login.css');
+        $this->getLayout()->toHtml();
     }
 
     public function loginPostAction(){

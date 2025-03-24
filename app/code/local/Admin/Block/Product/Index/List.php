@@ -2,35 +2,32 @@
 
 class Admin_Block_Product_Index_List extends Core_Block_Template{
 
-    // public function __construct(){
-    //     $this->setTemplate('catalog/product/list.phtml');
-    // }
-
     protected $_product;
+    protected $_collection;
     public function __construct(){
 
-        $this->setTemplate('admin/product/index/new.phtml');
+        $this->setTemplate('admin/product/index/list.phtml');
+        $this->init();
         
     }
 
-    public function getProduct(){
+    public function init(){
 
-        // $this->_product = Mage::getSingleton('catalog/filter')->getProductCollection();
-        // return $this->_product->getData();
+        $toolbar = $this->getLayout()->createBlock('admin/grid_toolbar');
+        $this->addChild('toolbar' , $toolbar);
 
+        $this->_collection = Mage::getModel('catalog/filter')
+            ->getProductCollection();
         
+        $this->getChild('toolbar')->prepareToolbar();
+    }
 
-        $products = Mage::getModel('catalog/filter')
-                            ->getProductCollection()
-                            // ->addAttributToSelect(['brand', 'color', 'country_Of_Origin' , 'model_number' , 'material'])
-                            // ->prepareQuery();
-                            ->getData();
-                            
-                            // echo '<pre>';
-                            // print_r($products);
-                            // echo '</pre>';
-                            // die;
-        return $products;
+    public function getCollection(){
+        return $this->_collection;
+    }
+
+    public function getProduct(){                
+        return $this->getCollection()->getData();
     }
 }
 

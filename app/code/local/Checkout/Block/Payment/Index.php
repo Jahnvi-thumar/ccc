@@ -2,9 +2,9 @@
 
 class Checkout_Block_Payment_Index extends Core_Block_Template{
 
-    // public function __construct(){
-    //     $this->setTemplate('catalog/product/list.phtml');
-    // }
+    public function __construct(){
+        $this->setTemplate('checkout/payment/index.phtml');
+    }
 
     public function getShippingMethods() {
 

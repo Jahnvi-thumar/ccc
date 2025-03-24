@@ -1,0 +1,131 @@
+/* payment_method.css */
+
+/* Myntra Color Variables */
+:root {
+    --myntra-primary: #FF3F6C;
+    --myntra-secondary: #282C3F;
+    --myntra-text-primary: #3E4152;
+    --myntra-text-secondary: #94969F;
+    --myntra-background: #FFFFFF;
+    --myntra-border: #EAEAEC;
+    --myntra-light-bg: #F5F5F6;
+    --myntra-hover: #FFF0F4;
+    --myntra-shadow: rgba(0, 0, 0, 0.05);
+}
+
+/* Main Container */
+.myntra-payment-container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: var(--myntra-background);
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px var(--myntra-shadow);
+    font-family: 'Whitney', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Heading */
+.myntra-payment-heading {
+    text-align: center;
+    color: var(--myntra-secondary);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--myntra-border);
+}
+
+/* Payment Options */
+.myntra-payment-option-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid var(--myntra-border);
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--myntra-background);
+    transition: all 0.2s ease-in-out;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.myntra-payment-option-wrapper:hover {
+    background-color: var(--myntra-hover);
+    border-color: var(--myntra-primary);
+}
+
+.myntra-payment-option-active {
+    border-color: var(--myntra-primary);
+    background-color: var(--myntra-hover);
+}
+
+.myntra-payment-radio {
+    margin-right: 12px;
+    cursor: pointer;
+    position: relative;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--myntra-text-secondary);
+    border-radius: 50%;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.myntra-payment-radio:checked {
+    border-color: var(--myntra-primary);
+}
+
+.myntra-payment-radio:checked::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background-color: var(--myntra-primary);
+    border-radius: 50%;
+}
+
+.myntra-payment-details-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--myntra-text-primary);
+}
+
+/* Additional UPI or Card details container */
+.myntra-payment-additional-details {
+    display: none;
+    padding: 16px;
+    margin-top: -8px;
+    margin-bottom: 12px;
+    background-color: var(--myntra-light-bg);
+    border: 1px solid var(--myntra-border);
+    border-radius: 4px;
+}
+
+/* Submit Button */
+.myntra-payment-submit {
+    width: 100%;
+    padding: 14px;
+    background: var(--myntra-primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.2s ease-in-out;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.myntra-payment-submit:hover {
+    background: #E6375F;
+}
+
+.myntra-payment-submit:active {
+    transform: translateY(1px);
+}

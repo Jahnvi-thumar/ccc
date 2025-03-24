@@ -1,0 +1,204 @@
+
+/* Myntra Admin Style */
+:root {
+    --myntra-primary: #FF3F6C;
+    --myntra-secondary: #282C3F;
+    --myntra-light-gray: #F5F5F6;
+    --myntra-border: #EAEAEC;
+    --myntra-text: #3E4152;
+    --myntra-success: #03A685;
+}
+
+.myntra-body {
+    font-family: 'Whitney', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: #F5F5F6;
+    margin: 0;
+    padding: 0;
+    color: var(--myntra-text);
+}
+
+/* Header styling - fixed at top */
+.myntra-header {
+    background-color: white;
+    padding: 15px 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.myntra-header-title {
+    margin: 0;
+    color: var(--myntra-secondary);
+    font-weight: 600;
+    border: none;
+    padding: 0;
+    font-size: 20px;
+}
+
+/* Main content container */
+.myntra-main-container {
+    padding-top: 80px; /* Space for fixed header */
+    padding-bottom: 30px;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.myntra-content-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+/* Table Styling */
+.myntra-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+}
+
+.myntra-table-bordered {
+    border: 1px solid var(--myntra-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Table Header */
+.myntra-thead {
+    background-color: var(--myntra-light-gray);
+}
+
+.myntra-th {
+    color: var(--myntra-secondary);
+    font-weight: 600;
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--myntra-border);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Table Body */
+.myntra-td {
+    padding: 16px;
+    border-bottom: 1px solid var(--myntra-border);
+    color: var(--myntra-text);
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.myntra-tr:hover {
+    background-color: var(--myntra-light-gray);
+}
+
+.myntra-tr:last-child .myntra-td {
+    border-bottom: none;
+}
+
+/* Image Container */
+.myntra-img-thumbnail {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--myntra-border);
+}
+
+/* Action Buttons Container */
+.myntra-action-container {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+}
+
+/* Button Styling */
+.myntra-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.myntra-btn-edit {
+    background-color: var(--myntra-primary);
+    color: white;
+}
+
+.myntra-btn-edit:hover {
+    background-color: #e63464;
+}
+
+.myntra-btn-delete {
+    background-color: #ee5253;
+    color: white;
+}
+
+.myntra-btn-delete:hover {
+    background-color: #d44041;
+}
+
+.myntra-empty-message {
+    text-align: center;
+    padding: 20px;
+    color: var(--myntra-text);
+    font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .myntra-main-container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .myntra-content-card {
+        padding: 15px;
+    }
+
+    .myntra-th, .myntra-td {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .myntra-header {
+        padding: 15px;
+    }
+
+    .myntra-main-container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .myntra-table-responsive {
+        overflow-x: auto;
+    }
+
+    .myntra-th, .myntra-td {
+        white-space: nowrap;
+        padding: 10px;
+    }
+
+    .myntra-action-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .myntra-btn {
+        width: 100%;
+    }
+}

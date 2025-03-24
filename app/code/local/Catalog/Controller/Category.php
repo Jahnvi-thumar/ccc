@@ -1,16 +1,13 @@
 <?php
 
-class Catalog_Controller_Category{
+class Catalog_Controller_Category extends Core_Controller_Front_Action{
 
     public function listAction(){
-        $layout = Mage::getBlock('Core/Layout');
-        $list = $layout->createBlock('Catalog/Category_List')
-                ->setTemplate('catalog/Category/List.phtml');
-        $layout->getChild('content')->addChild('view' , $list);
-        // echo "<pre>";
-        // print_r($layout->getChild('content'));
-        $layout->toHtml();  
-        // echo get_class() . "----" . __FUNCTION__;    
+       
+        $list = $this->getLayout()->createBlock('Catalog/Category_List');
+        $this->getLayout()->getChild('content')->addChild('view' , $list);
+        $this->getLayout()->getChild('head')->addCss('catalog/category/list.css');
+        $this->getLayout()->toHtml();  
     }
     
 }

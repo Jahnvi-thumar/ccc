@@ -3,23 +3,18 @@
 class Checkout_Controller_Cart extends Core_Controller_Front_Action{
 
     public function indexAction(){
-        // echo get_class() . "----" . __FUNCTION__;    
-        $layout = Mage::getBlock('Core/Layout');
-        $index = $layout->createBlock('Checkout/Cart_index')
-                ->setTemplate('checkout/cart/index.phtml');
-        $layout->getChild('content')->addChild('index' , $index);
-        // echo "<pre>";
-        // print_r($layout->getChild('content'));
-        $layout->toHtml();  
+        
+        $index = $this->getLayout()->createBlock('Checkout/Cart_index');
+        $this->getLayout()->getChild('content')->addChild('index' , $index);
+        $this->getLayout()->getChild('head')->addCss('checkout/cart/index.css');
+        $this->getLayout()->toHtml();  
     }
     
     public function updateAction(){
-        // echo get_class() . "----" . __FUNCTION__;  
-        
-        $request = Mage::getModel('core/request');
-        $postData = $request->getParams();
        
-        $cart = Mage::getModel('checkout/session')
+        $postData = $this->getRequest()->getParams();
+       
+        Mage::getModel('checkout/session')
             ->getCart()
             ->updateItem($postData['cart_item_id'] , $postData['quantity'])
             ->save();
@@ -28,11 +23,10 @@ class Checkout_Controller_Cart extends Core_Controller_Front_Action{
     }
     
     public function removeAction(){
-        // echo get_class() . "----" . __FUNCTION__;   
-        $item_id = Mage::getModel('core/request')->getquery('cart_item_id');
-        // echo $item_id;
         
-        $cart = Mage::getModel('checkout/session')
+        $item_id = $this->getRequest()->getquery('cart_item_id');
+        
+        Mage::getModel('checkout/session')
             ->getCart()
             ->removeItem($item_id)
             ->save();
@@ -42,17 +36,14 @@ class Checkout_Controller_Cart extends Core_Controller_Front_Action{
     }
     
     public function addAction(){
-
-        $request = Mage::getModel('core/request');
-        print_r($request->getParams());
         
-        $productId = $request->getParam('product_id');
-        $quantity = $request->getParam('quantity');
+        $productId = $this->getRequest()->getParam('product_id');
+        $quantity = $this->getRequest()->getParam('quantity');
 
-        $cart_model = Mage::getSingleton('checkout/session')
-                            ->getCart()
-                            ->addProduct($productId , $quantity)
-                            ->save();
+        Mage::getSingleton('checkout/session')
+            ->getCart()
+            ->addProduct($productId , $quantity)
+            ->save();
         
         // $this->redirect('checkout/cart/index');
 
@@ -60,7 +51,7 @@ class Checkout_Controller_Cart extends Core_Controller_Front_Action{
 
     public function applyCouponAction(){
 
-        $code = Mage::getModel('core/request')->getQuery();
+        $code = $this->getRequest()->getQuery();
         $cart_items = Mage::getSingleton('checkout/session')
             ->getCart()
             ->getItemCollection()
@@ -124,8 +115,6 @@ class Checkout_Controller_Cart extends Core_Controller_Front_Action{
         Mage::log($item_collection->prepareQuery());
 
 
-        // $cartitem_model = Mage::getModel('checkout/cart_item');
-        // print_r($cartitem_model->getCollection()->getData());
     }
 
     

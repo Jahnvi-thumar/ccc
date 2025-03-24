@@ -4,18 +4,16 @@ class Checkout_Controller_Shipping extends Core_Controller_Front_Action{
 
     public function indexAction(){
 
-        $layout = Mage::getBlock('Core/Layout');
-        $index = $layout->createBlock('Checkout/shipping_index')
-                ->setTemplate('checkout/shipping/index.phtml');
-        $layout->getChild('content')->addChild('index' , $index);
-        // echo "<pre>";
-        // print_r($layout->getChild('content'));
-        $layout->toHtml();  
+        $index = $this->getLayout()->createBlock('Checkout/shipping_index');
+        $this->getLayout()->getChild('content')->addChild('index' , $index);
+        $this->getLayout()->getChild('head')->addCss('checkout/shipping/index.css');
+        $this->getLayout()->getChild('head')->addCss('checkout/shipping/index.js');
+        $this->getLayout()->toHtml();  
     }
 
     public function saveAction(){
 
-        $data = Mage::getModel('core/request')->getParams();
+        $data = $this->getRequest()->getParams();
         $shipping = Mage::getModel('checkout/shipping');
 
         echo '<pre>';
