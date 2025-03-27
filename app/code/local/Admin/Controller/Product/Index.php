@@ -108,6 +108,13 @@ class Admin_Controller_Product_Index extends Core_Controller_Admin_Action{
         exit;
   
     }
+
+    public function testAction(){
+
+        $test = $this->getLayout()->createBlock('admin/product_index_test');
+        $this->getLayout()->getChild('content')->addChild('test' , $test);
+        $this->getLayout()->toHtml();
+    }
 }
 
 ?>

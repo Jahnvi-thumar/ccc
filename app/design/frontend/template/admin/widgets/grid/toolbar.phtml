@@ -1,26 +1,4 @@
-<!-- <h2>toolbar</h2>
-<div>
-    <form action="" method="GET">
-        <label for="">page</label>
-        <input type="number" name="page">
-        <label for="numberSelect">Choose a number:</label>
-        <select name="limit" id="numberSelect">
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="10">10</option>
-        </select>
-
-        <div>
-            <label for="">Total Records: </label>
-            <p><?php //echo $this->getTotalRecords() ?></p>
-        </div>
-        <button type="submit">submit</button>
-    </form>
-
-</div> -->
-
-
+<h2>toolbar</h2>
 
 <!-- <h2 class="myntra-admin__title">Listing Management</h2> -->
 <div class="myntra-admin__toolbar">
@@ -42,7 +20,8 @@
         
         <div class="myntra-admin__toolbar-info">
             <label class="myntra-admin__toolbar-label myntra-admin__toolbar-label--info">Total Records:</label>
-            <p class="myntra-admin__toolbar-count"><?php //echo $this->getTotalRecords() ?></p>
+            <p class="myntra-admin__toolbar-count"><?php
+            echo $this->getTotalRecords() ?></p>
         </div>
         
         <button type="submit" class="myntra-admin__toolbar-button">Apply Filters</button>

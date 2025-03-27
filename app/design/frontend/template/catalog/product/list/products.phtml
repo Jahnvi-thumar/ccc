@@ -5,19 +5,10 @@ $products = $this->getAllProducts();
 $categories = $this->getAllCategories();
 
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     
-</head>
-<body>
-<div class="container">
-<?php $this->getChildHtml('toolbar');  ?>
-<div class="filter-section">
+<div class="catalog-product-container">
+    <?php $this->getChildHtml('toolbar');  ?>
+<!-- <div class="filter-section">
     <div class="filters">
         <div class="filter-title">FILTERS</div>
         <div class="clear-all">CLEAR ALL</div>
@@ -38,9 +29,9 @@ $categories = $this->getAllCategories();
             <option value="price">Price: High to Low</option>
         </select>
     </div>
-</div>
+</div> -->
 
-<div id="price-filter-popup" style="display: none; position: absolute; background: white; border: 1px solid #eaeaec; padding: 15px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100; min-width: 250px;">
+<!-- <div id="price-filter-popup" style="display: none; position: absolute; background: white; border: 1px solid #eaeaec; padding: 15px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100; min-width: 250px;">
         <h4>Price Range</h4>
         <div class="price-range-container">
             <div class="price-inputs">
@@ -57,79 +48,75 @@ $categories = $this->getAllCategories();
                 <button id="reset-price-filter">Reset</button>
             </div>
         </div>
-    </div>
-
+    </div> -->
+<div id="jahanvi">
     <div class="product-grid" id="product-grid">
 
-<?php foreach ($products as $index => $product): ?>
+        <?php foreach ($products as $index => $product): ?>
 
-<?php $productUrl = $this->getUrl('*/*/view') . '/?id=' . $product->getProductId(); ?>
-<div class="product-card product-card-<?php echo $index; ?>" onclick="location.href='<?php echo $productUrl; ?>'">
-<?php if ($index % 5 == 0): ?>
-    <div class="new-tag">NEW</div>
-<?php endif; ?>
+        <?php $productUrl = $this->getUrl('*/*/view') . '/?id=' . $product->getProductId(); ?>
+        <div class="product-card product-card-<?php echo $index; ?>" onclick="location.href='<?php echo $productUrl; ?>'">
+        <?php if ($index % 5 == 0): ?>
+            <div class="new-tag">NEW</div>
+        <?php endif; ?>
 
-<div class="product-image-container">
-    <?php 
-        // Get product images - if not available, use placeholder
-        $currentImages = [];
-        foreach ($this->getAllProductsImgs($product->getProductId()) as $image){
-
-            $currentImages[] = $image->getFilePath();
-            
-        }
-        
-        // If no images, use placeholder
-        if (empty($currentImages)) {
-            $currentImages = ['assets/images/placeholder.jpg'];
-        }
-        
-        // Display the first image
-        $mainImage = $currentImages[0];
-    ?>
-    <img src="/mvc_copy/<?php echo $mainImage; ?>" alt="<?php echo $product->getName(); ?>" class="product-image">
-    
-    <div class="similar-products">SIMILAR PRODUCTS</div>
-</div>
-
-<div class="product-details">
-    <div class="product-brand"><?php echo $product->getBrand() ?: 'Brand Name'; ?></div>
-    <div class="product-name"><?php echo $product->getName(); ?></div>
-    
-    <div class="price-container">
-        <span class="current-price">Rs. <?php echo number_format((float)$product->getPrice('price'), 0); ?></span>
-        <?php 
-            // Calculate original price (20% higher than current price for demo)
-            $originalPrice = (float)$product->getPrice('price') * 1.2;
-            $discount = 20; // 20% discount for demo
-        ?>
-        <span class="original-price">Rs. <?php echo number_format($originalPrice, 0); ?></span>
-        <span class="discount">(<?php echo $discount; ?>% OFF)</span>
-    </div>
-    
-    <?php if ($index % 2 == 0): // Only show ratings for some products ?>
-    <div class="rating-container">
-        <div class="rating">
+        <div class="product-image-container">
             <?php 
-                // Generate random rating between 3.5 and 4.9
-                $rating = number_format(rand(35, 49) / 10, 1);
-                // Generate random number of reviews
-                $reviews = rand(10, 1500);
+                // Get product images - if not available, use placeholder
+                $currentImages = [];
+                foreach ($this->getAllProductsImgs($product->getProductId()) as $image){
+                    $currentImages[] = $image->getFilePath();
+                }
+                
+                // If no images, use placeholder
+                if (empty($currentImages)) {
+                    $currentImages = ['assets/images/placeholder.jpg'];
+                }
+                
+                // Display the first image
+                $mainImage = $currentImages[0];
             ?>
-            <?php echo $rating; ?> <i class="fas fa-star"></i> | <?php echo $reviews; ?>
+            <img src="/mvc_copy/<?php echo $mainImage; ?>" alt="<?php echo $product->getName(); ?>" class="product-image">
+            
+            <div class="similar-products">SIMILAR PRODUCTS</div>
         </div>
-    </div>
-    <?php endif; ?>
+
+        <div class="product-details">
+            <div class="product-brand"><?php echo $product->getBrand() ?: 'Brand Name'; ?></div>
+            <div class="product-name"><?php echo $product->getName(); ?></div>
+            
+            <div class="price-container">
+                <span class="current-price">Rs. <?php echo number_format((float)$product->getPrice('price'), 0); ?></span>
+                <?php 
+                    // Calculate original price (20% higher than current price for demo)
+                    $originalPrice = (float)$product->getPrice('price') * 1.2;
+                    $discount = 20; // 20% discount for demo
+                ?>
+                <span class="original-price">Rs. <?php echo number_format($originalPrice, 0); ?></span>
+                <span class="discount">(<?php echo $discount; ?>% OFF)</span>
+            </div>
+            
+            <?php if ($index % 2 == 0): // Only show ratings for some products ?>
+            <div class="rating-container">
+                <div class="rating">
+                    <?php 
+                        // Generate random rating between 3.5 and 4.9
+                        $rating = number_format(rand(35, 49) / 10, 1);
+                        // Generate random number of reviews
+                        $reviews = rand(10, 1500);
+                    ?>
+                    <?php echo $rating; ?> <i class="fas fa-star"></i> | <?php echo $reviews; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+
+        <button class="wishlist-button" title="Add to Wishlist">
+            <i class="far fa-heart"></i>
+        </button>
+        </div>
+        <?php endforeach; ?>
+</div>
 </div>
 
-<button class="wishlist-button" title="Add to Wishlist">
-    <i class="far fa-heart"></i>
-</button>
 </div>
-<?php endforeach; ?>
-</div>
-
-
-</div>
-</body>
-</html>

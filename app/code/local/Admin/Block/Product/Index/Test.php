@@ -1,11 +1,10 @@
 <?php
 
-class Admin_Block_Product_Index_List extends Admin_Block_Widgets_Grid{
+class Admin_Block_Product_Index_Test extends Admin_Block_Widgets_Grid{
 
-    protected $_product;
-    protected $_collection;
+    protected $_collection = null;
     public function __construct(){
-
+        // $this->setTemplate('admin/product/index/test.phtml');
         parent::__construct();
         $this->addColumns('product_id' , 
             [
@@ -69,7 +68,7 @@ class Admin_Block_Product_Index_List extends Admin_Block_Widgets_Grid{
                 'type' => 'link',
                 'filter' => '',
                 'url' => $this->getUrl('admin/product_index/new'),
-                'data_idx' => 'product_id'
+                'call_back_funtion' => 'getEditUrl'
                 
         ]);
         $this->addColumns('delete' , 
@@ -78,10 +77,10 @@ class Admin_Block_Product_Index_List extends Admin_Block_Widgets_Grid{
                 'type' => 'link',
                 'filter' => '',
                 'url' => $this->getUrl('admin/product_index/delete'),
-                'data_idx' => 'product_id'
+                'call_back_funtion' => 'getDeleteUrl'
         ]);
-        $this->init();
         
+        $this->init();
     }
 
     public function init(){
@@ -99,6 +98,16 @@ class Admin_Block_Product_Index_List extends Admin_Block_Widgets_Grid{
     public function getProduct(){                
         return $this->getCollection()->getData();
     }
+
+    public function getEditUrl($row){
+        return $this->getUrl('admin/product_index/new') . '/?product_id=' . $row->getProductId();
+    }
+
+    public function getDeleteUrl($row){
+        return $this->getUrl('admin/product_index/delete') . '/?product_id=' . $row->getProductId();
+
+    }
+
 }
 
 ?>

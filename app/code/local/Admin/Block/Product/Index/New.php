@@ -13,9 +13,7 @@ class Admin_Block_Product_Index_New extends Core_Block_Template{
 
     public function getProduct(){
 
-
-        
-        $id = Mage::getModel('core/request')->getQuery('id');
+        $id = Mage::getModel('core/request')->getQuery('product_id');
         
         $this->_product = Mage::getModel('catalog/product')
                 ->load($id);

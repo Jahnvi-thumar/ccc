@@ -16,9 +16,9 @@ class Checkout_Controller_Shipping extends Core_Controller_Front_Action{
         $data = $this->getRequest()->getParams();
         $shipping = Mage::getModel('checkout/shipping');
 
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
 
         $cart = Mage::getSingleton('checkout/session')
             ->getCart();
@@ -29,9 +29,9 @@ class Checkout_Controller_Shipping extends Core_Controller_Front_Action{
             ->setShippingCharge($shipping->getCharge($data['shipping_method']))
             ->save();
 
-            echo '<pre>';
-            print_r($cart);
-            echo '</pre>';
+            // echo '<pre>';
+            // print_r($cart);
+            // echo '</pre>';
             // die;
 
         $this->redirect('checkout/payment/index');

@@ -28,6 +28,8 @@ class Catalog_Controller_Product extends Core_Controller_Front_Action{
             $this->getLayout()->getChild('content')
                 ->getChild('list')
                 ->removeChild('filter');
+                
+            $this->getLayout()->getChild('content')->getChild('list')->getChild('products')->removeChild('toolbar');
             $this->getLayout()->removeChild('header');
             $this->getLayout()->removeChild('footer');
             

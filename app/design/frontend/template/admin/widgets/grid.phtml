@@ -1,0 +1,173 @@
+<h2>grid</h2>
+<?php $this->getChildHtml('toolbar')  ?>
+<style>
+    /* Myntra Admin Grid Styles */
+:root {
+    --primary-color: #ff3f6c;
+    --background-light: #f5f5f5;
+    --text-primary: #282c3f;
+    --text-secondary: #5b5b5b;
+    --border-color: #e0e0e0;
+    --hover-color: #f1f1f1;
+    --link-color: #ff3f6c;
+    --link-hover-color: #ff184a;
+}
+
+.myntra-admin-grid-container {
+    font-family: 'Whitney', 'Helvetica Neue', sans-serif;
+    background-color: var(--background-light);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 16px;
+}
+
+.myntra-admin-grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Header Styles */
+.myntra-admin-grid-header-row {
+    background-color: #f4f4f4;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.myntra-admin-grid-header-cell {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+/* Filter Row Styles */
+.myntra-admin-filter-row {
+    background-color: #f9f9f9;
+}
+
+.myntra-admin-filter-cell {
+    padding: 8px 16px;
+}
+
+.myntra-admin-filter-cell input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Data Row Styles */
+.myntra-admin-grid-data-row {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.myntra-admin-grid-data-row:hover {
+    background-color: var(--hover-color);
+}
+
+.myntra-admin-grid-data-cell {
+    padding: 12px 16px;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+/* Link Styles */
+.myntra-admin-grid-data-cell a {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.myntra-admin-grid-data-cell a:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
+}
+
+/* Action Buttons */
+.myntra-admin-action-btn,
+.myntra-admin-grid-action-edit,
+.myntra-admin-grid-action-delete {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-right: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.myntra-admin-grid-action-edit {
+    background-color: #4CAF50;
+}
+
+.myntra-admin-grid-action-delete {
+    background-color: #f44336;
+}
+
+.myntra-admin-action-btn:hover,
+.myntra-admin-grid-action-edit:hover,
+.myntra-admin-grid-action-delete:hover {
+    opacity: 0.9;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    .myntra-admin-grid-table {
+        font-size: 12px;
+    }
+    
+    .myntra-admin-grid-header-cell,
+    .myntra-admin-grid-data-cell {
+        padding: 8px 12px;
+    }
+}
+</style>
+
+<div class="myntra-admin-grid-container">
+    <?php $this->getChildHtml('toolbar') ?>
+    
+    <table class="myntra-admin-grid-table">
+        <thead>
+            <tr class="myntra-admin-grid-header-row">
+                <?php foreach($this->_columns as $col) : ?>
+                    <th class="myntra-admin-grid-header-cell">
+                        <?php echo $col->getData()['label']; ?>
+                    </th>
+                <?php endforeach; ?>
+            </tr>
+            <tr class="myntra-admin-filter-row">
+                <?php foreach($this->_columns as $col) : ?>
+                    <th class="myntra-admin-filter-cell">
+                        <?php echo $col->getFilter()->render(); ?>
+                    </th>
+                <?php endforeach; ?>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php foreach($this->_collection->getData() as $row) : ?>
+                <tr class="myntra-admin-grid-data-row">
+                    <?php foreach($this->_columns as $col) : ?>
+                        <td class="myntra-admin-grid-data-cell">
+                            <?php echo $col->setRow($row)->render();
+                            // echo '<pre>';
+                            // print_r($col);
+                            // echo '</pre>'; ?>
+                        </td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
