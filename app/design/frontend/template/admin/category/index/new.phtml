@@ -1,0 +1,53 @@
+<?php 
+$result = $this->getCategory();
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<?php //result = $this->getCategory(); ?>
+<?php
+
+// echo '<pre>';
+// print_r($result);
+// echo '</pre>';
+?>
+<?php echo $this->getHtmlField('formStart', ['method' => 'POST', 'action' => $this->getUrl('*/*/save'), 'enctype' => 'multipart/form-data']); ?>
+
+<?php echo $this->getHtmlField('hidden', ['id' => 'category_id', 'name' => "catalog_category[category_id]", 'value' => ""]); ?>
+<?php //echo $this->getHtmlField('hidden', ['id' => 'result_id', 'name' => "result[result_id]", 'value' => !empty($result) ? $result->getresultId() : ""]); ?>
+
+
+
+<?php echo $this->getHtmlField('label', ['for' => 'name']); ?>
+<?php echo $this->getHtmlField('text', ['id' => 'name', 'name' => "catalog_category[name]", 'value' =>  ""]); ?>
+<?php //echo $this->getHtmlField('text', ['id' => 'name', 'name' => "catalog_category[name]", 'value' => ""]); ?>
+<br>
+
+<?php echo $this->getHtmlField('label', ['for' => 'description']); ?>
+<?php echo $this->getHtmlField('textarea', ['id' => 'description', 'name' => "catalog_category[description]"]); ?>
+<br>
+
+<?php echo $this->getHtmlField('label', ['for' => 'parent_id']); ?>
+<?php echo $this->getHtmlField('dropDown', [
+    'name' => "catalog_category[parent_id]",
+    'value' => !empty($result) ? $result : [0],
+    'checked' => (!empty($catalog_category) ? $result->getParentId() : "")
+]);
+
+?>
+<br>
+
+<button type="submit">Submit</button>
+
+<?php echo $this->getHtmlField('formend', []); ?>
+
+</body>
+</html>

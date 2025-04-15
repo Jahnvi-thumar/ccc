@@ -1,0 +1,78 @@
+<?php
+$result = $this->getCategory();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category List</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+   
+</head>
+<body class="myntra-body">
+    <?php if(count($result) > 0) : ?>
+    
+    <header class="myntra-header">
+        <h2 class="myntra-header-title">Category Management</h2>
+    </header>
+    
+    <div class="myntra-main-container">
+        <div class="myntra-content-card">
+            <table class="myntra-table myntra-table-bordered">
+                <thead class="myntra-thead">
+                    <tr class="myntra-tr">
+                        <th class="myntra-th">ID</th>
+                        <th class="myntra-th">Name</th>
+                        <th class="myntra-th">Description</th>
+                        <th class="myntra-th">Image</th>
+                        <th class="myntra-th">Product Count</th>
+                        <th class="myntra-th">Visibility</th>
+                        <th class="myntra-th">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($result)) : ?>
+                        <?php foreach ($result as $row) : ?>
+                            <tr class="myntra-tr">
+                                <td class="myntra-td"><?= htmlspecialchars($row->getcategory_id()) ?></td>
+                                <td class="myntra-td"><?= htmlspecialchars($row->getname()) ?></td>
+                                <td class="myntra-td"><?= htmlspecialchars($row->getdescription()) ?></td>
+                                <td class="myntra-td">
+                                    <?php if (!empty($row->getimage())) : ?>
+                                        <img class="myntra-img-thumbnail" src="/ecommerce/<?= htmlspecialchars($row->getimage()) ?>" alt="Category Image">
+                                    <?php else : ?>
+                                        <span class="myntra-no-image">No Image</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="myntra-td"><?= htmlspecialchars($row->product_count) ?></td>
+                                <td class="myntra-td"><?= !empty($row->getvisibility()) ? htmlspecialchars($row->getvisibility()) : "-" ?></td>
+                                <td class="myntra-td">
+                                    <div class="myntra-action-container">
+                                        <form action="?&m=Admin&v=Category&a=view&id=<?php echo htmlspecialchars($row->getcategory_id()); ?>" method="POST">
+                                            <input type="hidden" name="catlog_category[category_id]" value="<?php echo $row->getcategory_id() ?>">
+                                            <button type="submit" class="myntra-btn myntra-btn-edit">Edit</button>
+                                        </form>
+                                        <form action="?&m=Admin&v=Category&a=deleteCategory" method="POST">
+                                            <input type="hidden" name="catlog_category[category_id]" value="<?php echo $row->getcategory_id() ?>">
+                                            <button type="submit" class="myntra-btn myntra-btn-delete" onclick="return confirm('Are you sure you want to delete this category?');">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <tr class="myntra-tr">
+                            <td class="myntra-td myntra-empty-message" colspan="7">No categories found</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <?php endif; ?>
+</body>
+</html>

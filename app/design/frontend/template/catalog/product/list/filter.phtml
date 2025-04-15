@@ -1,0 +1,36 @@
+<?php
+$categories = $this->getAllCategories();
+$attributes = $this->getAttributes();
+// $product_attributes = $this->getProductAttributes();
+?>
+
+<div class="category-filter">
+    <h3>Shop by Category</h3>
+        <?php foreach($categories as $categorygrp) : ?>
+            <?php foreach($categorygrp as $category) : ?>
+                <label>
+                    <input type="checkbox" class="filter-checkbox" name="categoryid" value=<?php echo $category->getCategoryId() ?>>
+                    <?= $category->getName() ?>
+                </label><br>
+            <?php endforeach ; ?>
+        <?php endforeach ; ?>
+        <br>
+        <div class="line"></div>
+        <h4>Attributes</h4>
+        <?php foreach($attributes as $_attribute) : ?>
+            <label class="attr_name">
+                <?= $_attribute->getName() ?>
+            </label><br>
+
+            <?php foreach($this->getProductAttributes($_attribute->getAttributeId()) as $product_attribute) : ?>
+                <label>
+                <input type="checkbox" class="filter-checkbox" name="<?php echo $_attribute->getName() ?>" 
+                    value="<?php echo $product_attribute->getValue() ?>">
+                <?= $product_attribute->getValue() ?>
+            </label><br>
+            <?php endforeach ; ?>
+        <?php endforeach; ?>
+        <button id="applyFilter" type="submit">Apply Filter</button>
+</div>
+
+

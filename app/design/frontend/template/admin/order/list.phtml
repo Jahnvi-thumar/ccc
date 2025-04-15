@@ -1,0 +1,156 @@
+<!-- <h1>hello order list</h1> -->
+
+<?php
+$this->getChildHtml('toolbar');
+$orders = $this->getAllOrders();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Dashboard | Admin Panel</title>
+   
+</head>
+<body>
+    <div class="myntra-admin">
+        <div class="myntra-admin-container">
+            <div class="myntra-admin-sidebar">
+                <div class="myntra-admin-logo">
+                    <img src="/api/placeholder/120/40" alt="Myntra Admin">
+                    <!-- <img src="https://via.placeholder.com/120x40" alt="Myntra Admin"> -->
+                </div>
+                <div class="myntra-admin-nav-item active">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Orders</span>
+                </div>
+                <div class="myntra-admin-nav-item">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </div>
+                <div class="myntra-admin-nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </div>
+                <div class="myntra-admin-nav-item">
+                    <i class="fas fa-tags"></i>
+                    <span>Promotions</span>
+                </div>
+                <div class="myntra-admin-nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </div>
+                <div class="myntra-admin-nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </div>
+            
+            <div class="myntra-admin-main-content">
+                <div class="myntra-admin-header">
+                    <h1>Orders Management</h1>
+                    <div class="myntra-admin-header-actions">
+                        <div class="myntra-admin-search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search orders...">
+                        </div>
+                        <button class="myntra-admin-btn myntra-admin-btn-primary"><i class="fas fa-plus"></i> New Order</button>
+                    </div>
+                </div>
+                
+                <div class="myntra-admin-stats">
+                    <div class="myntra-admin-stat-card">
+                        <h3>Total Orders</h3>
+                        <div class="value">2</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-up"></i> 12.5% from last week
+                        </div>
+                    </div>
+                    <div class="myntra-admin-stat-card">
+                        <h3>Total Revenue</h3>
+                        <div class="value">₹22,015</div>
+                        <div class="change positive">
+                            <i class="fas fa-arrow-up"></i> 8.3% from last week
+                        </div>
+                    </div>
+                    <div class="myntra-admin-stat-card">
+                        <h3>Average Order Value</h3>
+                        <div class="value">₹11,007.5</div>
+                        <div class="change negative">
+                            <i class="fas fa-arrow-down"></i> 2.1% from last week
+                        </div>
+                    </div>
+                    <div class="myntra-admin-stat-card">
+                        <h3>Pending Orders</h3>
+                        <div class="value">2</div>
+                        <div class="change negative">
+                            <i class="fas fa-arrow-up"></i> 5% from last week
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="myntra-admin-card">
+                    <div class="myntra-admin-card-header">
+                        <h2>Recent Orders</h2>
+                        <div class="actions">
+                            <button class="myntra-admin-btn myntra-admin-btn-outline"><i class="fas fa-filter"></i> Filter</button>
+                            <button class="myntra-admin-btn myntra-admin-btn-outline"><i class="fas fa-download"></i> Export</button>
+                        </div>
+                    </div>
+                    <div class="myntra-admin-card-body">
+                        <table class="myntra-admin-orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Payment Method</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myntra-admin-orders-table-body">
+                                <!-- Orders will be dynamically inserted here -->
+                                <?php foreach($orders as $_order) : ?>
+                                    <tr>
+                                        <td><?php echo '#'. htmlspecialchars($_order->getorderId()); ?></td>
+                                        <td>
+                                            <div><?php echo 'Customer ID:' . htmlspecialchars($_order->getCustomerId()); ?></div>
+                                            <div style="font-size: 12px; color: var(--myntra-admin-secondary);">
+                                                <?php echo htmlspecialchars($_order->getEmail()) ?></div>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($_order->getCreatedAt()) ?></td>
+                                        <td><?php echo htmlspecialchars($_order->getPaymentMethod()) ?></td>
+                                        <td><?php echo htmlspecialchars($_order->getTotalAmount()) ?></td>
+                                        <td><span class="myntra-admin-status pending"><?php echo htmlspecialchars('status') ?></span></td>
+                                        <td class="myntra-admin-actions-cell">
+                                            <a href="<?php echo $this->getUrl('admin/order_index/view') . '/?order_id=' . $_order->getOrderId() ?>" class="myntra-admin-action-btn view"><i class="fas fa-eye"></i></a>
+                                            <div class="myntra-admin-action-btn edit"><i class="fas fa-edit"></i></div>
+                                            <div class="myntra-admin-action-btn delete"><i class="fas fa-trash"></i></div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="myntra-admin-pagination">
+                        <div class="myntra-admin-pagination-item"><i class="fas fa-chevron-left"></i></div>
+                        <div class="myntra-admin-pagination-item active">1</div>
+                        <div class="myntra-admin-pagination-item">2</div>
+                        <div class="myntra-admin-pagination-item">3</div>
+                        <div class="myntra-admin-pagination-item"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                </div>
+                
+                <div class="myntra-admin-footer">
+                    © 2025 Myntra Admin Dashboard. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+</html>

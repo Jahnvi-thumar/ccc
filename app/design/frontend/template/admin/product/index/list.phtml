@@ -1,0 +1,99 @@
+<?php 
+$this->getChildHtml('toolbar');
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/catalog.css"> <!-- External CSS file -->
+
+   
+</head>
+
+<body class="catalog-container">
+    <h2 class="catalog-heading">Product Catalog</h2>
+
+    <div class="catalog-actions">
+        <a class="catalog-add-btn" href="<?php echo $this->getUrl('admin/export_csv/getCsv'); ?>">Export</a>
+    </div>
+
+    <!-- <form action="<?php echo $this->getUrl('*/*/list') ?>" method="GET">
+        <input type="hidden" name="limit" value="<?php echo $this->getRequest()->getQuery('limit', 5); ?>">
+        <input type="hidden" name="page" value="<?php echo $this->getRequest()->getQuery('page', 1); ?>">
+        <button type="submit" name="export" value="export">Export in CSV</button>
+    </form> -->
+
+    <div class="catalog-actions">
+        <a class="catalog-add-btn" href="<?php echo $this->getUrl('*/*/new'); ?>">Add Product</a>
+    </div>
+
+    <div class="catalog-actions">
+        <a class="catalog-add-btn" href="<?php echo $this->getUrl('admin/order_index/list'); ?>">View Orders</a>
+    </div>
+
+    <?php if (count($this->getProduct()) > 0): ?>
+        <table class="catalog-table">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>SKU</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Category</th>
+                <th>Brand</th>
+                <th>Model Number</th>
+                <th>Color</th>
+                <th>Material</th>
+                <th>Country Of Origin</th>
+                <th>Media</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+
+            <?php foreach ($this->getProduct() as $product): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($product->getProduct_id()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getName()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getSku()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getDescription()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getPrice()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getStock_quantity()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getCategory_id()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getBrand()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getModelNumber()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getColor()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getMaterial()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getCountryOfOrigin()); ?></td>
+                    <td>
+                        <img src="<?php echo htmlspecialchars($product->getMedia()); ?>" alt="Product Image">
+                    </td>
+                    <td><?php echo htmlspecialchars($product->getCreated_at()); ?></td>
+                    <td><?php echo htmlspecialchars($product->getUpdated_at()); ?></td>
+                    <td class="catalog-action-icons">
+                        <a href="<?php echo $this->getUrl('*/*/new') . '/?id=' . $product->getProductId(); ?>">
+                            <i class="fa fa-edit catalog-edit-icon"></i>
+                        </a>
+                    </td>
+                    <td class="catalog-action-icons">
+                        <a href="<?php echo $this->getUrl('admin/product_index/delete') . '/?id=' . $product->getProductId(); ?>" onclick="return confirm('Are you sure you want to delete this product?');">
+                            <i class="fa fa-trash catalog-delete-icon"></i>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p class="catalog-empty">No products available.</p>
+    <?php endif; ?>
+</body>
+
+</html>

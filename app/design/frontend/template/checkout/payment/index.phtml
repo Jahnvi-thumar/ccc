@@ -1,0 +1,53 @@
+<?php $payment_methods = $this->getPaymentMethods();
+// echo '<pre>';
+// print_r($payment_methods);
+// echo '</pre>';
+// die;// 
+?>
+
+<div class="myntra-payment-container">
+    <form action="<?php echo $this->getUrl("checkout/payment/save") ?>" method="POST">
+        <h2 class="myntra-payment-heading">Select Payment Method</h2>
+        
+        <label class="myntra-payment-option-wrapper" id="card-option">
+            <input type="radio" name="payment_method" value="card" class="myntra-payment-radio">
+            <div class="myntra-payment-details-text">Credit / Debit Card</div>
+        </label>
+        
+        <div id="card-details" class="myntra-payment-additional-details" style="display: none;">
+            <!-- Card details -->
+            <div class="card-input-fields">
+                <input type="text" placeholder="Card Number" class="payment-input" />
+                <div class="card-expiry-cvv">
+                    <input type="text" placeholder="MM/YY" class="payment-input" />
+                    <input type="text" placeholder="CVV" class="payment-input" />
+                </div>
+                <input type="text" placeholder="Cardholder Name" class="payment-input" />
+            </div>
+        </div>
+        
+        <label class="myntra-payment-option-wrapper" id="upi-option">
+            <input type="radio" name="payment_method" value="upi" class="myntra-payment-radio">
+            <div class="myntra-payment-details-text">UPI</div>
+        </label>
+        
+        <div id="upi-details" class="myntra-payment-additional-details" style="display: none;">
+            <!-- UPI details -->
+            <div class="upi-input-fields">
+                <input type="text" placeholder="Enter UPI ID (e.g. name@upi)" class="payment-input" />
+            </div>
+        </div>
+        
+        <label class="myntra-payment-option-wrapper" id="cod-option">
+            <input type="radio" name="payment_method" value="cod" class="myntra-payment-radio" checked>
+            <div class="myntra-payment-details-text">Cash on Delivery (COD)</div>
+        </label>
+
+        <label class="myntra-payment-option-wrapper" id="cod-option">
+            <input type="radio" name="payment_method" value="paypal" class="myntra-payment-radio" checked>
+            <div class="myntra-payment-details-text">PayPal</div>
+        </label>
+        
+        <button type="submit" class="myntra-payment-submit">PLACE ORDER</button>
+    </form>
+</div>

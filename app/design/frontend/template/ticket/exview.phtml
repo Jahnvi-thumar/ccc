@@ -1,0 +1,171 @@
+
+<h3>reply new</h3>
+<div class="main_container">
+    <div class="add-submit-btn">
+        <div>
+            <button type="submit" id="submit-ans">Submit</button>
+            <button type="submit" id="add-ans">Add Another</button>
+        </div>
+    </div>
+    <div class="container">
+        <table>
+            <thead>
+                <tr id="main-row-heading">
+                    <th>Main Questions</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-container">
+                <tr id="tr-level-1-row-1" >
+                    <?php foreach($this->getticketDetail() as $question): ?>
+                        <td id="1">
+                            <div id="div-level-1-row-1" class="click-element">
+                                <?php echo $question->getSubject(); ?>
+                            </div>
+                        </td>
+                    <?php endforeach; ?>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+let replyData = [];
+let innerLevel = 1;
+let mainRow = 1;
+let prepareTr;
+let targetId = '';
+let lastPartOfPrev = '';
+let levelNumber = 0;
+let currParentId = 0;
+
+class changeForm {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.bindEvents();
+    }
+
+    bindEvents() {
+        console.log('bind events.......');
+        $(document).on('click', '.click-element', function() {
+            const input = $(`<input 
+                type="text" 
+                name="comment[name]" 
+                class="reply-input"
+                placeholder="Enter value" 
+                style="display:block; margin-top:10px;" 
+            />`);
+            
+            let clickedDiv = $(this);
+            let parentTd = clickedDiv.parent();        
+            let parentTr = parentTd.parent(); 
+            targetId = parentTr.attr('id'); 
+            lastPartOfPrev = targetId.substring(targetId.lastIndexOf('-') + 1); 
+            let parts = targetId.split('-');
+            levelNumber = parts[2]; 
+            
+            
+            currParentId = $(this).attr('data-comment-id') || 0;
+            console.log('Current parent ID:', currParentId);
+            
+            $(this).append(input);
+        });
+
+        $('#submit-ans').off('click').on('click', function() {
+            replyData = []; 
+            innerLevel++;
+
+            $('.reply-input').each(function() {
+                let val = $(this).val();
+                if (val.trim() !== '') {
+                    replyData.push(val);
+                }
+                $(this).remove();
+            });
+
+            console.log('Stored Reply Data:', replyData);
+            console.log("submit Clicked.....");
+
+            $.ajax({
+                url: 'http://localhost/mvc_copy/ticket/ticket/save/',
+                type: 'POST',
+                data: {
+                    ticket_id: 1,
+                    parent_id: currParentId,
+                    name: replyData
+                },
+                success: function(response) {
+                    console.log('Raw server response:', response);
+                    
+                  
+                    let commentIdsArray = [];
+                    let match = response.match(/\[(\d+,\d+|\d+)\]/);
+                    
+                    if (match) {
+                        try {
+                            commentIdsArray = JSON.parse(match[0]);
+                            console.log('Extracted comment IDs:', commentIdsArray);
+                        } catch (e) {
+                            console.error('Failed to parse comment IDs:', e);
+                        }
+                    }
+                    
+                  
+                    let mainRowHeading = $(`<th>${innerLevel}</th>`);
+                    $('#main-row-heading').append(mainRowHeading);
+                    
+                    
+                    let trElements = [];
+                    
+                    replyData.forEach((reply, index) => {
+                        let innerLevelId = `tr-level-${++levelNumber}-row-${lastPartOfPrev}-${index}`;
+                        
+                        
+                        let commentId = commentIdsArray[index] || '';
+                        console.log(`Assigning comment ID ${commentId} to row ${index}`);
+                        
+                        let tr = $('<tr>', { 
+                            id: innerLevelId 
+                        }).append(
+                            $('<td>').append(
+                                $('<div>', {
+                                    id: `div-level-${levelNumber}-row-${lastPartOfPrev}-${index}`,
+                                    class: 'click-element',
+                                    'data-comment-id': commentId, 
+                                    html: reply
+                                })
+                            )
+                        );
+                        
+                        trElements.push(tr);
+                    });
+                    
+                    
+                    let table = $('<table>');
+                    trElements.forEach(tr => {
+                        table.append(tr);
+                    });
+                    
+                    
+                    let displayInnerTd = $('<td>', {
+                        id: `td-level-${levelNumber}-row-${lastPartOfPrev}`
+                    }).append(table);
+                    
+                    
+                    $('#' + targetId).append(displayInnerTd);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error inserting data:', error);
+                }
+            });
+        });
+    }
+}
+
+$(document).ready(function() {
+    new changeForm();
+});
+</script>

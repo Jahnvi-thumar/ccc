@@ -1,0 +1,82 @@
+<?php 
+// echo '<pre>';
+// print_r($this->getUpcomingEvents());
+// echo '</pre>';
+// echo '<pre>';
+// print_r($this->getPastEvents());
+// echo '</pre>';
+// die;
+?>
+
+
+<h2>new</h2>
+<div class="main-part">
+    <div class="sections">
+        <div class="section-1">
+        <?php if (count($this->getUpcomingEvents()) > 0): ?>
+            <table class="events-table">
+                <tr>Upcomings Events</tr>
+                <tr>
+                    <th>Event Id</th>
+                    <th>Name</th>
+                </tr>
+
+                <?php foreach ($this->getUpcomingEvents() as $event): ?>
+                    <?php foreach($this->getRegistrationData($event->getEventId()) as $register): ?>
+                        <tr>
+                            
+                            <td><?php echo htmlspecialchars($event->getEventId()); ?></td>
+                            <td><?php echo htmlspecialchars($event->getTitle()); ?></td>
+                            <td><?php echo htmlspecialchars($event->getDescription()); ?></td>
+                            <td><?php echo htmlspecialchars($event->getDate()); ?></td>
+                            <td><?php echo htmlspecialchars($event->getLocation()); ?></td>
+                            <?php //if ($register->getCustomerId()); ?>
+                                <td>
+                                    <?php echo htmlspecialchars($register->getStatus()); ?>
+                                </td>
+                            <!-- <td class="events-action-icons">
+                                <a href="<?php echo $this->getUrl('ems/users_index/save') . '/?event_id=' . $event->getEventId(); ?>" onclick="return confirm('Are you sure you want to confirm for this event?');">
+                                    <i class="Register">Register</i>
+                                </a>
+                            </td> -->
+                            
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </table>
+        <?php else: ?>
+            <p>No upcoming events found.</p>
+        <?php endif; ?>
+        </div>
+        
+
+        <div class="section-2">
+        <?php if (count($this->getPastEvents()) > 0): ?>
+            <table class="events-table">
+                <tr>past Events</tr>
+                <tr>
+
+                    <th>Event Id</th>
+                    <th>Name</th>
+                    
+                </tr>
+
+                <?php foreach ($this->getPastEvents() as $event): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($event->getEventId()); ?></td>
+                        <td><?php echo htmlspecialchars($event->getTitle()); ?></td>
+                        <td><?php echo htmlspecialchars($event->getDescription()); ?></td>
+                        <td><?php echo htmlspecialchars($event->getDate()); ?></td>
+                        <td><?php echo htmlspecialchars($event->getLocation()); ?></td>
+                        
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php else: ?>
+            <p>No upcoming events found.</p>
+        <?php endif; ?>
+        </div>
+        </div>
+    </div>
+</div>
+                

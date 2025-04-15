@@ -1,0 +1,135 @@
+
+.catalog-container {
+    font-family: 'Georgia', serif;
+    background: #f4f4f4;
+    padding: 30px;
+    min-height: 100vh;
+}
+
+.catalog-heading {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 32px;
+    margin: 20px 0;
+    font-weight: normal;
+    position: relative;
+}
+
+.catalog-heading:after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #2c3e50;
+    margin: 15px auto;
+}
+
+.catalog-actions {
+    display: flex;
+    justify-content: flex-end;
+    width: 90%;
+    margin: 0 auto 20px;
+}
+
+.catalog-add-btn {
+    background: #2c3e50;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.catalog-add-btn:hover {
+    background: #34495e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.catalog-table {
+    width: 95%;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.catalog-table th {
+    background: #2c3e50;
+    color: #fff;
+    padding: 12px;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.catalog-table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    color: #555;
+    font-size: 14px;
+    text-align: center;
+}
+
+.catalog-table tr:hover td {
+    background-color: #f8f9fa;
+}
+
+.catalog-table tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}
+
+.catalog-table img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+    transition: transform 0.3s ease;
+}
+
+.catalog-table img:hover {
+    transform: scale(1.1);
+}
+
+.catalog-action-icons .fa {
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.catalog-edit-icon {
+    color: #4a90e2;
+}
+
+.catalog-delete-icon {
+    color: #e74c3c;
+}
+
+.catalog-action-icons .fa:hover {
+    transform: scale(1.15);
+}
+
+@media (max-width: 768px) {
+    .catalog-container {
+        padding: 15px;
+    }
+
+    .catalog-table {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+
+    .catalog-heading {
+        font-size: 24px;
+    }
+
+    .catalog-actions {
+        width: 100%;
+    }
+}

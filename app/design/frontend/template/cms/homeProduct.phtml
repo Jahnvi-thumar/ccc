@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .myntra-style-product-carousel {
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.myntra-style-product-wrapper {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.myntra-style-product-card {
+    flex: 0 0 20%; /* Show 5 products at once */
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.myntra-style-product-image {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 133%; /* Aspect ratio for product images */
+    overflow: hidden;
+    background-color: #f5f5f6;
+}
+
+.myntra-style-product-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.myntra-style-brand-name {
+    margin-top: 10px;
+    height: 24px;
+}
+
+.myntra-style-brand-name img {
+    max-height: 24px;
+    max-width: 100%;
+}
+
+.myntra-style-product-info {
+    margin-top: 5px;
+}
+
+.myntra-style-product-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.myntra-style-product-category {
+    font-size: 14px;
+    color: #535766;
+    margin: 2px 0;
+}
+
+.myntra-style-product-price {
+    margin: 2px 0;
+    font-weight: 500;
+}
+
+.myntra-style-original-price {
+    text-decoration: line-through;
+    color: #7e818c;
+    margin-right: 5px;
+}
+
+.myntra-style-sale-price {
+    color: #282c3f;
+}
+
+.myntra-style-slider-navigation {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.myntra-style-slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #d4d5d9;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.myntra-style-slider-dot.active {
+    background-color: #282c3f;
+}
+
+.myntra-style-prev-btn,
+.myntra-style-next-btn {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.myntra-style-prev-btn {
+    left: 10px;
+}
+
+.myntra-style-next-btn {
+    right: 10px;
+}
+    </style>
+</head>
+<body>
+    
+    <h1>home product</h1>
+    <div class="myntra-style-product-carousel">
+    <div class="myntra-style-product-wrapper">
+        <?php foreach($this->getProductImageSlider() as $product): ?>
+            <div class="myntra-style-product-card">
+                <div class="myntra-style-product-image">
+                    
+                        <img src="<?php echo $product->getMediaFilePath(); ?>" alt="<?php echo $product->getName(); ?>">
+                    
+                </div>
+                <!-- <div class="myntra-style-brand-name">
+                     Brand name or logo could go here -->
+                    <!-- <img src="<?php //echo $product($product->getBrand_id()); ?>" alt="Brand"> 
+                </div> -->
+                <div class="myntra-style-product-info">
+                    <h3 class="myntra-style-product-title"><?php echo $product->getName(); ?></h3>
+                    <p class="myntra-style-product-category"><?php echo $product->getCategory_id(); ?></p>
+                    <!-- <p class="myntra-style-product-price">
+                        <?php //if($product->getDiscount()): ?>
+                            <span class="myntra-style-original-price">₹<?php echo $product->getOriginalPrice(); ?></span>
+                        <?php //endif; ?>
+                        <span class="myntra-style-sale-price">₹<?php echo $product->getPrice(); ?></span>
+                    </p> -->
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    
+    <div class="myntra-style-slider-navigation">
+        <!-- Navigation dots will be generated here -->
+    </div>
+    
+    <button class="myntra-style-prev-btn">&lt;</button>
+    <button class="myntra-style-next-btn">&gt;</button>
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all product carousels on the page
+    initMyntraStyleCarousels();
+});
+
+function initMyntraStyleCarousels() {
+    // Select all sliders on the page
+    const carousels = document.querySelectorAll('.myntra-style-product-carousel');
+    
+    carousels.forEach((carousel, carouselIndex) => {
+        const wrapper = carousel.querySelector('.myntra-style-product-wrapper');
+        const slides = carousel.querySelectorAll('.myntra-style-product-card');
+        const prevBtn = carousel.querySelector('.myntra-style-prev-btn');
+        const nextBtn = carousel.querySelector('.myntra-style-next-btn');
+        const navContainer = carousel.querySelector('.myntra-style-slider-navigation');
+        
+        // Configuration
+        const itemsPerView = 5;
+        const slideDuration = 5000; // 5 seconds per slide
+        let currentSlide = 0;
+        let slideInterval;
+        const totalSlides = Math.ceil(slides.length / itemsPerView);
+        
+        // Create unique identifier for this carousel instance
+        const carouselId = 'myntra-style-carousel-' + carouselIndex;
+        carousel.setAttribute('id', carouselId);
+        
+        // Create navigation dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('myntra-style-slider-dot');
+            if (i === 0) dot.classList.add('active');
+            dot.dataset.slide = i;
+            dot.dataset.carouselId = carouselId;
+            dot.addEventListener('click', function() {
+                const slideIndex = parseInt(this.dataset.slide);
+                const targetCarouselId = this.dataset.carouselId;
+                const targetCarousel = document.getElementById(targetCarouselId);
+                
+                goToSlide(targetCarousel, slideIndex);
+                resetAutoSlide(targetCarousel);
+            });
+            navContainer.appendChild(dot);
+        }
+        
+        // Function to go to a specific slide
+        function goToSlide(carousel, slideIndex) {
+            const wrapper = carousel.querySelector('.myntra-style-product-wrapper');
+            const slideWidth = carousel.querySelector('.myntra-style-product-card').offsetWidth;
+            const offset = -slideIndex * (itemsPerView * slideWidth);
+            
+            wrapper.style.transform = `translateX(${offset}px)`;
+            
+            // Update active slide index
+            carousel.dataset.currentSlide = slideIndex;
+            
+            // Update active dot
+            const dots = carousel.querySelectorAll('.myntra-style-slider-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === slideIndex);
+            });
+        }
+        
+        // Function to advance to the next slide
+        function nextSlide(carousel) {
+            const currentSlide = parseInt(carousel.dataset.currentSlide || 0);
+            const totalSlides = parseInt(carousel.dataset.totalSlides);
+            
+            const nextSlideIndex = (currentSlide + 1) % totalSlides;
+            goToSlide(carousel, nextSlideIndex);
+        }
+        
+        // Setup auto-sliding
+        function startAutoSlide(carousel) {
+            const interval = setInterval(() => {
+                nextSlide(carousel);
+            }, slideDuration);
+            
+            carousel.dataset.slideInterval = interval;
+            return interval;
+        }
+        
+        // Reset the auto-slide timer (used after manual navigation)
+        function resetAutoSlide(carousel) {
+            clearInterval(parseInt(carousel.dataset.slideInterval));
+            carousel.dataset.slideInterval = startAutoSlide(carousel);
+        }
+        
+        // Store total slides count
+        carousel.dataset.totalSlides = totalSlides;
+        carousel.dataset.currentSlide = 0;
+        
+        // Initialize auto-sliding
+        carousel.dataset.slideInterval = startAutoSlide(carousel);
+        
+        // Previous button click handler
+        prevBtn.addEventListener('click', function() {
+            const currentSlide = parseInt(carousel.dataset.currentSlide || 0);
+            const totalSlides = parseInt(carousel.dataset.totalSlides);
+            
+            const prevSlideIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+            goToSlide(carousel, prevSlideIndex);
+            resetAutoSlide(carousel);
+        });
+        
+        // Next button click handler
+        nextBtn.addEventListener('click', function() {
+            const currentSlide = parseInt(carousel.dataset.currentSlide || 0);
+            const totalSlides = parseInt(carousel.dataset.totalSlides);
+            
+            const nextSlideIndex = (currentSlide + 1) % totalSlides;
+            goToSlide(carousel, nextSlideIndex);
+            resetAutoSlide(carousel);
+        });
+        
+        // Pause auto-sliding on hover
+        carousel.addEventListener('mouseenter', function() {
+            clearInterval(parseInt(carousel.dataset.slideInterval));
+        });
+        
+        // Resume auto-sliding when mouse leaves
+        carousel.addEventListener('mouseleave', function() {
+            carousel.dataset.slideInterval = startAutoSlide(carousel);
+        });
+        
+        // Handle responsive adjustments
+        window.addEventListener('resize', function() {
+            goToSlide(carousel, parseInt(carousel.dataset.currentSlide || 0));
+        });
+    });
+}
+</script>
+</body>
+</html>

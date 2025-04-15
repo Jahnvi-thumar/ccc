@@ -1,0 +1,92 @@
+<!-- <h2>view</h2> -->
+<h1><?php echo $this->getEvents()->getTitle(); ?></h1>
+<div class="summarybar">
+    <table>
+        <thead>
+            <tr>
+                <td>Total Users</td>
+                <td>Pnding</td>
+                <td>Approved</td>
+                <td>Rejected</td>
+            </tr>
+            <tbody>
+                <tr>
+                    <td><?php echo $this->getTotalUsers(); ?></td>
+                    <td><?php echo $this->getPendingUsers(); ?></td>
+                    <td><?php echo $this->getApprovedUsers(); ?></td>
+                    <td><?php echo $this->getRejectedUsers(); ?></td>
+                </tr>
+            </tbody>
+        </thead>
+    </table>
+</div>
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Users</th>
+                <th>status</th>
+                <th>change status</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <?php foreach($this->getRegisterUsers() as $user): ?>
+                
+                <?php if($user): ?>
+                        <tr>
+                            <td><?php echo $this->getCustomerName($user->getCustomerId()); ?></td>
+                            <td><?php echo $user->getStatus(); ?></td>
+                            <?php if($user->getStatus() == 'pending'): ?>
+                                <td>
+                                    <form action="" method="POST" id="form">
+                                        <input type="hidden" id="register_id" name="registrations[register_id]" value="<?php echo $user->getRegisterId(); ?>">
+                                        <label for="registrations[status]">Status:</label>
+                                        <select name="registrations[status]" id="status" onchange="updateSatus(this)" required>
+                                            <option value="" disabled selected>Select status</option>
+                                            <option value="approved">Approved</option>
+                                            <option value="rejected">Rejected</option>
+                                        </select>
+                                    </form>
+                                </td>
+                            <?php endif; ?>
+                        </tr>    
+                <?php else: ?>
+                    <tr>
+                        <td>No users found for this event.</td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<script>
+    function updateSatus(select) {
+
+    const form = document.getElementById('form');
+    const registerId = document.getElementById('register_id').value;
+    
+    const status = document.getElementById('status').value;
+    console.log(status);
+
+    $.ajax({
+            url: 'http://localhost/mvc_copy/ems/registrations/save/',
+            type: 'GET',
+            data: 
+            {
+                'status': status,
+                'register_id': registerId
+            },
+            success: (response) => {
+                console.log('Response received:', response);
+            },
+            error: (xhr, status, error) => {
+                console.error('AJAX Error:', error);
+            }
+    });
+    
+    
+}
+    
+</script>

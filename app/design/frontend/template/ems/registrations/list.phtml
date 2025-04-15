@@ -1,0 +1,47 @@
+<!-- <h2>ne</h2> -->
+<div class="summarybar">
+    <table>
+        <thead>
+            <tr>
+                <td>Total Users</td>
+                <td>Pnding</td>
+                <td>Approved</td>
+                <td>Rejected</td>
+            </tr>
+            <tbody>
+                <tr>
+                    <td><?php echo $this->getTotalUsers(); ?></td>
+                    <td><?php echo $this->getPendingUsers(); ?></td>
+                    <td><?php echo $this->getApprovedUsers(); ?></td>
+                    <td><?php echo $this->getRejectedUsers(); ?></td>
+                </tr>
+            </tbody>
+        </thead>
+    </table>
+</div>
+<div class="events">
+
+    <table>
+        <thead>
+            <tr>
+                <?php foreach($this->getEvents() as $event): ?>
+                    <th><?php echo $event->getTitle() ?></th>
+                <?php endforeach; ?>
+            </tr>
+            
+            <tbody>
+                <tr>
+                <?php foreach($this->getEvents() as $event): ?>
+                    <?php //foreach($this->getRegisterUsers($event->getEventId()) as $event): ?>
+                        <td class="events-action-icons">
+                            <a href="<?php echo $this->getUrl('ems/registrations/view') . '/?event_id=' . $event->getEventId(); ?>" >
+                                <i class="Register">Total Registrations</i>
+                            </a>
+                        </td>
+                    <?php //endforeach; ?>
+                <?php endforeach; ?>
+                </tr>
+            </tbody>
+        </thead>
+    </table>
+</div>

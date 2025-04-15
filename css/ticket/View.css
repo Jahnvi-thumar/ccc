@@ -1,0 +1,385 @@
+/* Base styles with modern pastel palette */
+:root {
+    --pastel-lavender: #e0d3f5;
+    --pastel-blue: #d0e8f2;
+    --pastel-green: #d4f0d3;
+    --pastel-pink: #f9d5e5;
+    --pastel-yellow: #fcf6bd;
+    --pastel-orange: #ffe2cc;
+    --text-dark: #475366;
+    --text-light: #6e7c91;
+    --text-header: #574b90;
+    --shadow: rgba(149, 157, 203, 0.2);
+    --hover-light: rgba(224, 211, 245, 0.15);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --transition: all 0.3s ease;
+  }
+  
+  body {
+    font-family: 'Nunito', 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9edf5 100%);
+    color: var(--text-dark);
+    line-height: 1.6;
+    padding: 30px;
+    margin: 0;
+  }
+  
+  /* Main container styling */
+  .main_container {
+    max-width: 900px;
+    margin: 20px auto;
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 30px var(--shadow);
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .main_container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--pastel-lavender), var(--pastel-blue), var(--pastel-pink));
+  }
+  
+  h3 {
+    color: var(--text-header);
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 30px;
+    position: relative;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  h3::after {
+    content: "";
+    position: absolute;
+    width: 70px;
+    height: 4px;
+    background: linear-gradient(to right, var(--pastel-blue), var(--pastel-pink));
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+  }
+  
+  /* Button styling */
+  .add-submit-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 25px;
+  }
+  
+  .add-submit-btn div {
+    display: flex;
+    gap: 15px;
+  }
+  
+  button {
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  #submit-ans {
+    background-color: var(--pastel-blue);
+    color: #2b5876;
+  }
+  
+  #submit-ans:hover {
+    background-color: #c1dff0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(208, 232, 242, 0.4);
+  }
+  
+  #add-ans {
+    background-color: var(--pastel-pink);
+    color: #b44b75;
+  }
+  
+  #add-ans:hover {
+    background-color: #f7c7db;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(249, 213, 229, 0.4);
+  }
+  
+  button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+  
+  button:hover::before {
+    left: 100%;
+  }
+  
+  /* Table styling */
+  .container {
+    margin-top: 20px;
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 20px;
+  }
+  
+  th, td {
+    padding: 15px 20px;
+    text-align: left;
+    position: relative;
+  }
+  
+  thead {
+    background: linear-gradient(45deg, var(--pastel-lavender), var(--pastel-blue));
+  }
+  
+  thead th {
+    color: #3b4863;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+    padding: 18px 20px;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+  
+  thead th:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  tbody tr {
+    transition: var(--transition);
+  }
+  
+  tbody tr:nth-child(odd) {
+    background-color: #f8f9fc;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #ffffff;
+  }
+  
+  tbody tr:hover {
+    background-color: var(--hover-light);
+  }
+  
+  tbody td {
+    border-bottom: 1px solid #edf2f9;
+    color: var(--text-light);
+  }
+  
+  /* Click element styling */
+  .click-element {
+    padding: 10px 15px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    background-color: #f5f7fa;
+    border-left: 3px solid var(--pastel-lavender);
+  }
+  
+  .click-element:hover {
+    background-color: #eaeff5;
+    transform: translateX(2px);
+  }
+  
+  /* Input field styling */
+  .reply-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-top: 15px;
+    border: 2px solid var(--pastel-blue);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    transition: var(--transition);
+    color: var(--text-dark);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  }
+  
+  .reply-input:focus {
+    border-color: var(--pastel-lavender);
+    outline: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  .reply-input::placeholder {
+    color: #a1a8c3;
+  }
+  
+  /* Nested tables styling */
+  tbody table {
+    margin: 10px 0;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid #f0f0f7;
+  }
+  
+  tbody table td {
+    background-color: #fbfcff;
+    border-bottom: 1px solid #eef1f9;
+  }
+  
+  tbody table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  /* Specific styling for nested comment structure */
+  #tr-level-1-row-1 {
+    background-color: #f8f9fc;
+  }
+  
+  #main-row-heading th {
+    transition: var(--transition);
+  }
+  
+  #tbody-container td {
+    vertical-align: top;
+  }
+  
+  /* Style for divs with IDs starting with 'div-level' */
+  [id^="div-level"] {
+    padding: 12px;
+    background-color: white;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--pastel-lavender);
+    transition: var(--transition);
+  }
+  
+  [id^="div-level"]:hover {
+    background-color: #f5f7fa;
+    border-left-color: var(--pastel-blue);
+  }
+  
+  /* Add nice transitions for dynamically added content */
+  #tbody-container tr,
+  #tbody-container td,
+  #tbody-container table {
+    transition: all 0.4s ease-in-out;
+  }
+  
+  /* Animation for new elements */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Apply animation to newly added elements */
+  .reply-input,
+  #tbody-container table {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+  
+  /* Enhanced styles for the hierarchical structure */
+  #tbody-container table td {
+    padding-left: 25px;
+  }
+  
+  #tbody-container table table td {
+    padding-left: 35px;
+  }
+  
+  #tbody-container table table table td {
+    padding-left: 45px;
+  }
+  
+  /* Level indicators with different pastel colors */
+  [id*="level-1"] > .click-element {
+    border-left-color: var(--pastel-blue);
+  }
+  
+  [id*="level-2"] > .click-element {
+    border-left-color: var(--pastel-pink);
+  }
+  
+  [id*="level-3"] > .click-element {
+    border-left-color: var(--pastel-green);
+  }
+  
+  [id*="level-4"] > .click-element {
+    border-left-color: var(--pastel-yellow);
+  }
+  
+  [id*="level-5"] > .click-element {
+    border-left-color: var(--pastel-orange);
+  }
+  
+  /* Responsive styles */
+  @media screen and (max-width: 768px) {
+    .main_container {
+      padding: 20px;
+      margin: 15px;
+    }
+    
+    h3 {
+      font-size: 24px;
+    }
+    
+    .add-submit-btn div {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    button {
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+    
+    th, td {
+      padding: 12px 15px;
+    }
+    
+    .click-element {
+      padding: 8px 12px;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    body {
+      padding: 15px;
+    }
+    
+    h3 {
+      font-size: 20px;
+    }
+    
+    .add-submit-btn div {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    button {
+      width: 100%;
+    }
+    
+    thead th {
+      font-size: 12px;
+    }
+  }

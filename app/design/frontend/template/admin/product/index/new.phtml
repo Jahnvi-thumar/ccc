@@ -1,0 +1,109 @@
+<?php 
+
+$categories = $this->getCategory();
+$Product = $this->getProduct();
+$attributes = $this->getAttribute();
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   
+</head>
+
+<body>
+   
+
+    <h1> Add Product</h1>
+    <?php echo $this->getHtmlField('formStart', ['method' => 'POST', 'action' => $this->getUrl('*/*/save'), 'enctype' => 'multipart/form-data']); ?>
+
+    <input type="hidden" name="catalog_product[product_id]" value="<?php echo isset($Product) && $Product->getProductId() ? $Product->getProductId() : "0"; ?>">
+
+    <?php echo $this->getHtmlField('label', ['for' => 'name']); ?>
+    <?php echo $this->getHtmlField('text', ['id' => 'name', 'name' => "catalog_product[name]", 'value' => isset($Product) ? htmlspecialchars($Product->getName()) : ""]); ?>
+
+
+    <?php echo $this->getHtmlField('label', ['for' => 'description']); ?>
+    <?php echo $this->getHtmlField('textarea', ['id' => 'description', 'name' => "catalog_product[description]", 'value' => isset($Product) ? htmlspecialchars($Product->getDescription()) : ""]); ?>
+
+
+    <?php echo $this->getHtmlField('label', ['for' => 'sku']); ?>
+    <?php echo $this->getHtmlField('text', ['id' => 'sku', 'name' => "catalog_product[sku]", 'value' => isset($Product) ? htmlspecialchars($Product->getSku()) : ""]); ?>
+
+
+    <?php echo $this->getHtmlField('label', ['for' => 'price']); ?>
+    <?php echo $this->getHtmlField('text', ['id' => 'price', 'name' => "catalog_product[price]", 'value' => isset($Product) ? htmlspecialchars($Product->getPrice()) : ""]); ?>
+
+
+    <?php echo $this->getHtmlField('label', ['for' => 'stock_quantity']); ?>
+    <?php echo $this->getHtmlField('text', ['id' => 'stock_quantity', 'name' => "catalog_product[stock_quantity]", 'value' => isset($Product) ? htmlspecialchars($Product->getStockQuantity()) : "0"]); ?>
+
+
+    <?php echo $this->getHtmlField('label', ['for' => 'category_id']); ?>
+    <?php echo $this->getHtmlField('dropDown', [
+        'name' => "catalog_product[category_id]",
+        'value' => $categories,
+        'checked' => isset($Product) ? $Product->getCategoryId() : ""
+    ]); ?>
+
+    <h1>Add Attributes</h1>
+    <div id="attribute-container">
+        <div class="form-group">
+            
+        <?php echo $this->getHtmlField('label', ['for' => 'brand']); ?>
+        <?php echo $this->getHtmlField('text', ['id' => 'brand', 'name' => "catalog_product[brand]", 'value' => isset($Product) ? htmlspecialchars($Product->getBrand()) : ""]); ?>
+
+        <?php echo $this->getHtmlField('label', ['for' => 'color']); ?>
+        <?php echo $this->getHtmlField('text', ['id' => 'color', 'name' => "catalog_product[color]", 'value' => isset($Product) ? htmlspecialchars($Product->getColor()) : ""]); ?>
+
+        <?php echo $this->getHtmlField('label', ['for' => 'material']); ?>
+        <?php echo $this->getHtmlField('text', ['id' => 'material', 'name' => "catalog_product[material]", 'value' => isset($Product) ? htmlspecialchars($Product->getMaterial()) : ""]); ?>
+
+        <?php echo $this->getHtmlField('label', ['for' => 'model_number']); ?>
+        <?php echo $this->getHtmlField('text', ['id' => 'model_number', 'name' => "catalog_product[model_number]", 'value' => isset($Product) ? htmlspecialchars($Product->getModelNumber()) : ""]); ?>
+
+        <?php echo $this->getHtmlField('label', ['for' => 'contry_of_origin']); ?>
+        <?php echo $this->getHtmlField('text', ['id' => 'contry_of_origin', 'name' => "catalog_product[country_of_origin]", 'value' => isset($Product) ? htmlspecialchars($Product->getCountryOfOrigin()) : ""]); ?>
+        
+        </div>
+    </div>
+
+
+    <!-- <h1>Add Attributes</h1>
+    <div id="attribute-container">
+        <div class="form-group">
+            <label for="attributes">Select Attribute</label>
+            <select id="attribute-select" onchange="addAttributeField()">
+                <option value="">Select an attribute</option>
+                <?php //foreach ($attributes as $attribute): ?>
+                    <option value="<?php //echo $attribute->getAttributeId(); ?>"
+                        data-type="<?php //echo $attribute->getType(); ?>">
+                        <?php //echo htmlspecialchars($attribute->getName()); ?>
+                    </option>
+                <?php //endforeach; ?>
+            </select>
+        </div>
+    </div> -->
+
+    <!-- <button type="button" onclick="addAttributeField()">Add Attribute</button> -->
+
+    <!-- <h1>Add Media</h1> -->
+    <!-- <div id="media-container">
+        <div class="form-group">
+            <label for="media">Select Media</label>
+            <?php //$base_url=Mage::getBaseUri(); ?>
+            <input type="file" name="catalog_product[]" id="media"  multiple>
+            <?php //foreach($Product->getFilepath() as $image) :?>
+                <img src="<?php //echo $base_url.$image; ?>" width="100" height="100">
+                <p><?php //print_r($image);?></p>
+            <?php //endforeach; ?>
+        </div>
+    </div> -->
+
+    <button type="submit">Submit</button>
+    <?php echo $this->getHtmlField('formend', []); ?>

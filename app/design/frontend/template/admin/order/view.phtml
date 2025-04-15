@@ -1,0 +1,39 @@
+<h1>order view</h1>
+<?php $this->getChildHtml(''); ?>
+<?php $this->getChildHtml('order'); ?>
+<?php $order = $this->getOrderModel() ?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   
+</head>
+
+<body>
+    <div class="overlay" id="orderDetailsOverlay">
+        <div class="modal-container">
+            <h2>Order Details</h2>
+            <button class="close-btn" onclick="closeModal()">X</button>
+            <p><strong>Order ID:</strong> ORD-2025-1001</p>
+            <p><strong>Customer:</strong> Sarah Johnson</p>
+            <p><strong>Date:</strong> March 17, 2025</p>
+            <p><strong>Status:</strong> <span class="status processing">Processing</span></p>
+            <?php $this->getChildHtml('address') ?>
+            <h3>Order Items:</h3>
+            <?php $this->getChildHtml('item'); ?>
+
+            <p><strong>Subtotal:</strong><?php echo $this->getSubtotal(); ?></p>
+            <p><strong>Shipping price:</strong><?php echo $order->getShippingPrice() ?></p>
+            <p><strong>Discount:</strong>-<?php echo $order->getCouponDiscount() ?> </p>
+            <p><strong>Total:</strong> <span class="total-price"><?php echo $order->getTotalAmount() ?></span></p>
+        </div>
+    </div>
+
+</body>
+
+</html>

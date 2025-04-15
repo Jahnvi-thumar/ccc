@@ -1,0 +1,367 @@
+
+/* Using myntra-admin namespacing to avoid CSS conflicts */
+:root {
+    --myntra-admin-primary: #FF3F6C;
+    --myntra-admin-secondary: #696b79;
+    --myntra-admin-light-gray: #f5f5f6;
+    --myntra-admin-dark-gray: #282c3f;
+    --myntra-admin-success: #03a685;
+    --myntra-admin-warning: #ff9f00;
+    --myntra-admin-pending: #7e57c2;
+    --myntra-admin-font-family: 'Assistant', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.myntra-admin * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.myntra-admin {
+    font-family: var(--myntra-admin-font-family);
+    background-color: #f5f5f6;
+    color: var(--myntra-admin-dark-gray);
+}
+
+.myntra-admin-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.myntra-admin-sidebar {
+    width: 250px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.myntra-admin-logo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--myntra-admin-light-gray);
+    margin-bottom: 20px;
+}
+
+.myntra-admin-logo img {
+    max-width: 120px;
+}
+
+.myntra-admin-nav-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    color: var(--myntra-admin-secondary);
+}
+
+.myntra-admin-nav-item.active {
+    background-color: rgba(255, 63, 108, 0.1);
+    color: var(--myntra-admin-primary);
+    border-left: 3px solid var(--myntra-admin-primary);
+}
+
+.myntra-admin-nav-item:hover {
+    background-color: rgba(255, 63, 108, 0.05);
+}
+
+.myntra-admin-nav-item i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.myntra-admin-main-content {
+    flex: 1;
+    margin-left: 250px;
+    padding: 20px;
+}
+
+.myntra-admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.myntra-admin-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.myntra-admin-header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.myntra-admin-search-bar {
+    position: relative;
+}
+
+.myntra-admin-search-bar input {
+    padding: 10px 15px 10px 40px;
+    border: 1px solid #e9e9ed;
+    border-radius: 4px;
+    width: 300px;
+    font-size: 14px;
+    outline: none;
+}
+
+.myntra-admin-search-bar i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: var(--myntra-admin-secondary);
+}
+
+.myntra-admin-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.myntra-admin-btn-primary {
+    background-color: var(--myntra-admin-primary);
+    color: white;
+}
+
+.myntra-admin-btn-primary:hover {
+    background-color: #e8364d;
+}
+
+.myntra-admin-btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--myntra-admin-primary);
+    color: var(--myntra-admin-primary);
+}
+
+.myntra-admin-btn-outline:hover {
+    background-color: rgba(255, 63, 108, 0.1);
+}
+
+.myntra-admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.myntra-admin-stat-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.myntra-admin-stat-card h3 {
+    font-size: 14px;
+    color: var(--myntra-admin-secondary);
+    margin-bottom: 10px;
+}
+
+.myntra-admin-stat-card .value {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--myntra-admin-dark-gray);
+}
+
+.myntra-admin-stat-card .change {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.myntra-admin-stat-card .change.positive {
+    color: var(--myntra-admin-success);
+}
+
+.myntra-admin-stat-card .change.negative {
+    color: var(--myntra-admin-primary);
+}
+
+.myntra-admin-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.myntra-admin-card-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--myntra-admin-light-gray);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.myntra-admin-card-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.myntra-admin-card-header .actions {
+    display: flex;
+    gap: 10px;
+}
+
+.myntra-admin-card-body {
+    padding: 0;
+}
+
+.myntra-admin-orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.myntra-admin-orders-table th, 
+.myntra-admin-orders-table td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--myntra-admin-light-gray);
+}
+
+.myntra-admin-orders-table th {
+    font-weight: 600;
+    color: var(--myntra-admin-secondary);
+    background-color: #fafafa;
+}
+
+.myntra-admin-orders-table tr:hover {
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+.myntra-admin-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.myntra-admin-status.pending {
+    background-color: rgba(126, 87, 194, 0.1);
+    color: var(--myntra-admin-pending);
+}
+
+.myntra-admin-status.processing {
+    background-color: rgba(255, 159, 0, 0.1);
+    color: var(--myntra-admin-warning);
+}
+
+.myntra-admin-status.completed {
+    background-color: rgba(3, 166, 133, 0.1);
+    color: var(--myntra-admin-success);
+}
+
+.myntra-admin-status.cancelled {
+    background-color: rgba(255, 63, 108, 0.1);
+    color: var(--myntra-admin-primary);
+}
+
+.myntra-admin-actions-cell {
+    display: flex;
+    gap: 10px;
+}
+
+.myntra-admin-action-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.myntra-admin-action-btn.view {
+    background-color: rgba(126, 87, 194, 0.1);
+    color: var(--myntra-admin-pending);
+}
+
+.myntra-admin-action-btn.edit {
+    background-color: rgba(255, 159, 0, 0.1);
+    color: var(--myntra-admin-warning);
+}
+
+.myntra-admin-action-btn.delete {
+    background-color: rgba(255, 63, 108, 0.1);
+    color: var(--myntra-admin-primary);
+}
+
+.myntra-admin-action-btn:hover {
+    opacity: 0.8;
+}
+
+.myntra-admin-pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px;
+}
+
+.myntra-admin-pagination-item {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.myntra-admin-pagination-item.active {
+    background-color: var(--myntra-admin-primary);
+    color: white;
+}
+
+.myntra-admin-pagination-item:hover:not(.active) {
+    background-color: var(--myntra-admin-light-gray);
+}
+
+.myntra-admin-footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--myntra-admin-secondary);
+    font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+    .myntra-admin-sidebar {
+        width: 80px;
+    }
+    
+    .myntra-admin-nav-item span {
+        display: none;
+    }
+    
+    .myntra-admin-nav-item i {
+        margin-right: 0;
+    }
+    
+    .myntra-admin-main-content {
+        margin-left: 80px;
+    }
+    
+    .myntra-admin-logo img {
+        max-width: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .myntra-admin-search-bar input {
+        width: 200px;
+    }
+    
+    .myntra-admin-stats {
+        grid-template-columns: 1fr;
+    }
+}

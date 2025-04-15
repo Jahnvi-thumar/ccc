@@ -1,0 +1,241 @@
+<div class="myntra-admin-header">
+    <div class="myntra-admin-logo">
+        <img src="/Content/images/myntra-logo.png" alt="Myntra Admin" class="myntra-logo-img" />
+    </div>
+    
+    <div class="myntra-admin-nav">
+        <ul class="myntra-menu-list" id="adminNavMenu">
+            <!-- Menu items will be populated via JavaScript -->
+            <!-- <?php //foreach($this->getNavLinks() as $nav_item) : ?>
+                <li>
+                    <a href="<?php //echo $this->getUrl('admin/' . $nav_item . '/')  ?>"><?php echo $nav_item; ?></a>
+                </li>
+            <?php //endforeach; ?> -->
+            <a href="<?php echo $this->getUrl('admin/product_index/test')  ?>"><?php echo 'product_index/test' ?></a>
+            <a href="<?php echo $this->getUrl('admin/category_index/test')  ?>"><?php echo 'product_index/test' ?></a>
+            <a href="<?php echo $this->getUrl('admin/order_index/list')  ?>"><?php echo 'order_index/list' ?></a>
+            <a href="<?php echo $this->getUrl('admin/product_index/test')  ?>"><?php echo 'product_index/test' ?></a>
+            <a href="<?php echo $this->getUrl('admin/product_index/test')  ?>"><?php echo 'product_index/test' ?></a>
+            
+        </ul>
+    </div>
+    
+    <div class="myntra-admin-controls">
+        <div class="myntra-notifications">
+            <span class="myntra-icon myntra-notification-icon">
+                <i class="fa fa-bell"></i>
+                <span class="myntra-badge">3</span>
+            </span>
+        </div>
+        <div class="myntra-admin-user">
+            <div class="myntra-user-avatar">
+                <span class="myntra-avatar-text">A</span>
+            </div>
+            <span class="myntra-user-name">Admin</span>
+            <span class="myntra-dropdown-icon">
+                <i class="fa fa-chevron-down"></i>
+            </span>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+<style>
+    .myntra-admin-header {
+        display: flex;
+        align-items: center;
+        background-color: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        padding: 0 24px;
+        height: 70px;
+        width: 100%;
+        position: relative;
+        z-index: 100;
+    }
+    
+    .myntra-admin-logo {
+        height: 36px;
+        margin-right: 48px;
+    }
+    
+    .myntra-logo-img {
+        height: 100%;
+    }
+    
+    .myntra-admin-nav {
+        flex: 1;
+    }
+    
+    .myntra-menu-list {
+        display: flex;
+        list-style: none;
+        height: 100%;
+    }
+    
+    .myntra-menu-item {
+        position: relative;
+        height: 70px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .myntra-menu-link {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        padding: 0 20px;
+        color: #282c3f;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+    
+    .myntra-menu-link:hover {
+        color: #ff3f6c;
+    }
+    
+    .myntra-active-link {
+        color: #ff3f6c;
+        font-weight: 600;
+    }
+    
+    .myntra-active-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: #ff3f6c;
+    }
+    
+    .myntra-admin-controls {
+        display: flex;
+        align-items: center;
+    }
+    
+    .myntra-notifications {
+        position: relative;
+        margin-right: 24px;
+        cursor: pointer;
+    }
+    
+    .myntra-icon {
+        font-size: 18px;
+        color: #3e4152;
+    }
+    
+    .myntra-badge {
+        position: absolute;
+        top: -6px;
+        right: -8px;
+        background-color: #ff3f6c;
+        color: white;
+        font-size: 10px;
+        font-weight: 600;
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .myntra-admin-user {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .myntra-admin-user:hover {
+        background-color: #f5f5f6;
+    }
+    
+    .myntra-user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: #ff3f6c;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-right: 8px;
+    }
+    
+    .myntra-user-name {
+        font-size: 14px;
+        font-weight: 500;
+        margin-right: 6px;
+    }
+    
+    .myntra-dropdown-icon {
+        font-size: 12px;
+        color: #94969f;
+    }
+
+    .myntra-menu-list li {
+    position: relative;
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.myntra-menu-list li a {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 20px;
+    color: #282c3f;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+    cursor: pointer;
+}
+
+.myntra-menu-list li a:hover {
+    color: #ff3f6c;
+}
+
+/* For active nav items */
+.myntra-menu-list li a.active {
+    color: #ff3f6c;
+    font-weight: 600;
+}
+
+.myntra-menu-list li a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #ff3f6c;
+}
+/* Add these CSS rules to your existing stylesheet */
+.myntra-menu-list li a:hover,
+.myntra-menu-list li a:focus,
+.myntra-menu-list li a:active {
+    color: #ff3f6c;
+}
+
+/* This will style the active nav item properly without requiring the .active class */
+.myntra-menu-list li:hover a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #ff3f6c;
+}
+
+    
+</style>
+

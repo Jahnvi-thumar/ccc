@@ -1,0 +1,103 @@
+<!-- <h2>view</h2> -->
+<?php $comments = $this->getTicketDetails();
+$tree = $this->buildTreeRecursive($comments); 
+$maxDepth = $this->getMaxDepth($tree);
+// echo '<pre>';
+// print_r($tree);
+// echo '</pre>';
+// die;
+
+?>
+<span class="d-none" id="ticketId"><?php echo $this->getId(); ?></span>
+<div class="main-container">
+    <div class="container">
+        <div>
+            <button type="submit" id="submit-ans">Submit</button>
+        </div>
+        <table class="main-table">
+
+            <thead>
+                <th>Tickets</th>
+            </thead>
+
+            <tbody class="table-body">
+                <?php echo $this->rendorTree($tree, $maxDepth); ?>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+<script>
+    let replyData = [];
+    let commentId = 0;
+    class changeForm{
+
+        constructor(){
+            console.log('constructore...');
+            this.init();
+        }
+
+        init(){
+            console.log('init...');
+            this.bindInput();
+        }
+
+        bindInput(){
+            console.log('bind...');
+            $(document).on('click', '.addreplybtn', function() {
+                const input = $(`<input 
+                    type="text" 
+                    name="comment[name]" 
+                    class="reply-input"
+                    placeholder="Enter value" 
+                    style="display:block; margin-top:10px;" 
+                />`);
+                
+                $(this).append(input); 
+                commentId = $(this).data('comment-id') || 0;
+                console.log('commentId: ', commentId);
+            });
+            this.insertData();
+        }
+
+        insertData(){
+            $('#submit-ans').off('click').on('click', function() {
+                replyData = []; 
+                let ticketId = $('#ticketId').html().trim();
+        
+                $('.reply-input').each(function() {
+                    let val = $(this).val();
+                    if (val.trim() !== '') {
+                        replyData.push(val);
+                    }
+                    $(this).remove();
+                });
+
+                console.log('Stored Reply Data:', replyData);
+                console.log("submit Clicked.....");
+
+                $.ajax({
+                    url: 'http://localhost/mvc_copy/ticket/ticket/save/',
+                    type: 'POST',
+                    data: {
+                        ticket_id: ticketId,
+                        parent_id: commentId,
+                        name: replyData
+                    },
+                    success: function(response) {
+                        console.log('Raw server response:', response);
+                        window.location.reload();5
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error inserting data:', error);
+                    }
+                });
+            });
+        }
+    }
+
+
+    $(document).ready(function(){
+        new changeForm();
+    });
+</script>

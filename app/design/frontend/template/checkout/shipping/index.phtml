@@ -1,0 +1,37 @@
+<?php 
+$shipping_data = $this->getShippingMethods();
+
+?>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Shipping & Payment</title>
+   
+    
+</head>
+
+<body>
+    <div class="container-shipping">
+        <h2>Select Shipping Provider</h2>
+        <form action="<?php echo $this->getUrl("checkout/shipping/save") ?>" method="post">
+            <?php foreach ($shipping_data as $option): ?>
+                <label class="shipping-option">
+                    <input type="radio" name="shipping_method" value="<?php echo htmlspecialchars($option['name']); ?>" required>
+                    <div class="details">
+                        <strong><?php echo htmlspecialchars($option['name']); ?></strong>
+                        <p class="delivery-time">Delivery: <?php echo htmlspecialchars($option['delivery_time']); ?></p>
+                    </div>
+                    <span class="price">₹<?php echo number_format($option['charge'], 2); ?></span>
+                </label>
+            <?php endforeach; ?>
+            
+            <button type="submit" class="submit-btn">Proceed to Payment</button>
+        </form>
+    </div>
+</body>
+</html>

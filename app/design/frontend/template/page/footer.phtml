@@ -1,0 +1,464 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myntra Style Footer</title>
+    <style>
+        /* Reset Styles */
+        .myntra-footer-reset {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Assistant', 'Roboto', sans-serif;
+        }
+
+        /* Body Styling */
+        .myntra-footer-body-container {
+            min-height: 100vh;
+            padding-bottom: 300px;
+            position: relative;
+        }
+
+        /* Footer Main Container */
+        .myntra-footer-main-container {
+            background-color: #FAFBFC;
+            border-top: 1px solid #eaeaec;
+            color: #696b79;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Footer Content Wrapper */
+        .myntra-footer-content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+        }
+
+        /* Footer Top Section */
+        .myntra-footer-top-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        /* Footer Column */
+        .myntra-footer-column {
+            width: 20%;
+            min-width: 180px;
+            margin-bottom: 10px;
+        }
+
+        /* Footer Column Heading */
+        .myntra-footer-column-heading {
+            color: #282c3f;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        /* Footer Column Links List */
+        .myntra-footer-column-links-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        /* Footer Column Link Item */
+        .myntra-footer-column-link-item {
+            margin-bottom: 8px;
+        }
+
+        /* Footer Column Link */
+        .myntra-footer-column-link {
+            color: #696b79;
+            font-size: 13px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .myntra-footer-column-link:hover {
+            color: #ff3f6c;
+            text-decoration: underline;
+        }
+
+        /* Footer Middle Section */
+        .myntra-footer-middle-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-top: 1px solid #eaeaec;
+            border-bottom: 1px solid #eaeaec;
+        }
+
+        /* Footer Popular Searches */
+        .myntra-footer-popular-searches {
+            width: 100%;
+        }
+
+        /* Popular Searches Heading */
+        .myntra-footer-popular-searches-heading {
+            color: #282c3f;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* Popular Searches Links */
+        .myntra-footer-popular-searches-links {
+            color: #696b79;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* Popular Searches Link */
+        .myntra-footer-popular-searches-link {
+            color: #696b79;
+            text-decoration: none;
+            margin-right: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .myntra-footer-popular-searches-link:hover {
+            color: #ff3f6c;
+            text-decoration: underline;
+        }
+
+        /* Popular Searches Separator */
+        .myntra-footer-popular-searches-separator {
+            margin: 0 3px;
+            color: #696b79;
+        }
+
+        /* Footer Bottom Section */
+        .myntra-footer-bottom-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+        }
+
+        /* Footer Contact Info */
+        .myntra-footer-contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            width: 60%;
+        }
+
+        /* Contact Info Block */
+        .myntra-footer-contact-info-block {
+            margin-right: 30px;
+            margin-bottom: 15px;
+        }
+
+        /* Contact Info Heading */
+        .myntra-footer-contact-info-heading {
+            color: #282c3f;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        /* Contact Info Text */
+        .myntra-footer-contact-info-text {
+            color: #696b79;
+            font-size: 13px;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Footer Social Media */
+        .myntra-footer-social-media {
+            display: flex;
+            flex-direction: column;
+            width: 40%;
+            align-items: flex-end;
+        }
+
+        /* Social Media Heading */
+        .myntra-footer-social-media-heading {
+            color: #282c3f;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Social Media Icons Container */
+        .myntra-footer-social-media-icons {
+            display: flex;
+        }
+
+        /* Social Media Icon Link */
+        .myntra-footer-social-media-icon-link {
+            margin-left: 15px;
+            color: #696b79;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .myntra-footer-social-media-icon-link:hover {
+            color: #ff3f6c;
+            text-decoration: underline;
+        }
+
+        /* Footer Copyright */
+        .myntra-footer-copyright {
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #94969f;
+        }
+
+        /* Scroll to Top Button */
+        .myntra-footer-scroll-to-top-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            background-color: #ff3f6c;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, background-color 0.2s ease;
+        }
+
+        .myntra-footer-scroll-to-top-button.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .myntra-footer-scroll-to-top-button:hover {
+            background-color: #e62e5c;
+        }
+
+        /* Scroll to Top Button Arrow Icon */
+        .myntra-footer-scroll-to-top-arrow {
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .myntra-footer-column {
+                width: 50%;
+            }
+            
+            .myntra-footer-contact-info, .myntra-footer-social-media {
+                width: 100%;
+            }
+            
+            .myntra-footer-social-media {
+                align-items: flex-start;
+                margin-top: 15px;
+            }
+            
+            .myntra-footer-social-media-icon-link {
+                margin-left: 0;
+                margin-right: 15px;
+            }
+        }
+    </style>
+</head>
+<body class="myntra-footer-reset myntra-footer-body-container">
+
+
+<div style="height: 1500px; padding: 20px;">
+    <h1>Myntra Style Footer Demo</h1>
+    <p>Scroll down to see the footer and test the scroll to top button.</p>
+</div>
+
+
+<footer class="myntra-footer-main-container">
+    <div class="myntra-footer-content-wrapper">
+       
+        <div class="myntra-footer-top-section">
+            
+            <div class="myntra-footer-column">
+                <h3 class="myntra-footer-column-heading">Online Shopping</h3>
+                <ul class="myntra-footer-column-links-list">
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Men</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Women</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Kids</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Home & Living</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Beauty</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Gift Cards</a>
+                    </li>
+                </ul>
+            </div>
+
+            
+            <div class="myntra-footer-column">
+                <h3 class="myntra-footer-column-heading">Useful Links</h3>
+                <ul class="myntra-footer-column-links-list">
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Contact Us</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">FAQ</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">T&C</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Terms Of Use</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Track Orders</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Shipping</a>
+                    </li>
+                </ul>
+            </div>
+
+           <div class="myntra-footer-column">
+                <h3 class="myntra-footer-column-heading">Experience Myntra App</h3>
+                <ul class="myntra-footer-column-links-list">
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Android</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">iOS</a>
+                    </li>
+                </ul>
+            </div>
+
+           
+            <div class="myntra-footer-column">
+                <h3 class="myntra-footer-column-heading">Policy</h3>
+                <ul class="myntra-footer-column-links-list">
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Return Policy</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Privacy Policy</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Security</a>
+                    </li>
+                    <li class="myntra-footer-column-link-item">
+                        <a href="#" class="myntra-footer-column-link">Sitemap</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        
+        <div class="myntra-footer-middle-section">
+            <div class="myntra-footer-popular-searches">
+                <h4 class="myntra-footer-popular-searches-heading">POPULAR SEARCHES</h4>
+                <div class="myntra-footer-popular-searches-links">
+                    <a href="#" class="myntra-footer-popular-searches-link">Makeup</a>
+                    <span class="myntra-footer-popular-searches-separator">|</span>
+                    <a href="#" class="myntra-footer-popular-searches-link">Dresses For Girls</a>
+                    <span class="myntra-footer-popular-searches-separator">|</span>
+                    <a href="#" class="myntra-footer-popular-searches-link">T-Shirts</a>
+                    <span class="myntra-footer-popular-searches-separator">|</span>
+                    <a href="#" class="myntra-footer-popular-searches-link">Sandals</a>
+                    <span class="myntra-footer-popular-searches-separator">|</span>
+                    <a href="#" class="myntra-footer-popular-searches-link">Headphones</a>
+                    <span class="myntra-footer-popular-searches-separator">|</span>
+                    <a href="#" class="myntra-footer-popular-searches-link">Handbags</a>
+                    <span class="myntra-footer-popular-searches-separator">|</span>
+                    <a href="#" class="myntra-footer-popular-searches-link">Ladies Watches</a>
+                    <span class="myntra-footer-popular-searches-separator">|</span>
+                    <a href="#" class="myntra-footer-popular-searches-link">Bags</a>
+                </div>
+            </div>
+        </div>
+
+       
+        <div class="myntra-footer-bottom-section">
+            <div class="myntra-footer-contact-info">
+                <div class="myntra-footer-contact-info-block">
+                    <h4 class="myntra-footer-contact-info-heading">CONTACT US</h4>
+                    <p class="myntra-footer-contact<div class="myntra-footer-contact-info">
+                <div class="myntra-footer-contact-info-block">
+                    <h4 class="myntra-footer-contact-info-heading">CONTACT US</h4>
+                    <p class="myntra-footer-contact-info-text">
+                        123-456-7890<br>
+                        support@example.com
+                    </p>
+                </div>
+                <div class="myntra-footer-contact-info-block">
+                    <h4 class="myntra-footer-contact-info-heading">REGISTERED OFFICE ADDRESS</h4>
+                    <p class="myntra-footer-contact-info-text">
+                        Buildings Alyssa,<br>
+                        Begonia & Clove Embassy Tech Village,<br>
+                        Outer Ring Road, Bengaluru, 560103
+                    </p>
+                </div>
+            </div>
+            <div class="myntra-footer-social-media">
+                <h4 class="myntra-footer-social-media-heading">KEEP IN TOUCH</h4>
+                <div class="myntra-footer-social-media-icons">
+                    <a href="#" class="myntra-footer-social-media-icon-link">FB</a>
+                    <a href="#" class="myntra-footer-social-media-icon-link">TW</a>
+                    <a href="#" class="myntra-footer-social-media-icon-link">YT</a>
+                    <a href="#" class="myntra-footer-social-media-icon-link">IG</a>
+                </div>
+            </div>
+            <div class="myntra-footer-copyright">
+                © 2025 www.example.com. All rights reserved.
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<div class="myntra-footer-scroll-to-top-button" id="scrollToTopBtn">
+    <span class="myntra-footer-scroll-to-top-arrow">^</span>
+</div> -->
+
+<!-- <script>
+    // Scroll to Top functionality
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    
+    // Show button when user scrolls down 200px
+    window.onscroll = function() {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            scrollToTopBtn.classList.add('show');
+        } else {
+            scrollToTopBtn.classList.remove('show');
+        }
+    };
+    
+    // Scroll to top when button is clicked
+    scrollToTopBtn.addEventListener('click', function() {
+        // For Safari
+        document.body.scrollTop = 0;
+        // For Chrome, Firefox, IE and Opera
+        document.documentElement.scrollTop = 0;
+    });
+</script> -->
+</body>
+</html>

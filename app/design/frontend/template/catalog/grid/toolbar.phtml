@@ -1,0 +1,27 @@
+<!-- <h2 class="myntra-admin__title">Listing Management</h2> -->
+<div class="myntra-admin__toolbar">
+    <form action="" method="GET" class="myntra-admin__toolbar-form">
+        <div class="myntra-admin__toolbar-form-group">
+            <label for="page-input" class="myntra-admin__toolbar-label">Page</label>
+            <input type="number" name="page" id="page-input" class="myntra-admin__toolbar-input myntra-admin__toolbar-input--numeric" min="1">
+        </div>
+        
+        <div class="myntra-admin__toolbar-form-group">
+            <label for="limit-select" class="myntra-admin__toolbar-label">Records per page</label>
+            <select name="limit" id="limit-select" class="myntra-admin__toolbar-select">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        
+        <div class="myntra-admin__toolbar-info">
+            <label class="myntra-admin__toolbar-label myntra-admin__toolbar-label--info">Total Records:</label>
+            <p class="myntra-admin__toolbar-count"><?php echo $this->getTotalRecords() ?></p>
+        </div>
+        
+        <button type="submit" class="myntra-admin__toolbar-button">Apply Filters</button>
+    </form>
+</div>
+

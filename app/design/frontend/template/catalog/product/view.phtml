@@ -1,0 +1,235 @@
+<?php
+$id = Mage::getModel('core/request')->getQuery('id');
+$product = $this->getProductDetails($id);
+
+?>
+
+<!-- Product Page Main Content - No Header -->
+<main class="spd__container">
+    <!-- Breadcrumb Navigation -->
+    <div class="spd__breadcrumb">
+        <a href="/" class="spd__breadcrumb-link">Home</a> / 
+        <a href="/category" class="spd__breadcrumb-link">Category</a> /
+        <a href="/subcategory" class="spd__breadcrumb-link">Subcategory</a> /
+        <span class="spd__breadcrumb-current" id="productBrand"><?php echo $product->getBrand(); ?></span>
+    </div>
+
+    <!-- Product Section -->
+    <div class="spd__product-section">
+        <!-- Product Images Grid -->
+        <div class="spd__product-images">
+            <?php
+            $images = $product->getFilepath();
+            // echo '<pre>';
+            // print_r($images);
+            // echo '</pre>';
+            // die;
+            $imageCount = count($images);
+            
+            // Display up to 6 images
+            for ($i = 0; $i < $imageCount; $i++) {
+                $imageUrl = $images[$i];
+                $index = $i + 1;
+                echo '<div class="spd__image-container">
+                    // <img src="/mvc_copy/' . $imageUrl . '" alt="Product View" class="spd__product-image" id="productImage' . $index . '">
+                </div>';
+            }
+            
+            // Fill remaining image slots with placeholders if needed
+            // for ($i = $imageCount; $i < 6; $i++) {
+            //     $index = $i + 1;
+            //     echo '<div class="spd__image-container">
+            //         <img src="" alt="Product View" class="spd__product-image" id="productImage' . $index . '">
+            //     </div>';
+            // }
+            ?>
+        </div>
+
+        <!-- Product Info Section -->
+        <div class="spd__product-info">
+            <!-- Brand and Title -->
+            <h1 class="spd__product-brand" id="brandName"><?php echo $product->getBrand(); ?></h1>
+            <p class="spd__product-title" id="productTitle"><?php echo $product->getName(); ?></p>
+            
+            <!-- Ratings -->
+            <div class="spd__ratings">
+                <span class="spd__rating-value" id="ratingValue">4.2</span>
+                <span class="spd__rating-stars">★★★★☆</span>
+                <span class="spd__rating-count" id="ratingCount">13 Ratings</span>
+            </div>
+            
+            <!-- Price -->
+            <div class="spd__price-container">
+                <?php
+                $price = $product->getPrice();
+                $originalPrice = $price * 1.25; // Example for original price, replace with actual logic
+                $discount = round((($originalPrice - $price) / $originalPrice) * 100);
+                ?>
+                <span class="spd__current-price" id="currentPrice">₹<?php echo number_format($price, 2); ?></span>
+                <span class="spd__original-price" id="originalPrice">₹<?php echo number_format($originalPrice, 2); ?></span>
+                <span class="spd__discount" id="discountPercentage">(<?php echo $discount; ?>% OFF)</span>
+                <p class="spd__inclusive-text">Inclusive of all taxes</p>
+            </div>
+            
+            <!-- Color Options -->
+            <div class="spd__color-options">
+                <div class="spd__color-title">MORE COLORS</div>
+                <div class="spd__color-swatches" id="colorSwatches">
+                    <?php
+                    $productColor = $product->getColor();
+                    // This is a placeholder. In a real implementation, you would have a collection of available colors
+                    $availableColors = [
+                        ['id' => 1, 'name' => 'black', 'code' => '#000000'],
+                        ['id' => 2, 'name' => 'white', 'code' => '#FFFFFF'],
+                        ['id' => 3, 'name' => 'red', 'code' => '#FF0000'],
+                        ['id' => 4, 'name' => 'blue', 'code' => '#0000FF']
+                    ];
+                    
+                    foreach ($availableColors as $color) {
+                        $isActive = ($color['name'] === strtolower($productColor)) ? 'active' : '';
+                        echo '<div class="spd__color-swatch ' . $isActive . '" style="background-color: ' . $color['code'] . ';" data-color-id="' . $color['id'] . '"></div>';
+                    }
+                    ?>
+                </div>
+            </div>
+            
+            <!-- Size Options -->
+            <div class="spd__size-section">
+                <div class="spd__size-title">
+                    <span>SELECT SIZE</span>
+                    <span class="spd__size-chart">SIZE CHART &gt;</span>
+                </div>
+                <div class="spd__size-options" id="sizeOptions">
+                    <?php
+                    // This is a placeholder. In a real implementation, you would have a collection of available sizes
+                    $availableSizes = [
+                        ['id' => 1, 'label' => 'XS', 'outOfStock' => false],
+                        ['id' => 2, 'label' => 'S', 'outOfStock' => false],
+                        ['id' => 3, 'label' => 'M', 'outOfStock' => false],
+                        ['id' => 4, 'label' => 'L', 'outOfStock' => false],
+                        ['id' => 5, 'label' => 'XL', 'outOfStock' => true]
+                    ];
+                    
+                    foreach ($availableSizes as $index => $size) {
+                        $selected = ($index === 1) ? 'selected' : ''; // Default select the second size
+                        $outOfStock = $size['outOfStock'] ? 'out-of-stock' : '';
+                        $title = $size['outOfStock'] ? 'title="Out of Stock"' : '';
+                        
+                        echo '<div class="spd__size-option ' . $selected . ' ' . $outOfStock . '" ' . $title . ' data-size-id="' . $size['id'] . '">' . $size['label'] . '</div>';
+                    }
+                    ?>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="spd__action-buttons">
+                <form  method="POST" id="cartform">
+                    <input type="hidden" name="product_id"  value="<?php echo $product->getProductId() ?>">
+                    <div class="spd__add-to-bag" >
+                        <button type="submit" class="spd__add-to-bag addtocart">ADD TO Cart</button> 
+                    </div>
+                    <div>
+                        <input type="number" name="quantity">Quantity
+                    </div>
+                </form>
+                <button class="spd__wishlist">
+                    <i class="spd__heart-icon"></i> WISHLIST
+                </button>
+            </div>
+            
+            <!-- Delivery Options -->
+            <div class="spd__delivery-options">
+                <div class="spd__delivery-title">DELIVERY OPTIONS <i class="spd__truck-icon"></i></div>
+                <div class="spd__delivery-input">
+                    <input type="text" placeholder="Enter pincode" class="spd__pincode-input" id="pincodeInput">
+                    <button class="spd__check-button">Check</button>
+                </div>
+                <p class="spd__delivery-message">Please enter PIN code to check delivery time & Pay on Delivery Availability</p>
+                <ul class="spd__offer-list">
+                    <li class="spd__offer-item">100% Original Products</li>
+                    <li class="spd__offer-item">Pay on delivery might be available</li>
+                    <li class="spd__offer-item">Easy 14 days returns and exchanges</li>
+                </ul>
+            </div>
+            
+            <!-- Best Offers -->
+            <div class="spd__best-offers">
+                <div class="spd__offers-title">BEST OFFERS <i class="spd__tag-icon"></i></div>
+                <div class="spd__offer-details" id="offerDetails">
+                    <!-- Offers -->
+                    <?php
+                    // This is a placeholder. In a real implementation, you would fetch offers from a database
+                    $offers = [
+                        [
+                            'name' => 'Best Price: Rs. ' . round($price * 0.9),
+                            'description' => 'Applicable on: Orders above Rs. 799 (only on first purchase)'
+                        ],
+                        [
+                            'name' => '10% Discount on HDFC Bank Credit Card',
+                            'description' => 'Min Spend Rs.3,000; Max Discount Rs.500. Valid till 31st Dec'
+                        ],
+                        [
+                            'name' => '5% Unlimited Cashback on Flipkart Axis Bank Credit Card',
+                            'description' => 'Min Spend Rs.1,500; Max Discount Rs.500'
+                        ]
+                    ];
+                    
+                    foreach ($offers as $offer) {
+                        echo '<div class="spd__offer-item">
+                            <div class="spd__offer-name">' . $offer['name'] . '</div>
+                            <div class="spd__offer-description">' . $offer['description'] . '</div>
+                        </div>';
+                    }
+                    ?>
+                </div>
+            </div>
+            
+            <!-- Product Details -->
+            <div class="spd__product-details">
+                <h3 class="spd__details-title">PRODUCT DETAILS <i class="spd__info-icon"></i></h3>
+                <p class="spd__details-text" id="productDescription"><?php echo $product->getDescription(); ?></p>
+                
+                <div class="spd__size-fit">
+                    <h4 class="spd__section-title">Size & Fit</h4>
+                    <p class="spd__section-text" id="sizeFitInfo">The model (height 5'8) is wearing a size S</p>
+                </div>
+                
+                <div class="spd__material-care">
+                    <h4 class="spd__section-title">Material & Care</h4>
+                    <p class="spd__section-text" id="materialCareInfo">Material: <?php echo $product->getMaterial(); ?>
+                    <br>Machine Wash</p>
+                </div>
+                
+                <div class="spd__specifications">
+                    <h4 class="spd__section-title">Specifications</h4>
+                    <table class="spd__specs-table">
+                        <tr class="spd__spec-row">
+                            <td class="spd__spec-label">Model Number</td>
+                            <td class="spd__spec-value" id="specModelNumber"><?php echo $product->getModelNumber(); ?></td>
+                        </tr>
+                        <tr class="spd__spec-row">
+                            <td class="spd__spec-label">SKU</td>
+                            <td class="spd__spec-value" id="specSKU"><?php echo $product->getSku(); ?></td>
+                        </tr>
+                        <tr class="spd__spec-row">
+                            <td class="spd__spec-label">Stock</td>
+                            <td class="spd__spec-value" id="specStock"><?php echo $product->getStockQuantity(); ?> Units</td>
+                        </tr>
+                        <tr class="spd__spec-row">
+                            <td class="spd__spec-label">Country of Origin</td>
+                            <td class="spd__spec-value" id="specCountryOrigin"><?php echo $product->getCountryOfOrigin(); ?></td>
+                        </tr>
+                        <tr class="spd__spec-row">
+                            <td class="spd__spec-label">Color</td>
+                            <td class="spd__spec-value" id="specColor"><?php echo $product->getColor(); ?></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+<!-- JavaScript for dynamic functionality -->

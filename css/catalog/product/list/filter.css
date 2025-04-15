@@ -1,0 +1,15 @@
+
+    .category-filter{
+        background-color: pink;
+    }
+    .line{
+        background-color: palevioletred;
+        height: 2px;
+        padding: 1px;
+        margin-bottom: 3px;
+    }
+    .attr_name{
+        color: black;
+        size: 7px;
+        border: 1px solid black;
+    }

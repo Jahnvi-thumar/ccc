@@ -1,0 +1,315 @@
+<h1>admin category index list</h1> 
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+    font-family: 'Georgia', serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 30px;
+    min-height: 100vh;
+}
+
+h2 {
+    font-family: 'Georgia', serif;
+    text-align: center;
+    color: #2c3e50;
+    font-size: 32px;
+    margin: 20px 0 30px;
+    font-weight: normal;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+h2:after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #2c3e50;
+    margin: 15px auto;
+}
+
+.col-md-2 {
+    display: flex;
+    justify-content: flex-end;
+    width: 90%;
+    margin: 0 auto 20px;
+}
+
+.add-new {
+    background: #2c3e50;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.add-new:hover {
+    background: #34495e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+table {
+    width: 90%;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+th {
+    background: #2c3e50;
+    color: #fff;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 13px;
+    padding: 15px 12px;
+    letter-spacing: 0.5px;
+    border: none;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    color: #555;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background-color: #f8f9fa;
+}
+
+/* Alternating row colors */
+tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}
+
+tr:nth-child(even):hover td {
+    background-color: #f3f4f6;
+}
+
+/* Image styling */
+td img {
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+td img:hover {
+    transform: scale(1.05);
+}
+
+/* Action buttons */
+.fa {
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.fa-edit {
+    color: #4a90e2;
+}
+
+.fa-trash {
+    color: #e74c3c;
+}
+
+.fa:hover {
+    transform: scale(1.15);
+}
+
+/* Empty state styling */
+p {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+    margin: 30px 0;
+    font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    table {
+        width: 95%;
+    }
+    
+    th, td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    table {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+    
+    h2 {
+        font-size: 24px;
+    }
+    
+    .col-md-2 {
+        width: 100%;
+    }
+}
+
+/* Custom scrollbar for table */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2c3e50;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #34495e;
+}
+
+/* Loading state animation */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.loading td {
+    background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+}
+    </style>
+</head>
+
+<body>
+    <h2>All Product</h2>
+    <div class="col-md-2">
+        <a class="add-new" href='<?php echo $this->getUrl("*/*/new") ?>'>add product</a>
+    </div>
+    <?php if (count($this->getProduct()) > 0): ?>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category_Id</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Color</th>
+            <th>Size</th>
+            <th>Brand</th>
+            <th>Made_In</th>
+            <th>Model</th>
+            <th>Mfg_Date</th>
+            <th>Material</th>
+            <th>Status</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+
+        <?php foreach ($this->getProduct() as $result): ?>
+        <tr>
+            <td>
+                <?php echo $result->getProduct_id(); ?>
+            </td>
+            <td>
+                <?php echo $result->getName(); ?>
+            </td>
+            <td>
+                <?php echo $result->getCategory_id(); ?>
+            </td>
+            <td>
+                <?php echo $result->getDescription(); ?>
+            </td>
+            <td>
+                <?php echo $result->getPrice(); ?>
+            </td>
+            <td>
+                <img src="/mvc_copy/<?php echo $result->getImage(); ?>" alt="Product Image" width="50" height="50"
+                    style="border-radius: 5px;">
+                <!-- <?php //echo $result->getImage(); ?> -->
+            </td>
+            <!-- <td>
+                        <?php //echo $result->getPrice(); ?>
+                    </td> -->
+            <td>
+                <?php echo $result->getColor(); ?>
+            </td>
+            <td>
+                <?php echo $result->getSize(); ?>
+            </td>
+            <td>
+                <?php echo $result->getBrand(); ?>
+            </td>
+            <td>
+                <?php echo $result->getMade_in(); ?>
+            </td>
+            <td>
+                <?php echo $result->getModel(); ?>
+            </td>
+            </td>
+            <td>
+                <?php echo $result->getMfg_date(); ?>
+            </td>
+            <td>
+                <?php echo $result->getMaterial(); ?>
+            </td>
+            <td>
+                <?php echo $result->getStatusText(); ?>
+            </td>
+            <td>
+                <a href='<?php echo $this->getUrl("*/*/new") ?>/?id=<?php echo $result->getProduct_id(); ?>'> <i
+                        class='fa fa-edit' style="color:blue;"></i></a>
+            </td>
+            <td>
+                <a href='<?php echo $this->getUrl("*/*/delete") ?>/?id=<?php echo $result->getProduct_id(); ?>'> <i
+                        class='fa fa-trash' style="color:red;"></i></a>
+            </td>
+            
+        </tr>
+        <?php endforeach; ?>
+    </table>
+    <?php else: ?>
+    <p>No Product available. </p>
+    <?php endif; ?>
+</body>
+
+</html> -->
