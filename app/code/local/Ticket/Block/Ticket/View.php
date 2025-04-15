@@ -32,7 +32,7 @@ class Ticket_Block_Ticket_View extends Core_Block_Template{
     
         foreach ($comments as $comment) {
             if ($comment->getParentId() == $parentId) {
-                $children = $this->buildTreeRecursive($comments, $comment->getCommentId()); // Recursive call
+                $children = $this->buildTreeRecursive($comments, $comment->getCommentId()); 
                 $countOfCildren = 0;
                 if ($children) {
                     $comment->setChildren($children);
