@@ -14,31 +14,47 @@ class Ticket_Controller_Ticket extends Core_Controller_Front_Action{
         
         $commentIds = [];
         $data = $this->getRequest()->getParams();
-        if($data['parent_id'] > 0)
-        {
-            foreach($data['name'] as $_name){
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+        
+        foreach($data['replies'] as $reply){
+            
+            if(isset($reply['parent_id']) && $reply['parent_id'] > 0){
                 
-                $comment = Mage::getModel('ticket/ticket_comment')
-                ->setTicketId($data['ticket_id'])
-                ->setParentId($data['parent_id'])
-                ->setName($_name)
-                ->save();
-                $commentIds[] = $comment->getCommentId();
+                    echo 'hieee';
+                    $comment = Mage::getModel('ticket/ticket_comment')
+                    ->setTicketId($reply['ticket_id'])
+                        ->setParentId($reply['parent_id'])
+                        ->setName($reply['name'])
+                        ->save();
+                        $commentIds[] = $comment->getCommentId();
+                    }
+                    else{
+                   
+                    $comment = Mage::getModel( 'ticket/ticket_comment')
+                        ->setTicketId($reply['ticket_id'])
+                        ->setName($reply['name'])
+                        ->save();
+                        $commentIds[] = $comment->getCommentId();
+                        
+                }
             }
-        }
-        else{
-            foreach($data['name'] as $_name){
-                
-                $comment = Mage::getModel( 'ticket/ticket_comment')
-                ->setTicketId($data['ticket_id'])
-                ->setName($_name)
-                ->save();
-                $commentIds[] = $comment->getCommentId();
-            }
-
-        }
+       
 
         echo json_encode($commentIds);
+    }
+
+    public function updateAction(){
+
+        $data = $this->getRequest()->getParam('replies');
+        
+        $comment = Mage::getModel('ticket/ticket_comment')->load($data['comment_id']);
+        $comment->setCommentId($data['comment_id'])
+            ->setTicketId($data['ticket_id'])
+            ->setName($data['name'])
+            ->setIsComplete($data['is_complete'])
+            ->save();
     }
 
     public function ViewAction(){

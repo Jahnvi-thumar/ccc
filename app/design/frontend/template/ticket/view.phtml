@@ -13,6 +13,10 @@ $maxDepth = $this->getMaxDepth($tree);
     <div class="container">
         <div>
             <button type="submit" id="submit-ans">Submit</button>
+            <form action="<?php echo $this->getUrl('*/*/*')?>/">
+                <input type="hidden" name="ticket_id" value="<?php echo $this->getId() ?>">
+                <button type="showbtn" name='all' value='1' id="show-comment">Show All Complete Comments</button>
+            </form>
         </div>
         <table class="main-table">
 
@@ -29,75 +33,185 @@ $maxDepth = $this->getMaxDepth($tree);
 </div>
 <script>
     let replyData = [];
-    let commentId = 0;
-    class changeForm{
+    let prevClass = '';
 
-        constructor(){
-            console.log('constructore...');
-            this.init();
-        }
-
-        init(){
-            console.log('init...');
-            this.bindInput();
-        }
-
-        bindInput(){
-            console.log('bind...');
-            $(document).on('click', '.addreplybtn', function() {
-                const input = $(`<input 
-                    type="text" 
-                    name="comment[name]" 
-                    class="reply-input"
-                    placeholder="Enter value" 
-                    style="display:block; margin-top:10px;" 
-                />`);
-                
-                $(this).append(input); 
-                commentId = $(this).data('comment-id') || 0;
-                console.log('commentId: ', commentId);
-            });
-            this.insertData();
-        }
-
-        insertData(){
-            $('#submit-ans').off('click').on('click', function() {
-                replyData = []; 
-                let ticketId = $('#ticketId').html().trim();
-        
-                $('.reply-input').each(function() {
-                    let val = $(this).val();
-                    if (val.trim() !== '') {
-                        replyData.push(val);
-                    }
-                    $(this).remove();
-                });
-
-                console.log('Stored Reply Data:', replyData);
-                console.log("submit Clicked.....");
-
-                $.ajax({
-                    url: 'http://localhost/mvc_copy/ticket/ticket/save/',
-                    type: 'POST',
-                    data: {
-                        ticket_id: ticketId,
-                        parent_id: commentId,
-                        name: replyData
-                    },
-                    success: function(response) {
-                        console.log('Raw server response:', response);
-                        window.location.reload();5
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error inserting data:', error);
-                    }
-                });
-            });
-        }
+class changeForm {
+    constructor() {
+        this.init();
     }
 
+    init() {
+        this.bindInput();
+        
+    }
 
-    $(document).ready(function(){
-        new changeForm();
-    });
+    updateData(commentId, name, ticketId){
+
+        replyData = {
+            'comment_id' : commentId,
+            'ticket_id' : ticketId,
+            'is_complete' : 1,
+            'name' : name
+        };
+        $.ajax({
+            url: 'http://localhost/mvc_copy/ticket/ticket/update/',
+            type: 'POST',
+            data: { replies: replyData },
+            success: function (response) {
+                console.log('Raw server response:', response);
+                // window.location.reload();
+                    
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating data:', error);
+            }
+        });
+    }
+
+    bindInput() {
+
+        const self = this;
+        $(document).on('click' , '.completebtn' , (event) => {
+            const parentElement = $(event.target).parent();//currtd
+            const commentId = parentElement.data('comment-id');
+            const name = parentElement.clone().children().remove().end().text().trim();
+            const ticketId = $('#ticketId').html().trim();
+            console.log('parentElement : ' , parentElement);
+            console.log('commentId : ' , commentId);
+            console.log('name : ' , name);
+            console.log('ticketId : ' , ticketId);
+
+            const currTr = $(event.target).closest('tr');
+            const lastTd = currTr.find('td').last();
+            console.log('currTr' , currTr);
+            console.log('lastTd' , lastTd);
+
+            // if (parentElement[0] === lastTd[0] && parentElement.find('.addreplybtn').length === 0) {
+            //     console.log('No addreplybtn in last td, calling updateData');
+            //     this.updateData(commentId, name, ticketId);
+            // }
+
+            this.updateData(commentId , name , ticketId);
+        });
+
+        $(document).on('click', '.addreplybtn',  function() {
+            const parentId = $(this).data('comment-id') || null;
+            // const levelClass = $(this).attr('class').split(' ').find(cls => cls.startsWith('level-'));
+            const levelClass = $(this).attr('class').split(' ').find(cls => cls.startsWith('level-'));
+            const level = levelClass ? parseInt(levelClass.split('-')[1]) : 0;
+
+            // let classList = prevTd.attr('class');
+            // prevClass = (classList || '').split(' ').find(cls => cls.startsWith('level-'));
+
+                const input = $(`
+                    <input 
+                        type="text" 
+                        class="reply-input level-${level}" 
+                        data-comment-id="${parentId}" 
+                        placeholder="Enter reply"
+                        style="display:block; margin-top:10px;"
+                    />
+                `);
+
+                
+                $(this).append(input);
+                
+                self.insertData();
+        }); 
+    }
+
+    insertData() {
+        const self = this;
+        let parentIds = [];
+        $('#submit-ans').on('click', function () {
+            replyData = [];
+
+            let btn1 = $(document).find('.completebtn');
+            let btn2 = btn1.parent().next();
+
+            btn2.each(function () {
+                let input = $(this).find('input');
+                console.log(input);
+
+                if (input.length === 0) {
+                    console.log('No input found in:', this);
+
+                    
+                    let commentId = $(this).data('comment-id');
+
+                    
+                    let name = $(this).prev().clone().children().remove().end().text().trim();
+                    // .clone().children().remove().end().text().trim()$(this).clone().children().remove().end().text().trim();
+
+                   
+                    let urlParams = new URLSearchParams(window.location.search);
+                    let ticketId = urlParams.get('ticket_id');
+                    // console.log('comment-id' , commentId);
+                    // console.log('name-id' , name);
+                    // console.log('ticketId-id' , ticketId);
+
+                    
+                    self.updateData(commentId, name, ticketId);
+                }
+            });
+
+
+
+
+
+            const ticketId = $('#ticketId').html().trim();
+
+             replyData = []; 
+
+            $('.reply-input').each(function () {
+                const name = $(this).val().trim();
+                const parentId = $(this).data('comment-id') || null;
+
+                if (name !== '') {
+                    replyData.push({
+                        ticket_id: ticketId,
+                        parent_id: parentId,
+                        name: name
+                    });
+                }
+            });
+
+
+            // $('.reply-input').each(function () {
+            //     const name = $(this).val().trim();
+            //     const parentId = $(this).data('comment-id') || null;
+
+            //     if (name !== '') {
+            //         replyData.push({
+            //             ticket_id: ticketId,
+            //             parent_id: parentId,
+            //             name: name
+            //         });
+            //     }
+            // });
+            
+            console.log('Stored Reply Data:', replyData);
+            $('.reply-input').remove();
+           
+
+            $.ajax({
+                url: 'http://localhost/mvc_copy/ticket/ticket/save/',
+                type: 'POST',
+                data: { replies: replyData },
+                success: function (response) {
+                    console.log(' server response:', response);
+                    // window.location.reload();  
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error inserting data:', error);
+                }
+            });
+        });
+    }
+}
+
+$(document).ready(function () {
+    new changeForm();
+});
+
 </script>

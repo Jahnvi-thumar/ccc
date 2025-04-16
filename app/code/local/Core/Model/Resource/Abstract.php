@@ -77,8 +77,7 @@ class Core_Model_Resource_Abstract {
                 $primaryId
             );
 
-            // echo $sql;
-            // die;
+           
             return $this->getAdapter()->query($sql);
            
         } else {
@@ -105,8 +104,9 @@ class Core_Model_Resource_Abstract {
                 $columns,
                 $values
             );
-            // echo $sql;
            
+        //    echo $sql;
+        //    die;
             $id = $this->getAdapter()->insert($sql);
             // $model->load($id);
             $model->{$this->_primaryKey} = $id;

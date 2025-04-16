@@ -169,3 +169,79 @@ $(document).ready(function() {
     new changeForm();
 });
 </script>
+
+
+// $(document).on('click' , '.completebtn' , (event) => {
+        //     const parentElement = $(event.target).parent();//currtd
+        //     const commentId = parentElement.data('comment-id');
+        //     const name = parentElement.clone().children().remove().end().text().trim();
+        //     const ticketId = $('#ticketId').html().trim();
+        //     console.log('parentElement : ' , parentElement);
+        //     console.log('commentId : ' , commentId);
+        //     console.log('name : ' , name);
+        //     console.log('ticketId : ' , ticketId);
+
+        //     const currTr = $(event.target).closest('tr');
+        //     const lastTd = currTr.find('td').last();
+        //     console.log('currTr' , currTr);
+        //     console.log('lastTd' , lastTd);
+
+        //     if (parentElement[0] === lastTd[0] && parentElement.find('.addreplybtn').length === 0) {
+        //         console.log('No addreplybtn in last td, calling updateData');
+        //         this.updateData(commentId, name, ticketId);
+        //     }
+
+        //     this.updateData(commentId , name , ticketId);
+        // });
+
+
+        updateData(commentId, name, ticketId){
+
+replyData = {
+    'comment_id' : commentId,
+    'ticket_id' : ticketId,
+    'is_complete' : 1,
+    'name' : name
+};
+$.ajax({
+    url: 'http://localhost/mvc_copy/ticket/ticket/update/',
+    type: 'POST',
+    data: { replies: replyData },
+    success: function (response) {
+        console.log('Raw server response:', response);
+        // window.location.reload();
+            
+    },
+    error: function (xhr, status, error) {
+        console.error('Error updating data:', error);
+    }
+});
+}
+
+<!-- ---------------------------------- -->
+$(document).on('click', '.addreplybtn',  function() {
+            const parentId = $(this).data('comment-id') || null;
+            // const levelClass = $(this).attr('class').split(' ').find(cls => cls.startsWith('level-'));
+            const levelClass = $(this).attr('class').split(' ').find(cls => cls.startsWith('level-'));
+            const level = levelClass ? parseInt(levelClass.split('-')[1]) : 0;
+
+            let classList = prevTd.attr('class');
+            prevClass = (classList || '').split(' ').find(cls => cls.startsWith('level-'));
+
+                const input = $(`
+                    <input 
+                        type="text" 
+                        class="reply-input level-${level}" 
+                        data-comment-id="${parentId}" 
+                        placeholder="Enter reply"
+                        style="display:block; margin-top:10px;"
+                    />
+                `);
+
+                
+                $(this).append(input);
+                
+                self.insertData();
+        }); 
+
+        <!-- --------------------------------- -->

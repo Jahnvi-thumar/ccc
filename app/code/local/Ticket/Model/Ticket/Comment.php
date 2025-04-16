@@ -8,15 +8,37 @@ class Ticket_Model_Ticket_Comment extends Core_Model_Abstract{
         $this->_collectionClass = "Ticket_Model_Resource_Ticket_Comment_Collection";
     }
 
-    public function getAllComments($parent_id=0){
+    protected function _afterSave(){
 
-        return Mage::getModel('ticket/ticket_comment')
+     
+        $parent = Mage::getModel('ticket/ticket_comment')->load($this->getParentId());
+        // echo '<pre>';
+        // print_r($parent);
+        // echo '</pre>';
+        // die;
+    
+        // if($this->getParentId() != null || $this->getParentId()!='')
+        // {
+
+            $completChild = Mage::getModel('ticket/ticket_comment')
             ->getCollection()
-            ->addFieldToFilter('ticket_id' , 1)
-            ->addFieldToFilter('parent_id' , $parent_id)
-            ->getData();
+            ->select(['count(*)' => 'complete_child'])
+            ->addFieldToFilter('parent_id' , $parent->getCommentId())
+            ->addFieldToFilter('is_complete' , 0)
+            ->getFirstItem();
             
+            Mage::log($completChild);
+            
+       
+        if($completChild->getCompleteChild() == 0){
+        
+           $parent->setIsComplete(1)
+           ->save();
+        // }
     }
+    }
+
+   
 
 }
 ?>
