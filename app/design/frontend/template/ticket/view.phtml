@@ -1,27 +1,26 @@
-<!-- <h2>view</h2> -->
-<?php $comments = $this->getTicketDetails();
-$tree = $this->buildTreeRecursive($comments); 
-$maxDepth = $this->getMaxDepth($tree);
-// echo '<pre>';
-// print_r($tree);
-// echo '</pre>';
+<?php 
+$comments = $this->getTicketDetails();
+echo ($this->getStartLevel());
 // die;
-
+$tree = $this->buildTreeRecursive($comments, null, 0, $this->getStartLevel()); 
+$maxDepth = $this->getMaxDepth($tree);
 ?>
 <span class="d-none" id="ticketId"><?php echo $this->getId(); ?></span>
 <div class="main-container">
     <div class="container">
         <div>
             <button type="submit" id="submit-ans">Submit</button>
-            <form action="<?php echo $this->getUrl('*/*/*')?>/">
+            <form action="<?php echo $this->getUrl('*/*/*')?>/" method="GET">
                 <input type="hidden" name="ticket_id" value="<?php echo $this->getId() ?>">
                 <button type="showbtn" name='all' value='1' id="show-comment">Show All Complete Comments</button>
+                <input type="text" name="last">
+                <button type="showlast5btn" id="show-last5comment">Show Last Comments</button>
             </form>
         </div>
         <table class="main-table">
 
             <thead>
-                <th>Tickets</th>
+                <th><?php echo $this->getTicket()->getSubject(); ?></th>
             </thead>
 
             <tbody class="table-body">
@@ -41,8 +40,7 @@ class changeForm {
     }
 
     init() {
-        this.bindInput();
-        
+        this.bindInput(); 
     }
 
     updateData(commentId, name, ticketId){
@@ -86,11 +84,6 @@ class changeForm {
             console.log('currTr' , currTr);
             console.log('lastTd' , lastTd);
 
-            // if (parentElement[0] === lastTd[0] && parentElement.find('.addreplybtn').length === 0) {
-            //     console.log('No addreplybtn in last td, calling updateData');
-            //     this.updateData(commentId, name, ticketId);
-            // }
-
             this.updateData(commentId , name , ticketId);
         });
 
@@ -123,41 +116,57 @@ class changeForm {
     insertData() {
         const self = this;
         let parentIds = [];
-        $('#submit-ans').on('click', function () {
-            replyData = [];
+        $('#submit-ans').off('click').on('click', function () {
+            // replyData = [];
 
-            let btn1 = $(document).find('.completebtn');
-            let btn2 = btn1.parent().next();
+            // let btn1 = $(document).find('.completebtn');
+            // let btn2 = btn1.parent().next();
 
-            btn2.each(function () {
-                let input = $(this).find('input');
-                console.log(input);
+           
+            // console.log(btn2);
 
-                if (input.length === 0) {
-                    console.log('No input found in:', this);
 
-                    
-                    let commentId = $(this).data('comment-id');
+            $('.completebtn').each(function () {
+                const $btn = $(this);
+                const $parentTd = $btn.closest('td');
+                const $nextTd = $parentTd.next('td');
 
-                    
-                    let name = $(this).prev().clone().children().remove().end().text().trim();
-                    // .clone().children().remove().end().text().trim()$(this).clone().children().remove().end().text().trim();
+                if ($nextTd.find('input').length === 0) {
+                    const commentId = $parentTd.data('comment-id');
+                    const name = $parentTd.clone().children().remove().end().text().trim();
+                    const ticketId = $('#ticketId').text().trim();
 
-                   
-                    let urlParams = new URLSearchParams(window.location.search);
-                    let ticketId = urlParams.get('ticket_id');
-                    // console.log('comment-id' , commentId);
-                    // console.log('name-id' , name);
-                    // console.log('ticketId-id' , ticketId);
+                    console.log('commentId:', commentId);
+                    console.log('name:', name);
+                    console.log('ticketId:', ticketId);
 
-                    
-                    self.updateData(commentId, name, ticketId);
+                     self.updateData(commentId, name, ticketId);
+                    // replyData.push({ commentId, name, ticketId });
                 }
             });
 
+            // $('.completebtn').each(function () {
+            //     const $btn = $(this);
+            //     const $parentTd = $btn.closest('td');
 
+            //     // Check if this comment has a reply-input directly inside it
+            //     const hasInput = $parentTd.find('input.reply-input').length > 0;
 
+            //     if (!hasInput) {
+            //         console.log('No input found in:', $parentTd[0]);
 
+            //         const commentId = $parentTd.data('comment-id');
+            //         const name = $parentTd.clone().children().remove().end().text().trim();
+
+            //         const ticketId = $('#ticketId').text().trim();
+
+            //         console.log('commentId:', commentId);
+            //         console.log('name:', name);
+            //         console.log('ticketId:', ticketId);
+
+            //         // self.updateData(commentId, name, ticketId);
+            //     }
+            // });
 
             const ticketId = $('#ticketId').html().trim();
 
@@ -176,20 +185,6 @@ class changeForm {
                 }
             });
 
-
-            // $('.reply-input').each(function () {
-            //     const name = $(this).val().trim();
-            //     const parentId = $(this).data('comment-id') || null;
-
-            //     if (name !== '') {
-            //         replyData.push({
-            //             ticket_id: ticketId,
-            //             parent_id: parentId,
-            //             name: name
-            //         });
-            //     }
-            // });
-            
             console.log('Stored Reply Data:', replyData);
             $('.reply-input').remove();
            

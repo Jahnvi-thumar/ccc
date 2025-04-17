@@ -13,20 +13,55 @@ class Ticket_Block_Ticket_View extends Core_Block_Template{
         return $this->getRequest()->getQuery('ticket_id');
     }
 
+    public function getTicket(){
+        $ticketId = $this->getRequest()->getQuery('ticket_id');
+        $ticket = Mage::getModel('ticket/ticket')->load($ticketId);
+        return $ticket;
+    }
+
+    public function findTotalLevel(){
+
+        $ticket = Mage::getModel('ticket/ticket_comment')
+            ->getCollection()
+            ->select(['max(level)' => 'max_level'])
+            ->addFieldToFilter('ticket_id' , $this->getId())
+            ->getFirstItem();
+
+        return $ticket->getMaxLevel()+1;
+    }
+
+    public function getStartLevel(){
+        $last = $this->getRequest()->getQuery('last');
+        if($last){
+            return $this->findTotalLevel() - $last;
+        }
+    }
     public function getTicketDetails($parent_id=0){
 
         if(!is_array($this->_ticketData)){
             $this->_ticketData = [];
             $ticketId = $this->getRequest()->getQuery('ticket_id');
             $all = $this->getRequest()->getQuery('all');
+            $last = $this->getRequest()->getQuery('last');
+           
             if($all)
             {
                 $this->_ticketData = Mage::getModel('ticket/ticket_comment')
                     ->getCollection()
                     ->addFieldToFilter('ticket_id' , $ticketId)
                     ->getData();
-                }
-                else{     
+            }elseif($last){
+
+                $startLevel = $this->getStartLevel();
+               
+                $this->_ticketData = Mage::getModel('ticket/ticket_comment')
+                    ->getCollection()
+                    ->addFieldToFilter('ticket_id' , $ticketId)
+                    ->addFieldToFilter('level' , ['>=' => $startLevel])
+                    ->getData();
+               
+            }
+            else{     
                     $this->_ticketData = Mage::getModel('ticket/ticket_comment')
                         ->getCollection()
                         ->addFieldToFilter('ticket_id' , $ticketId)
@@ -37,24 +72,57 @@ class Ticket_Block_Ticket_View extends Core_Block_Template{
         return $this->_ticketData;
     }
 
-    function buildTreeRecursive($comments, $parentId = null) {
+    function buildTreeRecursive($comments, $parentId = null, $level=0, $startLevel=null) {
 
         $branch = [];
+
+        $last = $this->getRequest()->getQuery('last');
+        $processedIds = [];
+        
+        if($startLevel != null){
+
+            foreach ($comments as $comment) {
+                if ($comment->getLevel() == $startLevel && !in_array($comment->getCommentId(), $processedIds)) {
+                    $children = $this->buildTreeRecursive($comments, $comment->getCommentId(), $level + 1, null); 
+                    $countOfChildren = 0;
     
-        foreach ($comments as $comment) {
-            if ($comment->getParentId() == $parentId) {
-                $children = $this->buildTreeRecursive($comments, $comment->getCommentId()); 
-                $countOfCildren = 0;
-                if ($children) {
-                    $comment->setChildren($children);
-                    foreach($children as $child){
-                        $countOfCildren += 1 + (int) $child->getCountOfChildren();
+                    if ($children) {
+                        $comment->setChildren($children);
+                        foreach ($children as $child) {
+                            $countOfChildren += 1 + (int)$child->getCountOfChildren();
+                            $processedIds[] = $child->getCommentId(); 
+                        }
+                        $comment->setCountOfChildren($countOfChildren);
+                    } else {
+                        $comment->setCountOfChildren(0);
                     }
-                    $comment->setCountOfChildren(count($children));
-                } 
-                $comment->setCountOfChildren($countOfCildren);
     
-                $branch[] = $comment;
+                    $processedIds[] = $comment->getCommentId(); 
+                    $branch[] = $comment;
+                }
+            }
+            
+
+
+        } 
+        else{
+
+            foreach ($comments as $comment) {
+                if ($comment->getParentId() == $parentId) {
+                    $comment->setLevel($level);
+                    $children = $this->buildTreeRecursive($comments, $comment->getCommentId(), $level+1); 
+                    $countOfCildren = 0;
+                    if ($children) {
+                        $comment->setChildren($children);
+                        foreach($children as $child){
+                            $countOfCildren += 1 + (int) $child->getCountOfChildren();
+                        }
+                        $comment->setCountOfChildren(count($children));
+                    } 
+                    $comment->setCountOfChildren($countOfCildren);
+                    
+                    $branch[] = $comment;
+                }
             }
         }
     
@@ -128,7 +196,7 @@ class Ticket_Block_Ticket_View extends Core_Block_Template{
             
            if($commentObj->getIsComplete()==1)
            {
-               $html .= '<td style="background-color:green" class="level-' . $level . '" rowspan="' . $rowspan . '" data-comment-id="' . $commentObj->getCommentId() . '">' 
+               $html .= '<td style="background-color:rgb(153, 231, 171); color:black" class="level-' . $level . '" rowspan="' . $rowspan . '" data-comment-id="' . $commentObj->getCommentId() . '">' 
                       . htmlspecialchars($commentObj->getName());
            }
            else
@@ -143,7 +211,7 @@ class Ticket_Block_Ticket_View extends Core_Block_Template{
                 
                 if($commentObj->getIsComplete()==1)
                 {
-                    $html .= '<td style="background-color:green" class="addreplybtn level-' . ($level + 1) . '" data-comment-id="' . $commentObj->getCommentId() . '">
+                    $html .= '<td style="background-color:rgb(153, 231, 171); color:black" class="addreplybtn level-' . ($level + 1) . '" data-comment-id="' . $commentObj->getCommentId() . '">
                               </td>';
                 }
                 else

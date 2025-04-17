@@ -18,6 +18,7 @@ class Admin_Block_Widgets_Grid_Toolbar extends Core_Block_Template{
         $this->_limit = is_numeric($limit) ? $limit : 5;
         // echo $this->_page;
         // echo $this->_limit;
+        
         $this->_collection = clone $this->getParent()->getCollection();
         $this->getParent()->getCollection()->limit($this->_limit , $this->_page);
     }

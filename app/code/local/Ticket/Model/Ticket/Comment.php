@@ -8,34 +8,23 @@ class Ticket_Model_Ticket_Comment extends Core_Model_Abstract{
         $this->_collectionClass = "Ticket_Model_Resource_Ticket_Comment_Collection";
     }
 
-    protected function _afterSave(){
-
-     
-        $parent = Mage::getModel('ticket/ticket_comment')->load($this->getParentId());
-        // echo '<pre>';
-        // print_r($parent);
-        // echo '</pre>';
-        // die;
     
-        // if($this->getParentId() != null || $this->getParentId()!='')
-        // {
-
-            $completChild = Mage::getModel('ticket/ticket_comment')
+    public function _afterSave()
+    {
+        $comment_id = $this->getCommentId();
+        $this->load($comment_id);
+        $totalChild = Mage::getModel('ticket/ticket_comment')
             ->getCollection()
-            ->select(['count(*)' => 'complete_child'])
-            ->addFieldToFilter('parent_id' , $parent->getCommentId())
-            ->addFieldToFilter('is_complete' , 0)
+            ->addFieldToFilter('parent_id', $this->getParentId())
+            ->addFieldToFilter('is_complete', 0)
+            ->select(['COUNT(*)' => 'total'])
             ->getFirstItem();
-            
-            Mage::log($completChild);
-            
-       
-        if($completChild->getCompleteChild() == 0){
-        
-           $parent->setIsComplete(1)
-           ->save();
-        // }
-    }
+        if ($totalChild->getTotal() == 0 && $this->getParentId() != '') {
+            Mage::getModel('ticket/ticket_comment')
+                ->setCommentId($this->getParentId())
+                ->setIsComplete(1)
+                ->save();
+        }
     }
 
    
